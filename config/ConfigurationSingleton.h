@@ -17,7 +17,8 @@ static std::string CONFIG_FILE = "adaship_config.ini"; // Name of the external d
 
 class ConfigurationSingleton {
 
-  std::map<std::string, std::string> configMap {};
+  // Using a MultiMap so we can store the same key with multiple values.
+  std::multimap<std::string, std::string> configMultiMap{};
 
 private:
   ConfigurationSingleton();
@@ -29,8 +30,7 @@ public:
 
   void operator = (ConfigurationSingleton const&) = delete; // Singletons should not be assignable.
 
-  std::map<std::string, std::string> getConfigMap();;
+  std::multimap<std::string, std::string> getConfigMultiMap();;
 };
-
 
 #endif //BATTLESHIPS_CONFIGURATIONSINGLETON_H

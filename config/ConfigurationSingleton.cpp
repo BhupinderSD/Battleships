@@ -19,16 +19,17 @@ ConfigurationSingleton::ConfigurationSingleton() {  // Constructor.
     getline(file, lineInFile); // Read the line in the file and save it in the variable lineInFile.
     lineInFile.erase(remove_if(lineInFile.begin(), lineInFile.end(), isspace), lineInFile.end()); // Remove spaces in the line.
     std::vector<std::string> iniSplit = split(lineInFile, ':');
-    configMap.insert(std::pair<std::string, std::string>(iniSplit[0], iniSplit[1]));
+    configMultiMap.insert(std::pair<std::string, std::string>(iniSplit[0], iniSplit[1]));
   }
-  file.close(); // Close the file stream
 
+  file.close(); // Close the file stream
 }
+
 ConfigurationSingleton &ConfigurationSingleton::getInstance() {
   static ConfigurationSingleton instance; // Instantiated on first use and guaranteed to be destroyed.
   return instance;
 }
 
-std::map<std::string, std::string> ConfigurationSingleton::getConfigMap() {
-  return configMap;
+std::multimap<std::string, std::string> ConfigurationSingleton::getConfigMultiMap() {
+  return configMultiMap;
 }
