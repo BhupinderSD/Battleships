@@ -3,6 +3,7 @@
 //
 
 #include "ConfigurationSingleton.h"
+#include <algorithm>
 
 ConfigurationSingleton::ConfigurationSingleton() {  // Constructor.
   if (!fileExists(CONFIG_FILE)) { // Check if the file does not exist.
