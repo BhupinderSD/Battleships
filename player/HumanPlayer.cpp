@@ -21,7 +21,7 @@ HumanPlayer::Orientation HumanPlayer::getOrientation(const std::string& boatName
 
   std::cout << question; // Show the user the question.
   std::cin >> orientation; // Get the users response.
-  while(std::cin.fail() || orientation != 1 && orientation != 2) { // While the user enters an invalid input, keep asking for an orientation.
+  while(std::cin.fail() || (orientation != 1 && orientation != 2)) { // While the user enters an invalid input, keep asking for an orientation.
     std::cout << "Please enter a valid orientation.\n\n";
     flushBuffer();
     std::cout << question;
@@ -54,11 +54,11 @@ HumanPlayer::Coordinate HumanPlayer::getCoordinates(const std::string &boatName)
 
     // Check that the coordinates are valid.
     if (tempCoordinates.x.empty() && tempCoordinates.y == 0) {
-      std::cout << "Please enter valid BoatPosition.\n" << std::endl;
+      std::cout << "Please enter valid coordinates.\n" << std::endl;
     } else if (tempCoordinates.x.empty()) {
-      std::cout << "Please enter a valid x boatPosition (a letter).\n" << std::endl;
+      std::cout << "Please enter a valid x coordinate (a letter).\n" << std::endl;
     } else if (tempCoordinates.y == 0) {
-      std::cout << "Please enter a valid y boatPosition (a number).\n" << std::endl;
+      std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
     } else {
       coordinate = tempCoordinates; // Set the temp coordinates as the coordinates to return.
       break;
