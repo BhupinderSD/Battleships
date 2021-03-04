@@ -60,7 +60,32 @@ bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const Boa
     break;
   }
 
-  return false; //TODO(Bhupinder): Return true if this is a valid boat placement.
+  for (const Coordinate& coordinate : boatPositions) {
+    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+    // Check if any index of the boat extends the board.
+    if (xCoordinate < 0 || xCoordinate > boardWidth || coordinate.y < 0 || coordinate.y > boardHeight) {
+      std::cout << "The boat must be placed within the board." << std::endl;
+      return false;
+    }
+
+    std::string index = gameBoard[xCoordinate][coordinate.y];
+    // Check if a boat already exists at this index.
+    if (index != "0"){
+      std::cout << "A boat already exists at this position." << std::endl;
+      return false;
+    }
+  }
+
+  // Add this boat to the board.
+  for (const Coordinate& coordinate : boatPositions) {
+    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+    gameBoard[xCoordinate][coordinate.y] = boatName[0];
+  }
+
+  // Add ths board to the boat locations map.
+  boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
+
+  return true;
 }
 
 std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {

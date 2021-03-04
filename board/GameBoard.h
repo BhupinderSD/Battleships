@@ -20,11 +20,6 @@ struct BoatStart { // A struct that stores the position and orientation for a bo
   Orientation orientation;
 };
 
-struct BoatLocation {
-  std::string boatName;
-  std::vector<Coordinate> boatPositions;
-};
-
 class GameBoard {
 
   const int PADDING = 2; // Padding so each index can be bigger than the max index length.
@@ -35,12 +30,14 @@ class GameBoard {
 
   std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
 
+  std::map<std::string, std::vector<Coordinate>> boatLocations;
+
 public:
   GameBoard(); // Constructor.
 
   void showBoard();
 
-  static bool placeBoat(const std::string& boatName, int boatLength,
+  bool placeBoat(const std::string& boatName, int boatLength,
                         const BoatStart & boatPosition);
 
 private:
