@@ -70,7 +70,7 @@ bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const Boa
 
     std::string index = gameBoard[xCoordinate][coordinate.y];
     // Check if a boat already exists at this index.
-    if (index != "0"){
+    if (index != "[]"){
       std::cout << "A boat already exists at this position." << std::endl;
       return false;
     }
@@ -95,7 +95,7 @@ std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardW
     std::vector<std::string> row; // Create a vector to represent this row.
     row.reserve(boardHeight); // Pre-allocate the capacity used by the for loop.
     for (int y = 0; y < boardHeight; y++) {
-      row.emplace_back("0"); // Add an empty board state to this index.
+      row.emplace_back("[]"); // Add an empty board state to this index.
     }
     gameBoard.push_back(row); // Add this row to the game board.
   }
