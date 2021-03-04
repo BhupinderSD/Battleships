@@ -64,14 +64,14 @@ bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const Boa
     int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
     // Check if any index of the boat extends the board.
     if (xCoordinate < 0 || xCoordinate > boardWidth || coordinate.y < 0 || coordinate.y > boardHeight) {
-      std::cout << "The boat must be placed within the board." << std::endl;
+      std::cout << "Position " << getAsciiLabel(xCoordinate) << coordinate.y + 1 << " is outside of the board, the boat must be placed within the board." << std::endl;
       return false;
     }
 
     std::string index = gameBoard[xCoordinate][coordinate.y];
     // Check if a boat already exists at this index.
     if (index != "[]"){
-      std::cout << "A boat already exists at this position." << std::endl;
+      std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << coordinate.y + 1 << "." << std::endl;
       return false;
     }
   }
