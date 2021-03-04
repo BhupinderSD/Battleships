@@ -73,6 +73,7 @@ Coordinate HumanPlayer::getCoordinates(const std::string &boatName) {
     } else if (tempCoordinates.y == 0) {
       std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
     } else {
+      tempCoordinates.y = tempCoordinates.y - 1; // Subtract 1 since the board index starts at 0.
       coordinate = tempCoordinates; // Set the temp coordinates as the coordinates to return.
       break;
     }
