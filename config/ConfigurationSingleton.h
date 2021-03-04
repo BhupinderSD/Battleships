@@ -23,13 +23,6 @@ class ConfigurationSingleton {
   int boardHeight = 10;  //default height for the board
   std::map<std::string, int> boatMap;
 
-private:
-  ConfigurationSingleton();
-
-  static std::multimap<std::string, std::string> readConfigFileToMultiMap();
-
-  void setConfigurationData(const std::multimap<std::string, std::string>& configMultiMap);
-
 public:
   static ConfigurationSingleton& getInstance();
 
@@ -42,6 +35,13 @@ public:
   int getHeight() const;
 
   std::map<std::string, int> getBoats();
+
+private:
+  ConfigurationSingleton();
+
+  static std::multimap<std::string, std::string> readConfigFileToMultiMap();
+
+  void setConfigurationData(const std::multimap<std::string, std::string>& configMultiMap);
 };
 
 #endif //BATTLESHIPS_CONFIGURATIONSINGLETON_H

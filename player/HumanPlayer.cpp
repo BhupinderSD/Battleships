@@ -8,19 +8,28 @@ HumanPlayer::HumanPlayer() {}
 
 void HumanPlayer::setBoatsOnBoard() {
   for (auto &itr : boatsMap) { // Iterate though every boat in the map.
-    std::string boatName = itr.first;
-    BoatPosition boatPosition;
-
-    gameBoard.showBoard();
-    boatPosition.orientation = getOrientation(boatName);
-
-    gameBoard.showBoard();
-    boatPosition.coordinate = getCoordinates(boatName);
+    setBoatOnBoard(itr.first, itr.second);
   }
 }
 
-HumanPlayer::Orientation HumanPlayer::getOrientation(const std::string& boatName) {
-  std::string question = "Which way do you want to place " + boatName + "? \n 1. Landscape \n 2. Portrait \n";
+void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {
+  while (true) {
+    BoatStart boatStart;
+
+    gameBoard.showBoard();
+    boatStart.orientation = getOrientation(boatName);
+
+    gameBoard.showBoard();
+    boatStart.coordinate = getCoordinates(boatName);
+
+    if (gameBoard.placeBoat(boatName, boatLength, boatStart)) {
+      break;
+    }
+  }
+}
+
+Orientation HumanPlayer::getOrientation(const std::string& boatName) {
+  std::string question = "Which way do you want to place " + boatName + "? \n 1. Horizontally \n 2. Vertically \n";
   int orientation;
 
   std::cout << question; // Show the user the question.
@@ -34,13 +43,13 @@ HumanPlayer::Orientation HumanPlayer::getOrientation(const std::string& boatName
   flushBuffer();
 
   if (orientation == 1) {
-    return HumanPlayer::Orientation::LANDSCAPE;
+    return Orientation::HORIZONTAL;
   } else {
-    return HumanPlayer::Orientation::PORTRAIT;
+    return Orientation::VERTICAL;
   }
 }
 
-HumanPlayer::Coordinate HumanPlayer::getCoordinates(const std::string &boatName) {
+Coordinate HumanPlayer::getCoordinates(const std::string &boatName) {
   Coordinate coordinate;
 
   while (true) { // Ask for coordinates till we receive valid coordinates.

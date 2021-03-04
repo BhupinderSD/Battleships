@@ -37,6 +37,32 @@ void GameBoard::showBoard() {
   }
 }
 
+bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const BoatStart & boatStart) {
+  std::vector<Coordinate> boatPositions; // Stores every index that this boat occupies.
+
+  switch (boatStart.orientation) {
+  case HORIZONTAL:
+    for (int i = 0; i < boatLength; i++) {
+      Coordinate coordinate;
+      int number = getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
+      coordinate.x = getAsciiLabel(number);
+      coordinate.y = boatStart.coordinate.y;
+      boatPositions.push_back(coordinate);
+    }
+    break;
+  case VERTICAL:
+    for (int i = 0; i < boatLength; i++) {
+      Coordinate coordinate;
+      coordinate.x = boatStart.coordinate.x;
+      coordinate.y = boatStart.coordinate.y + i;
+      boatPositions.push_back(coordinate);
+    }
+    break;
+  }
+
+  return false; //TODO(Bhupinder): Return true if this is a valid boat placement.
+}
+
 std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {
   std::vector<std::vector<std::string>> gameBoard;
 
@@ -62,4 +88,17 @@ std::string GameBoard::getAsciiLabel(int number) {
   }
 
   return string;
+}
+
+int GameBoard::getNumberFromAsciiLabel(const std::string& label) {
+  int number = 0;
+
+  for (int i = 0; i < label.size(); i++) {
+    char character = label[label.size() - i - 1]; // Start from the end.
+    character = std::toupper(character); // Ensure that the input is in upper case.
+    // Converts the character to 1-26 and multiplies it to its place value.
+    number += (character - 'A' + 1) * pow(26, i);
+  }
+
+  return number - 1;
 }
