@@ -5,6 +5,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
+#include <iostream>
 
 #ifndef BATTLESHIPS__HELPERFUNCTIONS_H_
 #define BATTLESHIPS__HELPERFUNCTIONS_H_
@@ -48,6 +49,20 @@ std::string padString(std::string string, int requiredLength) {
   }
 
   return string;
+}
+
+/* Returns the user input after asking them the specified question. */
+std::string getLine(std::string request) {
+  std::string string;
+  std::cout << request << std::endl;
+  getline(std::cin, string);
+  return string;
+}
+
+/* Clears the cin stream state and cin buffer. */
+void flushBuffer() {
+  std::cin.clear(); //resets the cin stream state so that future I/O operations work correctly
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); //clears the cin buffer including new lines or additional characters
 }
 
 #endif // BATTLESHIPS__HELPERFUNCTIONS_H_

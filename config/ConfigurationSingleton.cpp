@@ -51,16 +51,16 @@ std::multimap<std::string, std::string> ConfigurationSingleton::readConfigFileTo
 void ConfigurationSingleton::setConfigurationData(
     const std::multimap<std::string, std::string>& configMultiMap) {
   for (auto &itr : configMultiMap) { // Iterate though every key and value in the MultiMap.
-    if (itr. first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
+    if (itr.first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
       // Get the two numbers on either side of 'x'.
-      std::vector<std::string> boardDimensions = split(itr. second, 'x');
+      std::vector<std::string> boardDimensions = split(itr.second, 'x');
 
       // Update the width and height with the values from the config file.
       boardWidth = std::stoi(boardDimensions[0]);
       boardHeight = std::stoi(boardDimensions[1]);
-    } else if (itr. first == BOAT_KEY) { // Check if any boats have been set in the config file.
+    } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.
       // Get the boat name and length on either side of ','.
-      std::vector<std::string> boats = split(itr. second, ',');
+      std::vector<std::string> boats = split(itr.second, ',');
 
       std::string boatName = boats[0]; // Get the boat name as a string.
       int boatLength = std::stoi(boats[1]); // Get the boat length as an int.

@@ -4,13 +4,17 @@
 
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
+#include "player/HumanPlayer.cpp"
 
 int main() {
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
   int width = configSingleton.getWidth();
   int height = configSingleton.getHeight();
-  std::map<std::string, int> boats = configSingleton.getBoats();
+  std::map<std::string, int> boatsMap = configSingleton.getBoats();
 
   GameBoard gameBoard(width, height);
   gameBoard.showBoard();
+
+  HumanPlayer humanPlayer;
+  humanPlayer.setBoats(boatsMap);
 }
