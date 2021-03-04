@@ -4,13 +4,13 @@
 
 #include "GameBoard.h"
 
-GameBoard::GameBoard(int boardWidth, int boardHeight) {
+GameBoard::GameBoard() {
   gameBoard = createEmptyGameBoard(boardWidth, boardHeight);
 }
 
 void GameBoard::showBoard() {
-  int width = gameBoard.size();
-  int height = gameBoard[0].size();
+  int width = boardWidth;
+  int height = boardHeight;
 
   // Calculate the max length of an index on the board, so that each index can
   // be padded to the same length and the board can be evenly spaced.

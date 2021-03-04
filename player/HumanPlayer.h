@@ -22,6 +22,11 @@ class HumanPlayer {
     Orientation orientation;
   };
 
+  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
+  std::map<std::string, int> boatsMap = configSingleton.getBoats();
+
+  GameBoard gameBoard;
+
 private:
   static Orientation getOrientation(const std::string& boatName);
 
@@ -30,8 +35,7 @@ private:
 public:
   HumanPlayer();
 
-  static void setBoats(const std::map<std::string, int>& boatsMap);
-
+  void setBoatsOnBoard();
 };
 
 #endif // BATTLESHIPS_PLAYER_HUMANPLAYER_H_

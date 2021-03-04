@@ -9,6 +9,10 @@ class GameBoard {
 
   const int PADDING = 2; // Padding so each index can be bigger than the max index length.
 
+  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
+  int boardWidth = configSingleton.getWidth();
+  int boardHeight = configSingleton.getHeight();
+
   std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
 
 private:
@@ -17,7 +21,7 @@ private:
   static std::string getAsciiLabel(int number);
 
 public:
-  GameBoard(int boardWidth, int boardHeight); // Constructor that takes the board dimensions.
+  GameBoard(); // Constructor.
 
   void showBoard();
 };

@@ -6,11 +6,15 @@
 
 HumanPlayer::HumanPlayer() {}
 
-void HumanPlayer::setBoats(const std::map<std::string, int>& boatsMap) {
+void HumanPlayer::setBoatsOnBoard() {
   for (auto &itr : boatsMap) { // Iterate though every boat in the map.
     std::string boatName = itr.first;
     BoatPosition boatPosition;
+
+    gameBoard.showBoard();
     boatPosition.orientation = getOrientation(boatName);
+
+    gameBoard.showBoard();
     boatPosition.coordinate = getCoordinates(boatName);
   }
 }
