@@ -13,14 +13,19 @@ ConfigurationSingleton &ConfigurationSingleton::getInstance() {
 ConfigurationSingleton::ConfigurationSingleton() {  // Constructor.
   std::multimap<std::string, std::string> configMultiMap = readConfigFileToMultiMap();
   setConfigurationData(configMultiMap);
+  boatNames = setBoatNames(boatMap);
 }
 
 int ConfigurationSingleton::getWidth() const { return boardWidth; }
 
 int ConfigurationSingleton::getHeight() const { return boardHeight; }
 
-std::map<std::string, int> ConfigurationSingleton::getBoats() {
+std::map<std::string, int> ConfigurationSingleton::getBoatMap() {
   return boatMap;
+}
+
+std::vector<std::string> ConfigurationSingleton::getBoatNames() {
+  return boatNames;
 }
 
 std::multimap<std::string, std::string> ConfigurationSingleton::readConfigFileToMultiMap() {
@@ -84,4 +89,15 @@ void ConfigurationSingleton::setConfigurationData(
       }
     }
   }
+}
+
+std::vector<std::string> ConfigurationSingleton::setBoatNames(const std::map<std::string, int>& boatMap) {
+  std::vector<std::string> boatNames;
+
+  boatNames.reserve(boatMap.size()); // Pre-allocate the capacity used by the for loop.
+  for (auto &itr : boatMap) { // Iterate though every boat in the map.
+    boatNames.push_back(itr.first); // Add every boat name to the vector.
+  }
+
+  return boatNames;
 }

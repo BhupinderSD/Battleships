@@ -65,7 +65,7 @@ void flushBuffer() {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); //clears the cin buffer including new lines or additional characters
 }
 
-/* Get a number that is larger than or equal to 0 */
+/* Get a number that is larger than or equal to 0. */
 int getNumber(std::string request) {
   int number;
 
@@ -81,5 +81,15 @@ int getNumber(std::string request) {
   return number;
 }
 
+/* Print a bullet pointed list with the title and the strings in the vector. */
+void printList(const std::string& title, const std::vector<std::string>& placedBoats) {
+  if (!placedBoats.empty()) {
+    std::cout << title << std::endl;
+    for (const std::string& boatName : placedBoats) {
+      std::cout << " • " << boatName << std::endl;
+    }
+    std::cout << std::endl;
+  }
+}
 
 #endif // BATTLESHIPS__HELPERFUNCTIONS_H_

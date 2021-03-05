@@ -37,6 +37,8 @@ public:
 
   void showBoard();
 
+  void showPlacedAndUnplacedBoats();
+
   bool maybePlaceBoat(const std::string& boatName, int boatLength,
                         const BoatStart & boatPosition);
 

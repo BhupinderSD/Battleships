@@ -8,7 +8,6 @@
 class HumanPlayer {
 
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
-  std::map<std::string, int> boatsMap = configSingleton.getBoats();
 
   GameBoard gameBoard;
 

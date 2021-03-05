@@ -7,11 +7,12 @@
 HumanPlayer::HumanPlayer() {}
 
 void HumanPlayer::setBoatsOnBoard() {
-  for (auto &itr : boatsMap) { // Iterate though every boat in the map.
+  for (auto &itr : configSingleton.getBoatMap()) { // Iterate though every boat in the map.
+    gameBoard.showPlacedAndUnplacedBoats();
     setBoatOnBoard(itr.first, itr.second); // Place every boat on the board.
   }
-  gameBoard.showBoard();
 
+  gameBoard.showBoard();
   if (getNumber("Are you happy with the boat placements? \n1. Continue") == 1) {
     return;
   }

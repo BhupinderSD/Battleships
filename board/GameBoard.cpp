@@ -38,6 +38,22 @@ void GameBoard::showBoard() {
   }
 }
 
+void GameBoard::showPlacedAndUnplacedBoats() {
+  std::vector<std::string> unplacedBoats;
+  std::vector<std::string> placedBoats;
+
+  for (const std::string& boatName : configSingleton.getBoatNames()) {
+    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat was not found.
+      unplacedBoats.push_back(boatName); // Add the boat to the unplaced boats vector.
+    } else { // If the boat was found.
+      placedBoats.push_back(boatName);// Add the boat to the placed boats vector.
+    }
+  }
+
+  printList("Placed boats:", placedBoats);
+  printList("Unplaced boats:", unplacedBoats);
+}
+
 bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart &boatPosition) {
   std::vector<Coordinate> boatPositions = getBoatPositions(boatLength, boatPosition);
 
