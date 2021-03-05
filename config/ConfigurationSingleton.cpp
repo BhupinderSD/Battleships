@@ -55,15 +55,26 @@ void ConfigurationSingleton::setConfigurationData(
       // Get the two numbers on either side of 'x'.
       std::vector<std::string> boardDimensions = split(itr.second, 'x');
 
-      // Update the width and height with the values from the config file.
-      boardWidth = std::stoi(boardDimensions[0]);
-      boardHeight = std::stoi(boardDimensions[1]);
+      try { // Try to set the dimensions from the config file.
+        // Update the width and height with the values from the config file.
+        boardWidth = std::stoi(boardDimensions[0]);
+        boardHeight = std::stoi(boardDimensions[1]);
+      } catch (...) { // If we fails to set the dimensions, we will use the default value 10x10.
+        std::cout << "Unable to set board dimensions \'" << boardDimensions[0] << " x " << boardDimensions[1] << "\', ensure you are using the correct format in "<< CONFIG_FILE << "." << std::endl;
+      }
+
     } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.
       // Get the boat name and length on either side of ','.
       std::vector<std::string> boats = split(itr.second, ',');
 
-      std::string boatName = boats[0]; // Get the boat name as a string.
-      int boatLength = std::stoi(boats[1]); // Get the boat length as an int.
+      std::string boatName = "Boat"; // Default value for the boat name is 'Boat'.
+      int boatLength = 1; // Default length for a boat is '1'.
+      try {
+        boatName = boats[0]; // Get the boat name as a string.
+        boatLength = std::stoi(boats[1]); // Get the boat length as an int.
+      } catch (...) { // If we fail to set the board name or length, we use the default values.
+        std::cout << "Unable to set boat \'" << boatName << "\' of length  \'" << boats[1] << "\'. Ensure you are using the correct format in " << CONFIG_FILE << "." << std::endl;
+      }
 
       // Only add the boat to the map if it has a unique name.
       if (boatMap.find(boatName) == boatMap.end()) {
