@@ -84,7 +84,7 @@ bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const Boa
     gameBoard[xCoordinate][coordinate.y] = boatName[0];
   }
 
-  // Add ths board to the boat locations map.
+  // Add the board to the boat locations map.
   boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
 
   return true;
