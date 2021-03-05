@@ -10,6 +10,11 @@ void HumanPlayer::setBoatsOnBoard() {
   for (auto &itr : boatsMap) { // Iterate though every boat in the map.
     setBoatOnBoard(itr.first, itr.second); // Place every boat on the board.
   }
+  gameBoard.showBoard();
+
+  if (getNumber("Are you happy with the boat placements? \n1. Continue") == 1) {
+    return;
+  }
 }
 
 void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {

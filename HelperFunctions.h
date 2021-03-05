@@ -65,4 +65,21 @@ void flushBuffer() {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); //clears the cin buffer including new lines or additional characters
 }
 
+/* Get a number that is larger than or equal to 0 */
+int getNumber(std::string request) {
+  int number;
+
+  std::cout << request << std::endl;
+  std::cin >> number;
+  while(std::cin.fail() || number < 0) { //while the user enters an invalid input, keep asking for a valid input
+    std::cout << "Invalid input.\n\n";
+    flushBuffer();
+    std::cout << request << std::endl;
+    std::cin >> number;
+  }
+  flushBuffer();
+  return number;
+}
+
+
 #endif // BATTLESHIPS__HELPERFUNCTIONS_H_
