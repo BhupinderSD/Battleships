@@ -59,7 +59,7 @@ void ConfigurationSingleton::setConfigurationData(
         // Update the width and height with the values from the config file.
         boardWidth = std::stoi(boardDimensions[0]);
         boardHeight = std::stoi(boardDimensions[1]);
-      } catch (...) { // If we fails to set the dimensions, we will use the default value 10x10.
+      } catch (...) { // If we fail to set the dimensions, we will use the default value 10x10.
         std::cout << "Unable to set board dimensions \'" << boardDimensions[0] << " x " << boardDimensions[1] << "\', ensure you are using the correct format in "<< CONFIG_FILE << "." << std::endl;
       }
 
