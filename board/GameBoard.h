@@ -37,11 +37,17 @@ public:
 
   void showBoard();
 
-  bool placeBoat(const std::string& boatName, int boatLength,
+  bool maybePlaceBoat(const std::string& boatName, int boatLength,
                         const BoatStart & boatPosition);
 
 private:
   static std::vector<std::vector<std::string>> createEmptyGameBoard(int boardWidth, int boardHeight);
+
+  static std::vector<Coordinate> getBoatPositions(int boatLength, const BoatStart & boatStart);
+
+  bool isValidPosition(const std::vector<Coordinate>& boatPositions);
+
+  void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
   static std::string getAsciiLabel(int number);
 

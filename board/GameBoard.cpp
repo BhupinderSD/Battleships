@@ -38,54 +38,14 @@ void GameBoard::showBoard() {
   }
 }
 
-bool GameBoard::placeBoat(const std::string& boatName, int boatLength, const BoatStart & boatStart) {
-  std::vector<Coordinate> boatPositions; // Stores every index that this boat occupies.
+bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart &boatPosition) {
+  std::vector<Coordinate> boatPositions = getBoatPositions(boatLength, boatPosition);
 
-  switch (boatStart.orientation) {
-  case HORIZONTAL:
-    for (int i = 0; i < boatLength; i++) {
-      Coordinate coordinate;
-      int number = getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
-      coordinate.x = getAsciiLabel(number);
-      coordinate.y = boatStart.coordinate.y;
-      boatPositions.push_back(coordinate);
-    }
-    break;
-  case VERTICAL:
-    for (int i = 0; i < boatLength; i++) {
-      Coordinate coordinate;
-      coordinate.x = boatStart.coordinate.x;
-      coordinate.y = boatStart.coordinate.y + i;
-      boatPositions.push_back(coordinate);
-    }
-    break;
+  if (!isValidPosition(boatPositions)) {
+    return false;
   }
 
-  for (const Coordinate& coordinate : boatPositions) {
-    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
-    int yCoordinate = coordinate.y;
-    // Check if any index of the boat extends the board.
-    if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
-      std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
-      return false;
-    }
-
-    std::string index = gameBoard[xCoordinate][yCoordinate];
-    // Check if a boat already exists at this index.
-    if (index != "[]"){
-      std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
-      return false;
-    }
-  }
-
-  // Add this boat to the board.
-  for (const Coordinate& coordinate : boatPositions) {
-    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
-    gameBoard[xCoordinate][coordinate.y] = boatName[0];
-  }
-
-  // Add the board to the boat locations map.
-  boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
+  placeBoatOnBoard(boatName, boatPositions);
 
   return true;
 }
@@ -103,6 +63,67 @@ std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardW
   }
 
   return gameBoard;
+}
+
+std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatStart &boatStart) {
+  std::vector<Coordinate> boatPositions; // Stores every index that this boat occupies.
+
+  // Find the positions that the boat will take on the board, depending on the orientation.
+  switch (boatStart.orientation) {
+  case HORIZONTAL:
+    for (int i = 0; i < boatLength; i++) {
+      Coordinate coordinate;
+      int number = getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
+      coordinate.x = getAsciiLabel(number);
+      coordinate.y = boatStart.coordinate.y;
+      boatPositions.push_back(coordinate); // Add the coordinates to the boat positions.
+    }
+    break;
+  case VERTICAL:
+    for (int i = 0; i < boatLength; i++) {
+      Coordinate coordinate;
+      coordinate.x = boatStart.coordinate.x;
+      coordinate.y = boatStart.coordinate.y + i;
+      boatPositions.push_back(coordinate); // Add the coordinates to the boat positions.
+    }
+    break;
+  }
+
+  return boatPositions;
+}
+
+bool GameBoard::isValidPosition(const std::vector<Coordinate>& boatPositions) {
+  // Check that each index that the boat will occupy is valid.
+  for (const Coordinate& coordinate : boatPositions) {
+    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+    int yCoordinate = coordinate.y;
+    // Check if any index of the boat extends the board.
+    if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+      std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
+      return false;
+    }
+
+    std::string index = gameBoard[xCoordinate][yCoordinate];
+    // Check if a boat already exists at this index.
+    if (index != "[]"){
+      std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void GameBoard::placeBoatOnBoard(const std::string &boatName,
+                                 const std::vector<Coordinate> &boatPositions) {
+  // Add this boat to the board.
+  for (const Coordinate& coordinate : boatPositions) {
+    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+    gameBoard[xCoordinate][coordinate.y] = boatName[0];
+  }
+
+  // Add the board to the boat locations map.
+  boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
 }
 
 std::string GameBoard::getAsciiLabel(int number) {

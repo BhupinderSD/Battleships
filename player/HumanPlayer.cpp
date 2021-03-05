@@ -8,12 +8,12 @@ HumanPlayer::HumanPlayer() {}
 
 void HumanPlayer::setBoatsOnBoard() {
   for (auto &itr : boatsMap) { // Iterate though every boat in the map.
-    setBoatOnBoard(itr.first, itr.second);
+    setBoatOnBoard(itr.first, itr.second); // Place every boat on the board.
   }
 }
 
 void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {
-  while (true) {
+  while (true) { // Keep asking the user where they want to place a boat until we get a valid position.
     BoatStart boatStart;
 
     gameBoard.showBoard();
@@ -22,8 +22,8 @@ void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {
     gameBoard.showBoard();
     boatStart.coordinate = getCoordinates(boatName);
 
-    if (gameBoard.placeBoat(boatName, boatLength, boatStart)) {
-      break;
+    if (gameBoard.maybePlaceBoat(boatName, boatLength, boatStart)) {
+      break; // Once we have placed the boat on the board, exit the loop.
     }
   }
 }
