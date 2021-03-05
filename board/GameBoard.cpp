@@ -3,6 +3,7 @@
 //
 
 #include "GameBoard.h"
+#include <cmath>
 
 GameBoard::GameBoard() {
   gameBoard = createEmptyGameBoard(boardWidth, boardHeight);
