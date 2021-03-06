@@ -44,9 +44,13 @@ private:
 
   static std::multimap<std::string, std::string> readConfigFileToMultiMap();
 
+  static void verifyConfigurationData(std::multimap<std::string, std::string>& configMultiMap);
+
   void setConfigurationData(const std::multimap<std::string, std::string>& configMultiMap);
 
-  static void verifyConfigurationData(std::multimap<std::string, std::string>& configMultiMap);
+  void setBoardDimensions(const std::string& dimensions);
+
+  void addToBoatsMap(const std::string& boatInfo);
 
   static std::vector<std::string> setBoatNames(const std::map<std::string, int>& boatMap);
 };

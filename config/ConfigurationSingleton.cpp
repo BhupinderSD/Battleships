@@ -54,54 +54,83 @@ std::multimap<std::string, std::string> ConfigurationSingleton::readConfigFileTo
   return configMultiMap;
 }
 
-void ConfigurationSingleton::setConfigurationData(
-    const std::multimap<std::string, std::string>& configMultiMap) {
-  for (auto &itr : configMultiMap) { // Iterate though every key and value in the MultiMap.
-    if (itr.first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
-      // Get the two numbers on either side of 'x'.
-      std::vector<std::string> boardDimensions = split(itr.second, 'x');
-
-      try { // Try to set the dimensions from the config file.
-        // Update the width and height with the values from the config file.
-        boardWidth = std::stoi(boardDimensions[0]);
-        boardHeight = std::stoi(boardDimensions[1]);
-      } catch (...) { // If we fail to set the dimensions, we will use the default value 10x10.
-        std::cout << "Unable to set board dimensions \'" << boardDimensions[0] << " x " << boardDimensions[1] << "\', ensure you are using the correct format in "<< CONFIG_FILE << "." << std::endl;
-      }
-
-    } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.
-      // Get the boat name and length on either side of ','.
-      std::vector<std::string> boats = split(itr.second, ',');
-
-      std::string boatName = "Boat"; // Default value for the boat name is 'Boat'.
-      int boatLength = 1; // Default length for a boat is '1'.
-      try {
-        boatName = boats[0]; // Get the boat name as a string.
-        boatLength = std::stoi(boats[1]); // Get the boat length as an int.
-      } catch (...) { // If we fail to set the board name or length, we use the default values.
-        std::cout << "Unable to set boat \'" << boatName << "\' of length  \'" << boats[1] << "\'. Ensure you are using the correct format in " << CONFIG_FILE << "." << std::endl;
-      }
-
-      // Only add the boat to the map if it has a unique name.
-      if (boatMap.find(boatName) == boatMap.end()) {
-        boatMap.insert(std::pair<std::string, int>(boatName, boatLength));
-      } else {
-        std::cout << "Duplicated boat \'" << boatName << "\', each boat must be unique." << std::endl;
-      }
-    }
-  }
-}
-
 void ConfigurationSingleton::verifyConfigurationData(std::multimap<std::string, std::string> &configMultiMap) {
   if (configMultiMap.find(BOARD_KEY) == configMultiMap.end()) {
     // Inform the user that the default board dimensions will be used.
-    std::cout << "No board dimensions specified in " << CONFIG_FILE << ", using 10x10." << std::endl;
+    std::cout << "No board dimensions specified, using 10x10." << std::endl;
   }
 
   if (configMultiMap.find(BOAT_KEY) == configMultiMap.end()) {
     // Inform the user that a default single boat will be used.
-    std::cout << "No boats specified in " << CONFIG_FILE << ", using a single boat." << std::endl;
+    std::cout << "No boats specified, using a single boat." << std::endl;
     configMultiMap.insert(std::pair<std::string, std::string>(BOAT_KEY, "Carrier, 5"));
+  }
+}
+
+void ConfigurationSingleton::setConfigurationData(const std::multimap<std::string, std::string>& configMultiMap) {
+  for (auto &itr : configMultiMap) { // Iterate though every key and value in the MultiMap.
+    if (itr.first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
+      setBoardDimensions(itr.second);
+    } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.
+      addToBoatsMap(itr.second);
+    }
+  }
+}
+
+void ConfigurationSingleton::setBoardDimensions(const std::string& dimensions) {
+  // Get the two numbers on either side of 'x'.
+  std::vector<std::string> boardDimensions = split(dimensions, 'x');
+
+  try { // Try to set the dimensions from the config file.
+    // Update the width and height with the values from the config file.
+    boardWidth = std::stoi(boardDimensions[0]);
+    boardHeight = std::stoi(boardDimensions[1]);
+  } catch (...) { // If we fail to set the dimensions, we will use the default value 10x10.
+    std::cout << "Unable to set board dimensions \'" << boardDimensions[0] << " x " << boardDimensions[1] << "\', ensure you are using the correct format in "<< CONFIG_FILE << ". Using 10x10." << std::endl;
+  }
+
+  // Ensure that the board dimensions are valid.
+  if (boardWidth <= 0) {
+    std::cout << "The board width must be more than 0, using default value 10." << std::endl;
+    boardWidth = 10;
+  }
+
+  if (boardHeight <= 0) {
+    std::cout << "The board height must be more than 0, using default value 10." << std::endl;
+    boardHeight = 10;
+  }
+}
+
+void ConfigurationSingleton::addToBoatsMap(const std::string &boatInfo) {
+  // Get the boat name and length on either side of ','.
+  std::vector<std::string> boats = split(boatInfo, ',');
+
+  std::string boatName = "Boat"; // Default value for the boat name is 'Boat'.
+  int boatLength = 4; // Default length for a boat is '4'.
+
+  if (!boats[0].empty()) { // Only set the new name if it is not empty.
+    boatName = boats[0]; // Get the boat name as a string.
+  } else { // Inform the user that the default value will be used.
+    std::cout << "The boat name cannot be empty, using default name Boat." << std::endl;
+  }
+
+  try {
+    boatLength = std::stoi(boats[1]); // Get the boat length as an int.
+  } catch (...) { // If we fail to set the board length, we the default value.
+    std::cout << "Unable to set boat \'" << boatName << "\' of length  \'" << boats[1] << "\'. Ensure you are using the correct format in " << CONFIG_FILE << ". Using default length 4." << std::endl;
+  }
+
+  // Ensure that the boat length is valid.
+  if (boatLength <= 0) {
+    std::cout << "The boat length must be more than 0, using default value 4." << std::endl;
+    boatLength = 4;
+  }
+
+  // Only add the boat to the map if it has a unique name.
+  if (boatMap.find(boatName) == boatMap.end()) {
+    boatMap.insert(std::pair<std::string, int>(boatName, boatLength));
+  } else {
+    std::cout << "Duplicated boat \'" << boatName << "\', each boat must be unique." << std::endl;
   }
 }
 
