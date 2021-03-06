@@ -39,8 +39,9 @@ public:
 
   void showPlacedAndUnplacedBoats();
 
-  bool maybePlaceBoat(const std::string& boatName, int boatLength,
-                        const BoatStart & boatPosition);
+  bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);
+
+  void resetGameBoard();
 
 private:
   static std::vector<std::vector<std::string>> createEmptyGameBoard(int boardWidth, int boardHeight);

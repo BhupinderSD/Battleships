@@ -17,6 +17,8 @@ public:
   void setBoatsOnBoard();
 
 private:
+  void showAndSetBoatOnBoard();
+
   void setBoatOnBoard(const std::string& boatName, int boatLength);
 
   static Orientation getOrientation(const std::string& boatName);

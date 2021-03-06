@@ -7,14 +7,24 @@
 HumanPlayer::HumanPlayer() {}
 
 void HumanPlayer::setBoatsOnBoard() {
+  while (true) {
+    showAndSetBoatOnBoard();
+    gameBoard.showBoard();
+
+    int option = getNumber("Are you happy with the boat placements? \n1. Continue\n2. Reset", 1, 2);
+    if (option == 1) {
+      break; // If the user is happy with the boat placements, continue with the game.
+    } else {
+      gameBoard.resetGameBoard(); // Reset the game board.
+      continue; // Continue with the loop and place all of the boats again.
+    }
+  }
+}
+
+void HumanPlayer::showAndSetBoatOnBoard() {
   for (auto &itr : configSingleton.getBoatMap()) { // Iterate though every boat in the map.
     gameBoard.showPlacedAndUnplacedBoats();
     setBoatOnBoard(itr.first, itr.second); // Place every boat on the board.
-  }
-
-  gameBoard.showBoard();
-  if (getNumber("Are you happy with the boat placements? \n1. Continue") == 1) {
-    return;
   }
 }
 
@@ -36,17 +46,7 @@ void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {
 
 Orientation HumanPlayer::getOrientation(const std::string& boatName) {
   std::string question = "Which way do you want to place " + boatName + "? \n 1. Horizontally \n 2. Vertically \n";
-  int orientation;
-
-  std::cout << question; // Show the user the question.
-  std::cin >> orientation; // Get the users response.
-  while(std::cin.fail() || (orientation != 1 && orientation != 2)) { // While the user enters an invalid input, keep asking for an orientation.
-    std::cout << "Please enter a valid orientation.\n\n";
-    flushBuffer();
-    std::cout << question;
-    std::cin >> orientation;
-  }
-  flushBuffer();
+  int orientation = getNumber(question, 1, 2);
 
   if (orientation == 1) {
     return Orientation::HORIZONTAL;

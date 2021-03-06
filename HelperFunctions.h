@@ -61,17 +61,17 @@ std::string getLine(std::string request) {
 
 /* Clears the cin stream state and cin buffer. */
 void flushBuffer() {
-  std::cin.clear(); //resets the cin stream state so that future I/O operations work correctly
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); //clears the cin buffer including new lines or additional characters
+  std::cin.clear(); // Resets the cin stream state so that future I/O operations work correctly.
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); // Clears the cin buffer including new lines or additional characters.
 }
 
-/* Get a number that is larger than or equal to 0. */
-int getNumber(std::string request) {
+/* Get a number that is larger than or equal to startRange and smaller than or equal to endRange. */
+int getNumber(std::string request, int startRange, int endRange) {
   int number;
 
   std::cout << request << std::endl;
   std::cin >> number;
-  while(std::cin.fail() || number < 0) { //while the user enters an invalid input, keep asking for a valid input
+  while(std::cin.fail() || number < startRange || number > endRange) { // While the user enters an invalid input, keep asking for a valid input.
     std::cout << "Invalid input.\n\n";
     flushBuffer();
     std::cout << request << std::endl;

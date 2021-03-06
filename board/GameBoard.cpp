@@ -66,6 +66,12 @@ bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, cons
   return true;
 }
 
+void GameBoard::resetGameBoard() {
+  std::cout << "Resetting game board...\n" << std::endl;
+  gameBoard = createEmptyGameBoard(boardWidth, boardHeight); // Reset the game board with an empty one.
+  boatLocations.clear(); // Delete all stored boat locations.
+}
+
 std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {
   std::vector<std::vector<std::string>> gameBoard;
 
