@@ -12,6 +12,7 @@ ConfigurationSingleton &ConfigurationSingleton::getInstance() {
 
 ConfigurationSingleton::ConfigurationSingleton() {  // Constructor.
   std::multimap<std::string, std::string> configMultiMap = readConfigFileToMultiMap();
+  verifyConfigurationData(configMultiMap);
   setConfigurationData(configMultiMap);
   boatNames = setBoatNames(boatMap);
 }
@@ -88,6 +89,19 @@ void ConfigurationSingleton::setConfigurationData(
         std::cout << "Duplicated boat \'" << boatName << "\', each boat must be unique." << std::endl;
       }
     }
+  }
+}
+
+void ConfigurationSingleton::verifyConfigurationData(std::multimap<std::string, std::string> &configMultiMap) {
+  if (configMultiMap.find(BOARD_KEY) == configMultiMap.end()) {
+    // Inform the user that the default board dimensions will be used.
+    std::cout << "No board dimensions specified in " << CONFIG_FILE << ", using 10x10." << std::endl;
+  }
+
+  if (configMultiMap.find(BOAT_KEY) == configMultiMap.end()) {
+    // Inform the user that a default single boat will be used.
+    std::cout << "No boats specified in " << CONFIG_FILE << ", using a single boat." << std::endl;
+    configMultiMap.insert(std::pair<std::string, std::string>(BOAT_KEY, "Carrier, 5"));
   }
 }
 
