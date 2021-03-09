@@ -38,13 +38,14 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
     std::string boatName = boatNames[option - 1];
     int boatLength = boatMap.find(boatName)->second;
 
-    //TODO(Bhupinder): If a boat was placed before, remove it from the board before placing it again.
     setBoatOnBoard(boatName, boatLength); // Place every boat on the board.
   } while (gameBoard.hasUnplacedBoats());
 }
 
 void HumanPlayer::setBoatOnBoard(const std::string& boatName, int boatLength) {
   while (true) { // Keep asking the user where they want to place a boat until we get a valid position.
+    gameBoard.removeBoatFromBoardIfPlaced(boatName);
+
     BoatStart boatStart;
 
     gameBoard.showBoard();

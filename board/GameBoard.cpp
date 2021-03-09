@@ -4,6 +4,7 @@
 
 #include "GameBoard.h"
 #include <cmath>
+#include <utility>
 
 GameBoard::GameBoard() {
   gameBoard = createEmptyGameBoard(boardWidth, boardHeight);
@@ -66,6 +67,18 @@ void GameBoard::showPlacedAndUnplacedBoats() {
   printList("Unplaced boats:", unplacedBoats);
 }
 
+void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
+  if (boatLocations.find(boatName) == boatLocations.end()) {
+    return; // If the boat has not been placed, return.
+  }
+
+  std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second; // Coordinates that this boat occupies.
+
+  for (const Coordinate& coordinate : boatCoordinates) {
+    setBoardIndexWithString(coordinate, EMPTY_STATE);
+  }
+}
+
 bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart &boatPosition) {
   std::vector<Coordinate> boatPositions = getBoatPositions(boatLength, boatPosition);
 
@@ -91,7 +104,7 @@ std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardW
     std::vector<std::string> row; // Create a vector to represent this row.
     row.reserve(boardHeight); // Pre-allocate the capacity used by the for loop.
     for (int y = 0; y < boardHeight; y++) {
-      row.emplace_back("[]"); // Add an empty board state to this index.
+      row.emplace_back(EMPTY_STATE); // Add an empty board state to this index.
     }
     gameBoard.push_back(row); // Add this row to the game board.
   }
@@ -148,16 +161,19 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate>& boatPositions) {
   return true;
 }
 
-void GameBoard::placeBoatOnBoard(const std::string &boatName,
-                                 const std::vector<Coordinate> &boatPositions) {
+void GameBoard::placeBoatOnBoard(const std::string &boatName, const std::vector<Coordinate> &boatPositions) {
   // Add this boat to the board.
   for (const Coordinate& coordinate : boatPositions) {
-    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
-    gameBoard[xCoordinate][coordinate.y] = boatName[0];
+    setBoardIndexWithString(coordinate, {boatName[0]}); // Use the first letter of the boat name as its label.
   }
 
   // Add the board to the boat locations map.
   boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
+}
+
+void GameBoard::setBoardIndexWithString(const Coordinate& coordinate, std::string string) {
+    int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
+    gameBoard[xCoordinate][coordinate.y] = std::move(string);
 }
 
 std::string GameBoard::getAsciiLabel(int number) {

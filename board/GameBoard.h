@@ -20,6 +20,8 @@ struct BoatStart { // A struct that stores the position and orientation for a bo
   Orientation orientation;
 };
 
+static const std::string EMPTY_STATE = "[]";
+
 class GameBoard {
 
   const int PADDING = 2; // Padding so each index can be bigger than the max index length.
@@ -41,6 +43,8 @@ public:
 
   void showPlacedAndUnplacedBoats();
 
+  void removeBoatFromBoardIfPlaced(const std::string& boatName);
+
   bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);
 
   void resetGameBoard();
@@ -53,6 +57,8 @@ private:
   bool isValidPosition(const std::vector<Coordinate>& boatPositions);
 
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
+
+  void setBoardIndexWithString(const Coordinate& coordinate, std::string string);
 
   static std::string getAsciiLabel(int number);
 
