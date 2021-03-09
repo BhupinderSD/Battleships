@@ -17,7 +17,7 @@ public:
   void setBoatsOnBoard();
 
 private:
-  void showAndSetBoatOnBoard();
+  void selectAndSetBoatsOnBoard();
 
   void setBoatOnBoard(const std::string& boatName, int boatLength);
 

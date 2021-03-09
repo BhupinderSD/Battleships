@@ -81,12 +81,12 @@ int getNumber(std::string request, int startRange, int endRange) {
   return number;
 }
 
-/* Print a bullet pointed list with the title and the strings in the vector. */
+/* Print a list with the title and the strings in the vector. */
 void printList(const std::string& title, const std::vector<std::string>& placedBoats) {
   if (!placedBoats.empty()) {
     std::cout << title << std::endl;
     for (const std::string& boatName : placedBoats) {
-      std::cout << " • " << boatName << std::endl;
+      std::cout << boatName << std::endl;
     }
     std::cout << std::endl;
   }

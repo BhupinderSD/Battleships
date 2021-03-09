@@ -38,15 +38,27 @@ void GameBoard::showBoard() {
   }
 }
 
+bool GameBoard::hasUnplacedBoats() {
+  for (const std::string& boatName : configSingleton.getBoatNames()) {
+    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat has not been placed.
+      return true; // Return true, meaning that this boat has not been placed yet.
+    }
+  }
+
+  return false; // All boats have been placed.
+}
+
 void GameBoard::showPlacedAndUnplacedBoats() {
+  std::vector<std::string> boatNames = configSingleton.getBoatNames();
   std::vector<std::string> unplacedBoats;
   std::vector<std::string> placedBoats;
 
-  for (const std::string& boatName : configSingleton.getBoatNames()) {
-    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat was not found.
-      unplacedBoats.push_back(boatName); // Add the boat to the unplaced boats vector.
+  for (int i = 0; i < boatNames.size(); i++) {
+    std::string indexString = std::to_string(i + 1) + ". ";
+    if (boatLocations.find(boatNames[i]) == boatLocations.end()) { // If the boat was not found.
+      unplacedBoats.push_back(indexString + boatNames[i]); // Add the boat to the unplaced boats vector.
     } else { // If the boat was found.
-      placedBoats.push_back(boatName);// Add the boat to the placed boats vector.
+      placedBoats.push_back(indexString + boatNames[i]);// Add the boat to the placed boats vector.
     }
   }
 
