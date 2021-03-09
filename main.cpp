@@ -13,7 +13,7 @@ void playerVsComputer() {
 
 void showMenu() {
   while (true) { // Ask the user to enter a game mode until they choose to quit.
-    int option = getNumber("Please select a game mode: \n1. Player v Computer \n0. Reset", 0, 1);
+    int option = getNumber("Please select a game mode: \n1. Player v Computer \n0. Quit", 0, 1);
     switch(option) {
     case 1:
       playerVsComputer();
