@@ -34,7 +34,12 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
   do { // Allow the user to replace a boat, even if all boats are placed.
     gameBoard.showPlacedAndUnplacedBoats();
 
-    int option = getNumber("Please enter the number of the boat to place: ", 1, boatNames.size());
+    int option = getNumber("Please enter the number of the boat to place: ", 0, boatNames.size());
+    if (option == 0) { // Auto-place all remaining boats.
+      gameBoard.autoPlaceUnplacedBoats();
+      continue;
+    }
+
     std::string boatName = boatNames[option - 1];
     int boatLength = boatMap.find(boatName)->second;
 

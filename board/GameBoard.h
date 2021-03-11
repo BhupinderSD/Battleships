@@ -43,6 +43,8 @@ public:
 
   void showPlacedAndUnplacedBoats();
 
+  void autoPlaceUnplacedBoats();
+
   void removeBoatFromBoardIfPlaced(const std::string& boatName);
 
   bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);

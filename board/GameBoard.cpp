@@ -63,8 +63,16 @@ void GameBoard::showPlacedAndUnplacedBoats() {
     }
   }
 
+  if (!unplacedBoats.empty()) {
+    unplacedBoats.push_back(std::to_string(0) + ". Auto-place unplaced boats."); // Inform the user that they can auto-place boats.
+  }
+
   printList("Placed boats:", placedBoats);
   printList("Unplaced boats:", unplacedBoats);
+}
+
+void GameBoard::autoPlaceUnplacedBoats() {
+  //TODO(Bhupinder): Implement auto place algorithm.
 }
 
 void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
