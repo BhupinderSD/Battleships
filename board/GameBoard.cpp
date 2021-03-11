@@ -39,16 +39,6 @@ void GameBoard::showBoard() {
   }
 }
 
-bool GameBoard::hasUnplacedBoats() {
-  for (const std::string& boatName : configSingleton.getBoatNames()) {
-    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat has not been placed.
-      return true; // Return true, meaning that this boat has not been placed yet.
-    }
-  }
-
-  return false; // All boats have been placed.
-}
-
 void GameBoard::showPlacedAndUnplacedBoats() {
   std::vector<std::string> boatNames = configSingleton.getBoatNames();
   std::vector<std::string> unplacedBoats;
@@ -71,6 +61,35 @@ void GameBoard::showPlacedAndUnplacedBoats() {
   printList("Unplaced boats:", unplacedBoats);
 }
 
+
+void GameBoard::setBoatOnBoard(const std::string& boatName, int boatLength) {
+  while (true) { // Keep asking the user where they want to place a boat until we get a valid position.
+    removeBoatFromBoardIfPlaced(boatName);
+
+    BoatStart boatStart;
+
+    showBoard();
+    boatStart.orientation = getOrientation(boatName);
+
+    showBoard();
+    boatStart.coordinate = getCoordinates(boatName);
+
+    if (maybePlaceBoat(boatName, boatLength, boatStart)) {
+      break; // Once we have placed the boat on the board, exit the loop.
+    }
+  }
+}
+
+bool GameBoard::hasUnplacedBoats() {
+  for (const std::string& boatName : configSingleton.getBoatNames()) {
+    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat has not been placed.
+      return true; // Return true, meaning that this boat has not been placed yet.
+    }
+  }
+
+  return false; // All boats have been placed.
+}
+
 void GameBoard::autoPlaceUnplacedBoats() {
   //TODO(Bhupinder): Implement auto place algorithm.
 }
@@ -85,6 +104,50 @@ void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
   for (const Coordinate& coordinate : boatCoordinates) {
     setBoardIndexWithString(coordinate, EMPTY_STATE);
   }
+}
+
+Orientation GameBoard::getOrientation(const std::string& boatName) {
+  std::string question = "Which way do you want to place " + boatName + "? \n 1. Horizontally \n 2. Vertically \n";
+  int orientation = getNumber(question, 1, 2);
+
+  if (orientation == 1) {
+    return Orientation::HORIZONTAL;
+  } else {
+    return Orientation::VERTICAL;
+  }
+}
+
+Coordinate GameBoard::getCoordinates(const std::string &boatName) {
+  Coordinate coordinate;
+
+  while (true) { // Ask for coordinates till we receive valid coordinates.
+    Coordinate tempCoordinates;
+    std::string userCoordinates = getLine("Where do you want to place " + boatName + "? ");
+
+    // Split the x and y coordinates.
+    for (char character : userCoordinates) {
+      if (isalpha(character)) {
+        tempCoordinates.x += character;
+      } else if (isdigit(character)) {
+        tempCoordinates.y = tempCoordinates.y * 10 + (character - '0');
+      }
+    }
+
+    // Check that the coordinates are valid.
+    if (tempCoordinates.x.empty() && tempCoordinates.y == 0) {
+      std::cout << "Please enter valid coordinates.\n" << std::endl;
+    } else if (tempCoordinates.x.empty()) {
+      std::cout << "Please enter a valid x coordinate (a letter).\n" << std::endl;
+    } else if (tempCoordinates.y == 0) {
+      std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
+    } else {
+      tempCoordinates.y = tempCoordinates.y - 1; // Subtract 1 since the board index starts at 0.
+      coordinate = tempCoordinates; // Set the temp coordinates as the coordinates to return.
+      break;
+    }
+  }
+
+  return coordinate;
 }
 
 bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart &boatPosition) {

@@ -19,11 +19,6 @@ public:
 private:
   void selectAndSetBoatsOnBoard();
 
-  void setBoatOnBoard(const std::string& boatName, int boatLength);
-
-  static Orientation getOrientation(const std::string& boatName);
-
-  static Coordinate getCoordinates(const std::string& boatName);
 };
 
 #endif // BATTLESHIPS_PLAYER_HUMANPLAYER_H_

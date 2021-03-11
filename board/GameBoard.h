@@ -39,15 +39,13 @@ public:
 
   void showBoard();
 
-  bool hasUnplacedBoats();
-
   void showPlacedAndUnplacedBoats();
 
+  void setBoatOnBoard(const std::string& boatName, int boatLength);
+
+  bool hasUnplacedBoats();
+
   void autoPlaceUnplacedBoats();
-
-  void removeBoatFromBoardIfPlaced(const std::string& boatName);
-
-  bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);
 
   void resetGameBoard();
 
@@ -61,6 +59,14 @@ private:
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
   void setBoardIndexWithString(const Coordinate& coordinate, std::string string);
+
+  void removeBoatFromBoardIfPlaced(const std::string& boatName);
+
+  static Orientation getOrientation(const std::string& boatName);
+
+  static Coordinate getCoordinates(const std::string& boatName);
+
+  bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);
 
   static std::string getAsciiLabel(int number);
 
