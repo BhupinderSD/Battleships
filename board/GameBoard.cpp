@@ -7,6 +7,7 @@
 #include <utility>
 
 GameBoard::GameBoard() {
+  initRandom();
   gameBoard = createEmptyGameBoard(boardWidth, boardHeight);
 }
 
@@ -61,6 +62,40 @@ void GameBoard::showPlacedAndUnplacedBoats() {
   printList("Unplaced boats:", unplacedBoats);
 }
 
+void GameBoard::autoPlaceUnplacedBoats() {
+  std::map<std::string, int> boatMap = configSingleton.getBoatMap();
+  std::vector<std::string> boatNames = configSingleton.getBoatNames();
+  std::vector<std::string> unplacedBoats;
+
+  for (auto &boatName : boatNames) { // Find all of the unplaced boats and store the names in a vector.
+    if (boatLocations.find(boatName) == boatLocations.end()) { // If the boat has not been placed on the board.
+      unplacedBoats.push_back(boatName); // Add the boat to the unplaced boats vector.
+    }
+  }
+
+  for (auto &boatName : unplacedBoats) { // Try to add every unplaced boat on the board.
+    int boatLength = boatMap.find(boatName)->second;
+
+    int loopCount = 0;
+    while (true) { // Keep trying to place the boat until we get a valid position.
+      BoatStart boatStart;
+      boatStart.orientation = randomBoolean(rng) ? Orientation::HORIZONTAL : Orientation::VERTICAL; // Choose a random orientation.
+      boatStart.coordinate.x = getAsciiLabel(randomWidth(rng)); // Choose a random x coordinate.
+      boatStart.coordinate.y = randomHeight(rng); // Choose a random y coordinate.
+
+      if (maybePlaceBoat(boatName, boatLength, boatStart, /* printErrors= */ false)) { // Try to place the boat without printing any errors.
+        break; // Once we have placed the boat on the board, exit the loop.
+      }
+
+      if (loopCount > boardHeight * boardWidth * 2) { // Don't try to place a boat an unnecessary number of times.
+        std::cout << "Couldn't automatically place " << boatName << "." << std::endl; // Inform the user that a boat couldn't be placed automatically.
+        break; // Break the while true and try to place the next boat.
+      }
+
+      loopCount++; // Increment the loop count.
+    }
+  }
+}
 
 void GameBoard::setBoatOnBoard(const std::string& boatName, int boatLength) {
   while (true) { // Keep asking the user where they want to place a boat until we get a valid position.
@@ -74,7 +109,7 @@ void GameBoard::setBoatOnBoard(const std::string& boatName, int boatLength) {
     showBoard();
     boatStart.coordinate = getCoordinates(boatName);
 
-    if (maybePlaceBoat(boatName, boatLength, boatStart)) {
+    if (maybePlaceBoat(boatName, boatLength, boatStart, /* printErrors= */ true)) {
       break; // Once we have placed the boat on the board, exit the loop.
     }
   }
@@ -88,10 +123,6 @@ bool GameBoard::hasUnplacedBoats() {
   }
 
   return false; // All boats have been placed.
-}
-
-void GameBoard::autoPlaceUnplacedBoats() {
-  //TODO(Bhupinder): Implement auto place algorithm.
 }
 
 void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
@@ -150,10 +181,10 @@ Coordinate GameBoard::getCoordinates(const std::string &boatName) {
   return coordinate;
 }
 
-bool GameBoard::maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart &boatPosition) {
+bool GameBoard::maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors) {
   std::vector<Coordinate> boatPositions = getBoatPositions(boatLength, boatPosition);
 
-  if (!isValidPosition(boatPositions)) {
+  if (!isValidPosition(boatPositions, printErrors)) {
     return false;
   }
 
@@ -166,6 +197,13 @@ void GameBoard::resetGameBoard() {
   std::cout << "Resetting game board...\n" << std::endl;
   gameBoard = createEmptyGameBoard(boardWidth, boardHeight); // Reset the game board with an empty one.
   boatLocations.clear(); // Delete all stored boat locations.
+}
+
+void GameBoard::initRandom() {
+  rng = std::mt19937(rd()); // Initialise the random number generator, seeded with rd().
+  randomBoolean = std::uniform_int_distribution<>(0, 1); // Used to generate a random boolean.
+  randomHeight = std::uniform_int_distribution<>(0, boardHeight); // Used to generate a random int between 0 and the board height.
+  randomWidth = std::uniform_int_distribution<>(0, boardWidth); // Used to generate a random int between 0 and the board width.
 }
 
 std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {
@@ -210,21 +248,25 @@ std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatSt
   return boatPositions;
 }
 
-bool GameBoard::isValidPosition(const std::vector<Coordinate>& boatPositions) {
+bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bool printErrors) {
   // Check that each index that the boat will occupy is valid.
   for (const Coordinate& coordinate : boatPositions) {
     int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
     int yCoordinate = coordinate.y;
     // Check if any index of the boat extends the board.
     if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
-      std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
+      if (printErrors) {
+        std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
+      }
       return false;
     }
 
     std::string index = gameBoard[xCoordinate][yCoordinate];
     // Check if a boat already exists at this index.
     if (index != "[]"){
-      std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
+      if (printErrors) {
+        std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
+      }
       return false;
     }
   }

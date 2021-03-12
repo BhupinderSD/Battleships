@@ -5,6 +5,8 @@
 #ifndef BATTLESHIPS_BOARD_GAMEBOARD_H_
 #define BATTLESHIPS_BOARD_GAMEBOARD_H_
 
+#include <random>
+
 enum Orientation { // An enum to identify the different orientations of a boat.
   HORIZONTAL,
   VERTICAL
@@ -41,20 +43,29 @@ public:
 
   void showPlacedAndUnplacedBoats();
 
+  void autoPlaceUnplacedBoats();
+
   void setBoatOnBoard(const std::string& boatName, int boatLength);
 
   bool hasUnplacedBoats();
 
-  void autoPlaceUnplacedBoats();
-
   void resetGameBoard();
 
 private:
+
+  std::random_device rd;  // Used as the seed for the random number engine.
+  std::mt19937 rng; // Random number generator seeded with rd().
+  std::uniform_int_distribution<> randomBoolean; // Used to generate a random boolean.
+  std::uniform_int_distribution<> randomHeight; // Used to generate a random int between 0 and the board height.
+  std::uniform_int_distribution<> randomWidth; // Used to generate a random int between 0 and the board width.
+
+  void initRandom();
+
   static std::vector<std::vector<std::string>> createEmptyGameBoard(int boardWidth, int boardHeight);
 
   static std::vector<Coordinate> getBoatPositions(int boatLength, const BoatStart & boatStart);
 
-  bool isValidPosition(const std::vector<Coordinate>& boatPositions);
+  bool isValidPosition(const std::vector<Coordinate> &boatPositions, bool printErrors);
 
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
@@ -66,7 +77,7 @@ private:
 
   static Coordinate getCoordinates(const std::string& boatName);
 
-  bool maybePlaceBoat(const std::string& boatName, int boatLength, const BoatStart & boatPosition);
+  bool maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors);
 
   static std::string getAsciiLabel(int number);
 

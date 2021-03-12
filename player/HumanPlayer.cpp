@@ -9,7 +9,6 @@ HumanPlayer::HumanPlayer() {}
 void HumanPlayer::setBoatsOnBoard() {
   while (true) {
     selectAndSetBoatsOnBoard();
-    gameBoard.showBoard();
 
     int option = getNumber("Are you happy with the boat placements? \n1. Yes\n2. Move a boat\n3. Reset the board", 1, 3);
     switch (option) {
@@ -37,6 +36,7 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
     int option = getNumber("Please enter the number of the boat to place: ", 0, boatNames.size());
     if (option == 0) { // Auto-place all remaining boats.
       gameBoard.autoPlaceUnplacedBoats();
+      gameBoard.showBoard();
       continue;
     }
 
@@ -44,5 +44,6 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
     int boatLength = boatMap.find(boatName)->second;
 
     gameBoard.setBoatOnBoard(boatName, boatLength); // Place every boat on the board.
+    gameBoard.showBoard();
   } while (gameBoard.hasUnplacedBoats());
 }
