@@ -10,6 +10,10 @@ class ComputerPlayer {
 public:
   ComputerPlayer();
 
+  Coordinate nextTurn();
+
+  void updateIfHit(const Coordinate& torpedoLocation);
+
 private:
   GameBoard gameBoard;
 

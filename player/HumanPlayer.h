@@ -16,7 +16,9 @@ public:
 
   void setBoatsOnBoard();
 
-  void nextTurn();
+  Coordinate nextTurn();
+
+  void updateIfHit(const Coordinate& torpedoLocation);
 
 private:
   void selectAndSetBoatsOnBoard();

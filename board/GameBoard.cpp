@@ -80,8 +80,7 @@ void GameBoard::autoPlaceUnplacedBoats() {
     while (true) { // Keep trying to place the boat until we get a valid position.
       BoatStart boatStart;
       boatStart.orientation = randomBoolean(rng) ? Orientation::HORIZONTAL : Orientation::VERTICAL; // Choose a random orientation.
-      boatStart.coordinate.x = getAsciiLabel(randomWidth(rng)); // Choose a random x coordinate.
-      boatStart.coordinate.y = randomHeight(rng); // Choose a random y coordinate.
+      boatStart.coordinate = getRandomCoordinates();
 
       if (maybePlaceBoat(boatName, boatLength, boatStart, /* printErrors= */ false)) { // Try to place the boat without printing any errors.
         break; // Once we have placed the boat on the board, exit the loop.
@@ -95,6 +94,13 @@ void GameBoard::autoPlaceUnplacedBoats() {
       loopCount++; // Increment the loop count.
     }
   }
+}
+
+Coordinate GameBoard::getRandomCoordinates() {
+  Coordinate coordinate;
+  coordinate.x = getAsciiLabel(randomWidth(rng)); // Choose a random x coordinate.
+  coordinate.y = randomHeight(rng); // Choose a random y coordinate.
+  return coordinate;
 }
 
 void GameBoard::setBoatOnBoard(const std::string& boatName, int boatLength) {
@@ -237,8 +243,9 @@ void GameBoard::setHitState(const Coordinate& hitPosition) {
 void GameBoard::initRandom() {
   rng = std::mt19937(rd()); // Initialise the random number generator, seeded with rd().
   randomBoolean = std::uniform_int_distribution<>(0, 1); // Used to generate a random boolean.
-  randomHeight = std::uniform_int_distribution<>(0, boardHeight); // Used to generate a random int between 0 and the board height.
-  randomWidth = std::uniform_int_distribution<>(0, boardWidth); // Used to generate a random int between 0 and the board width.
+  // Minus 1 since uniform_int_distribution is closed range (ranges are inclusive).
+  randomHeight = std::uniform_int_distribution<>(0, boardHeight - 1); // Used to generate a random int between 0 and the board height.
+  randomWidth = std::uniform_int_distribution<>(0, boardWidth - 1); // Used to generate a random int between 0 and the board width.
 }
 
 std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {

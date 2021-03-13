@@ -26,8 +26,17 @@ void HumanPlayer::setBoatsOnBoard() {
   }
 }
 
-void HumanPlayer::nextTurn() {
-  Coordinate fireTorpedoLocation = gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+Coordinate HumanPlayer::nextTurn() {
+  return gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+}
+
+void HumanPlayer::updateIfHit(const Coordinate &torpedoLocation) {
+  if (gameBoard.isHit(torpedoLocation)) {
+    std::cout << "Hit!" << std::endl;
+    //TODO(Bhupinder): Update hit board.
+  } else {
+    std::cout << "Miss!" << std::endl;
+  }
 }
 
 void HumanPlayer::selectAndSetBoatsOnBoard() {

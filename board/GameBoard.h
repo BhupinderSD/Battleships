@@ -36,6 +36,8 @@ public:
 
   void autoPlaceUnplacedBoats();
 
+  Coordinate getRandomCoordinates();
+
   void setBoatOnBoard(const std::string& boatName, int boatLength);
 
   bool hasUnplacedBoats();
