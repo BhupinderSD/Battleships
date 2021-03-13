@@ -23,6 +23,7 @@ struct BoatStart { // A struct that stores the position and orientation for a bo
 };
 
 static const std::string EMPTY_STATE = "[]";
+static const std::string HIT_STATE = "✸";
 
 class GameBoard {
 
@@ -40,6 +41,8 @@ public:
   bool hasUnplacedBoats();
 
   void resetGameBoard();
+
+  bool isHit(const Coordinate& maybeHitPosition);
 
 private:
 
@@ -78,6 +81,8 @@ private:
   static Coordinate getCoordinates(const std::string& boatName);
 
   bool maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors);
+
+  void setHitState(const Coordinate& hitPosition);
 
   static std::string getAsciiLabel(int number);
 

@@ -4,6 +4,7 @@
 
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
+#include "board/HitBoard.cpp"
 #include "player/HumanPlayer.cpp"
 #include "player/ComputerPlayer.cpp"
 

@@ -199,6 +199,39 @@ void GameBoard::resetGameBoard() {
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
+bool GameBoard::isHit(const Coordinate& maybeHitPosition) {
+  int xCoordinate = getNumberFromAsciiLabel(maybeHitPosition.x);
+  int yCoordinate = maybeHitPosition.y;
+  std::string index = gameBoard[xCoordinate][yCoordinate];
+
+  if (index == EMPTY_STATE){
+    return false;
+  }
+
+  setHitState(maybeHitPosition);
+  return true;
+}
+
+void GameBoard::setHitState(const Coordinate& hitPosition) {
+  int xCoordinate = getNumberFromAsciiLabel(hitPosition.x);
+  int yCoordinate = hitPosition.y;
+
+  gameBoard[xCoordinate][yCoordinate] = HIT_STATE; // Set the board position to the hit state.
+
+  std::vector<std::string> boatNames = configSingleton.getBoatNames();
+  for (auto &boatName : boatNames) { // Loop though every boat on the board till we find the one at this index.
+    std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second;
+    for (int i = 0; i < boatCoordinates.size(); i++) { // Loop though every position taken by this boat.
+      Coordinate coordinate = boatCoordinates[i];
+      if (coordinate.x == hitPosition.x && coordinate.y == hitPosition.y) { // If this position is the position that was hit.
+        boatCoordinates.erase(boatCoordinates.begin() + i); // Remove this section of the boat.
+        boatLocations.find(boatName)->second = boatCoordinates; // Update the boat locations.
+        return; // Since the boat locations have been updated, return to avoid unneeded loops.
+      }
+    }
+  }
+}
+
 void GameBoard::initRandom() {
   rng = std::mt19937(rd()); // Initialise the random number generator, seeded with rd().
   randomBoolean = std::uniform_int_distribution<>(0, 1); // Used to generate a random boolean.
