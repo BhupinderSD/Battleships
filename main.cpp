@@ -5,10 +5,15 @@
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
 #include "player/HumanPlayer.cpp"
+#include "player/ComputerPlayer.cpp"
 
 void playerVsComputer() {
+  std::cout << "Human Player." << std::endl;
   HumanPlayer humanPlayer;
   humanPlayer.setBoatsOnBoard();
+
+  std::cout << "Computer Player." << std::endl;
+  ComputerPlayer computerPlayer;
 }
 
 void showMenu() {

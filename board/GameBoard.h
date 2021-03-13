@@ -26,16 +26,6 @@ static const std::string EMPTY_STATE = "[]";
 
 class GameBoard {
 
-  const int PADDING = 2; // Padding so each index can be bigger than the max index length.
-
-  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
-  int boardWidth = configSingleton.getWidth();
-  int boardHeight = configSingleton.getHeight();
-
-  std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
-
-  std::map<std::string, std::vector<Coordinate>> boatLocations;
-
 public:
   GameBoard(); // Constructor.
 
@@ -52,6 +42,16 @@ public:
   void resetGameBoard();
 
 private:
+
+  const int PADDING = 2; // Padding so each index can be bigger than the max index length.
+
+  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
+  int boardWidth = configSingleton.getWidth();
+  int boardHeight = configSingleton.getHeight();
+
+  std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
+
+  std::map<std::string, std::vector<Coordinate>> boatLocations;
 
   std::random_device rd;  // Used as the seed for the random number engine.
   std::mt19937 rng; // Random number generator seeded with rd().
