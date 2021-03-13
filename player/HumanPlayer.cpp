@@ -26,6 +26,10 @@ void HumanPlayer::setBoatsOnBoard() {
   }
 }
 
+void HumanPlayer::nextTurn() {
+  Coordinate fireTorpedoLocation = gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+}
+
 void HumanPlayer::selectAndSetBoatsOnBoard() {
   std::map<std::string, int> boatMap = configSingleton.getBoatMap();
   std::vector<std::string> boatNames = configSingleton.getBoatNames();

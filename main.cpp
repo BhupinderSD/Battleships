@@ -15,6 +15,8 @@ void playerVsComputer() {
 
   std::cout << "Computer Player." << std::endl;
   ComputerPlayer computerPlayer;
+
+  humanPlayer.nextTurn();
 }
 
 void showMenu() {

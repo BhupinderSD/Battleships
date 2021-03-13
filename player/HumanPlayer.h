@@ -16,6 +16,8 @@ public:
 
   void setBoatsOnBoard();
 
+  void nextTurn();
+
 private:
   void selectAndSetBoatsOnBoard();
 

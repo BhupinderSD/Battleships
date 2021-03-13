@@ -42,6 +42,8 @@ public:
 
   void resetGameBoard();
 
+  Coordinate getCoordinates(const std::string& boatName);
+
   bool isHit(const Coordinate& maybeHitPosition);
 
 private:
@@ -70,6 +72,8 @@ private:
 
   bool isValidPosition(const std::vector<Coordinate> &boatPositions, bool printErrors);
 
+  bool isValidCoordinate(const Coordinate& coordinate) const;
+
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
   void setBoardIndexWithString(const Coordinate& coordinate, std::string string);
@@ -77,8 +81,6 @@ private:
   void removeBoatFromBoardIfPlaced(const std::string& boatName);
 
   static Orientation getOrientation(const std::string& boatName);
-
-  static Coordinate getCoordinates(const std::string& boatName);
 
   bool maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors);
 

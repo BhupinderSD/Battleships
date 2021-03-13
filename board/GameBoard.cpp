@@ -107,7 +107,7 @@ void GameBoard::setBoatOnBoard(const std::string& boatName, int boatLength) {
     boatStart.orientation = getOrientation(boatName);
 
     showBoard();
-    boatStart.coordinate = getCoordinates(boatName);
+    boatStart.coordinate = getCoordinates("Where do you want to place " + boatName + "? ");
 
     if (maybePlaceBoat(boatName, boatLength, boatStart, /* printErrors= */ true)) {
       break; // Once we have placed the boat on the board, exit the loop.
@@ -148,12 +148,12 @@ Orientation GameBoard::getOrientation(const std::string& boatName) {
   }
 }
 
-Coordinate GameBoard::getCoordinates(const std::string &boatName) {
+Coordinate GameBoard::getCoordinates(const std::string &request) {
   Coordinate coordinate;
 
   while (true) { // Ask for coordinates till we receive valid coordinates.
     Coordinate tempCoordinates;
-    std::string userCoordinates = getLine("Where do you want to place " + boatName + "? ");
+    std::string userCoordinates = getLine(request);
 
     // Split the x and y coordinates.
     for (char character : userCoordinates) {
@@ -171,6 +171,8 @@ Coordinate GameBoard::getCoordinates(const std::string &boatName) {
       std::cout << "Please enter a valid x coordinate (a letter).\n" << std::endl;
     } else if (tempCoordinates.y == 0) {
       std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
+    } else if (!isValidCoordinate(tempCoordinates)) {
+      std::cout << "Please enter valid coordinates within the bounds of the board.\n" << std::endl;
     } else {
       tempCoordinates.y = tempCoordinates.y - 1; // Subtract 1 since the board index starts at 0.
       coordinate = tempCoordinates; // Set the temp coordinates as the coordinates to return.
@@ -286,8 +288,8 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
   for (const Coordinate& coordinate : boatPositions) {
     int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
     int yCoordinate = coordinate.y;
-    // Check if any index of the boat extends the board.
-    if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+
+    if (!isValidCoordinate(coordinate)) {
       if (printErrors) {
         std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
       }
@@ -302,6 +304,18 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
       }
       return false;
     }
+  }
+
+  return true;
+}
+
+/** Check if this coordinate is outside of the board. */
+bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
+  int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+  int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+    return false;
   }
 
   return true;
