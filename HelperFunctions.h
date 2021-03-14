@@ -2,10 +2,11 @@
 // Created by Bhupinder Dhoofer on 02/03/2021.
 //
 
+#include <codecvt>
+#include <iostream>
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
-#include <iostream>
 
 #ifndef BATTLESHIPS__HELPERFUNCTIONS_H_
 #define BATTLESHIPS__HELPERFUNCTIONS_H_
@@ -33,15 +34,20 @@ std::string createStringOfChar(char character, int requiredLength) {
   std::string string = "";
 
   for (int i = 0; i < requiredLength; i++) {
-    string += character; //append the character until we meet the required length
+    string += character; // Append the character until we meet the required length.
   }
 
   return string;
 }
 
+/** Returns the real length of a string, even if a char takes multiple bytes. */
+std::size_t getCharCount(const std::string& string){
+  return std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t >{}.from_bytes(string).size();
+}
+
 /** Pads the string with spaces till the required length. */
 std::string padString(std::string string, int requiredLength) {
-  int length = string.length();
+  int length = getCharCount(string);
 
   if (requiredLength > length) { // Check if we need to pad with more characters.
     int charsRequired = requiredLength - length;
