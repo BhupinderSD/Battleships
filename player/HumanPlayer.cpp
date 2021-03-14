@@ -32,11 +32,11 @@ Coordinate HumanPlayer::nextTurn() {
   return gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
 }
 
-bool HumanPlayer::updateIfHit(const Coordinate &torpedoLocation) {
-  return gameBoard.updateIfHit(torpedoLocation);
+HitStatus HumanPlayer::getHitStatus(const Coordinate &torpedoLocation) {
+  return gameBoard.getHitStatus(torpedoLocation);
 }
 
-void HumanPlayer::updateHitBoard(const Coordinate &torpedoLocation, bool hitStatus) {
+void HumanPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   hitBoard.updateBoard(torpedoLocation, hitStatus);
 }
 

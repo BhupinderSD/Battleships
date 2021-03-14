@@ -13,6 +13,13 @@ struct Coordinate { // A struct that stores the coordinates for a boat.
   int y = 0;
 };
 
+enum HitStatus {
+  HIT,
+  SUNK,
+  MISS,
+  WIN
+};
+
 ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 int boardWidth = configSingleton.getWidth();
 int boardHeight = configSingleton.getHeight();

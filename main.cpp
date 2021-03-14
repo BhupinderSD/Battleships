@@ -19,13 +19,13 @@ void playerVsComputer() {
   while (true) {
     std::cout << "Human Player." << std::endl;
     Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
-    bool humanHitStatus = computerPlayer.updateIfHit(humanTorpedoLocation);
+    HitStatus humanHitStatus = computerPlayer.getHitStatus(humanTorpedoLocation);
     humanPlayer.updateHitBoard(humanTorpedoLocation, humanHitStatus);
     ::waitForUser("Press enter to end your turn.\n");
 
     std::cout << "Computer Player." << std::endl;
     Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
-    bool computerHitStatus = humanPlayer.updateIfHit(computerTorpedoLocation);
+    HitStatus computerHitStatus = humanPlayer.getHitStatus(computerTorpedoLocation);
     computerPlayer.updateHitBoard(computerTorpedoLocation, computerHitStatus);
     ::waitForUser("Press enter to end the computer's turn.\n");
 

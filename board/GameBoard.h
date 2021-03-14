@@ -41,7 +41,7 @@ public:
 
   Coordinate getCoordinates(const std::string& boatName);
 
-  bool updateIfHit(const Coordinate& maybeHitPosition);
+  HitStatus getHitStatus(const Coordinate& maybeHitPosition);
 
 private:
 

@@ -12,7 +12,7 @@ public:
 
   void showBoard();
 
-  void updateBoard(const Coordinate& torpedoLocation, bool hitStatus);
+  void updateBoard(const Coordinate& torpedoLocation, HitStatus hitStatus);
 
 private:
 

@@ -13,7 +13,23 @@ void HitBoard::showBoard() {
   ::showBoard(hitBoard);
 }
 
-void HitBoard::updateBoard(const Coordinate &torpedoLocation, bool hitStatus) {
-  std::cout << (hitStatus ? "Hit!" : "Miss!") << std::endl;
-  ::setBoardIndexWithString(hitBoard, torpedoLocation, hitStatus ? HIT_STATE : MISS_STATE);
+void HitBoard::updateBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
+  switch (hitStatus) {
+  case HIT:
+    std::cout << "Hit!" << std::endl;
+    ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
+    break;
+  case SUNK:
+    std::cout << "Hit and sunk a ship!" << std::endl;
+    ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
+    break;
+  case WIN:
+    std::cout << "You win!" << std::endl;
+    //TODO(Bhupinder): End the game at a win.
+    break;
+  case MISS:
+    std::cout << "Miss!" << std::endl;
+    ::setBoardIndexWithString(hitBoard, torpedoLocation, MISS_STATE);
+    break;
+  }
 }

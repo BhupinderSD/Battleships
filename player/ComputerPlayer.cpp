@@ -17,10 +17,10 @@ Coordinate ComputerPlayer::nextTurn() {
   return fireTorpedoLocation;
 }
 
-bool ComputerPlayer::updateIfHit(const Coordinate& torpedoLocation) {
-  return gameBoard.updateIfHit(torpedoLocation);
+HitStatus ComputerPlayer::getHitStatus(const Coordinate& torpedoLocation) {
+  return gameBoard.getHitStatus(torpedoLocation);
 }
 
-void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, bool hitStatus) {
+void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   hitBoard.updateBoard(torpedoLocation, hitStatus);
 }

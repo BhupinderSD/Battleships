@@ -181,22 +181,23 @@ void GameBoard::resetGameBoard() {
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
-bool GameBoard::updateIfHit(const Coordinate& maybeHitPosition) {
+HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
   int xCoordinate = ::getNumberFromAsciiLabel(maybeHitPosition.x);
   int yCoordinate = maybeHitPosition.y;
   std::string index = gameBoard[xCoordinate][yCoordinate];
 
   if (index == ::EMPTY_STATE){
-    return false;
+    return MISS;
   }
 
-  if (index == HIT_STATE){
+  if (index == HIT_STATE) { //TODO(Bhupinder): Move this validation to Player#nextTurn.
     std::cout << "Already hit!" << std::endl;
-    return false;
+    return MISS;
   }
 
   setHitState(maybeHitPosition);
-  return true;
+  //TODO(Bhupinder): Check if a boat was sunk or if all boats are sunk.
+  return HIT;
 }
 
 void GameBoard::setHitState(const Coordinate& hitPosition) {
