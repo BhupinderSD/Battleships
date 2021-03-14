@@ -12,7 +12,9 @@ public:
 
   Coordinate nextTurn();
 
-  void updateIfHit(const Coordinate& torpedoLocation);
+  bool updateIfHit(const Coordinate& torpedoLocation);
+
+  void updateHitBoard(const Coordinate& torpedoLocation, bool hitStatus);
 
 private:
   GameBoard gameBoard;

@@ -113,7 +113,7 @@ void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
   std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second; // Coordinates that this boat occupies.
 
   for (const Coordinate& coordinate : boatCoordinates) {
-    setBoardIndexWithString(coordinate, ::EMPTY_STATE);
+    ::setBoardIndexWithString(gameBoard, coordinate, ::EMPTY_STATE);
   }
 }
 
@@ -163,7 +163,7 @@ Coordinate GameBoard::getCoordinates(const std::string &request) {
   return coordinate;
 }
 
-bool GameBoard::maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors) {
+bool GameBoard::maybePlaceBoat(const std::string &boatName, int boatLength, const BoatStart &boatPosition, bool printErrors) {
   std::vector<Coordinate> boatPositions = getBoatPositions(boatLength, boatPosition);
 
   if (!isValidPosition(boatPositions, printErrors)) {
@@ -181,8 +181,8 @@ void GameBoard::resetGameBoard() {
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
-bool GameBoard::isHit(const Coordinate& maybeHitPosition) {
-  int xCoordinate = getNumberFromAsciiLabel(maybeHitPosition.x);
+bool GameBoard::updateIfHit(const Coordinate& maybeHitPosition) {
+  int xCoordinate = ::getNumberFromAsciiLabel(maybeHitPosition.x);
   int yCoordinate = maybeHitPosition.y;
   std::string index = gameBoard[xCoordinate][yCoordinate];
 
@@ -195,7 +195,7 @@ bool GameBoard::isHit(const Coordinate& maybeHitPosition) {
 }
 
 void GameBoard::setHitState(const Coordinate& hitPosition) {
-  int xCoordinate = getNumberFromAsciiLabel(hitPosition.x);
+  int xCoordinate = ::getNumberFromAsciiLabel(hitPosition.x);
   int yCoordinate = hitPosition.y;
 
   gameBoard[xCoordinate][yCoordinate] = HIT_STATE; // Set the board position to the hit state.
@@ -230,7 +230,7 @@ std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatSt
   case HORIZONTAL:
     for (int i = 0; i < boatLength; i++) {
       Coordinate coordinate;
-      int number = getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
+      int number = ::getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
       coordinate.x = ::getAsciiLabel(number);
       coordinate.y = boatStart.coordinate.y;
       boatPositions.push_back(coordinate); // Add the coordinates to the boat positions.
@@ -252,7 +252,7 @@ std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatSt
 bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bool printErrors) {
   // Check that each index that the boat will occupy is valid.
   for (const Coordinate& coordinate : boatPositions) {
-    int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+    int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
     int yCoordinate = coordinate.y;
 
     if (!isValidCoordinate(coordinate)) {
@@ -277,7 +277,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
 
 /** Check if this coordinate is outside of the board. */
 bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
-  int xCoordinate = getNumberFromAsciiLabel(coordinate.x);
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
   int yCoordinate = coordinate.y;
 
   if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
@@ -290,27 +290,9 @@ bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
 void GameBoard::placeBoatOnBoard(const std::string &boatName, const std::vector<Coordinate> &boatPositions) {
   // Add this boat to the board.
   for (const Coordinate& coordinate : boatPositions) {
-    setBoardIndexWithString(coordinate, {boatName[0]}); // Use the first letter of the boat name as its label.
+    ::setBoardIndexWithString(gameBoard, coordinate, {boatName[0]}); // Use the first letter of the boat name as its label.
   }
 
   // Add the board to the boat locations map.
   boatLocations.insert(std::pair<std::string, std::vector<Coordinate>>(boatName, boatPositions));
-}
-
-void GameBoard::setBoardIndexWithString(const Coordinate& coordinate, std::string string) {
-    int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
-    gameBoard[xCoordinate][coordinate.y] = std::move(string);
-}
-
-int GameBoard::getNumberFromAsciiLabel(const std::string& label) {
-  int number = 0;
-
-  for (int i = 0; i < label.size(); i++) {
-    char character = label[label.size() - i - 1]; // Start from the end.
-    character = std::toupper(character); // Ensure that the input is in upper case.
-    // Converts the character to 1-26 and multiplies it to its place value.
-    number += (character - 'A' + 1) * pow(26, i);
-  }
-
-  return number - 1;
 }

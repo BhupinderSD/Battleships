@@ -9,16 +9,10 @@
 #include "../HelperFunctions.h"
 #include <random>
 #include <cmath>
-#include <utility>
 
 enum Orientation { // An enum to identify the different orientations of a boat.
   HORIZONTAL,
   VERTICAL
-};
-
-struct Coordinate { // A struct that stores the coordinates for a boat.
-  std::string x;
-  int y = 0;
 };
 
 struct BoatStart { // A struct that stores the position and orientation for a boat.
@@ -47,7 +41,7 @@ public:
 
   Coordinate getCoordinates(const std::string& boatName);
 
-  bool isHit(const Coordinate& maybeHitPosition);
+  bool updateIfHit(const Coordinate& maybeHitPosition);
 
 private:
 
@@ -77,8 +71,6 @@ private:
 
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
-  void setBoardIndexWithString(const Coordinate& coordinate, std::string string);
-
   void removeBoatFromBoardIfPlaced(const std::string& boatName);
 
   static Orientation getOrientation(const std::string& boatName);
@@ -86,8 +78,6 @@ private:
   bool maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors);
 
   void setHitState(const Coordinate& hitPosition);
-
-  static int getNumberFromAsciiLabel(const std::string& label);
 };
 
 #endif // BATTLESHIPS_BOARD_GAMEBOARD_H_

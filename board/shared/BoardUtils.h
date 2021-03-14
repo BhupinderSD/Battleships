@@ -2,9 +2,16 @@
 // Created by Bhupinder Dhoofer on 14/03/2021.
 //
 
+#include <utility>
+
 static const std::string EMPTY_STATE = "[]";
 
 const int PADDING = 2; // Padding so each index can be bigger than the max index length.
+
+struct Coordinate { // A struct that stores the coordinates for a boat.
+  std::string x;
+  int y = 0;
+};
 
 ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 int boardWidth = configSingleton.getWidth();
@@ -21,6 +28,20 @@ std::string getAsciiLabel(int number) {
   }
 
   return string;
+}
+
+/** Converts a Ascii label from {@link #getAsciiLabel} to its respective number. */
+int getNumberFromAsciiLabel(const std::string& label) {
+  int number = 0;
+
+  for (int i = 0; i < label.size(); i++) {
+    char character = label[label.size() - i - 1]; // Start from the end.
+    character = std::toupper(character); // Ensure that the input is in upper case.
+    // Converts the character to 1-26 and multiplies it to its place value.
+    number += (character - 'A' + 1) * pow(26, i);
+  }
+
+  return number - 1;
 }
 
 /** Returns an {@link EMPTY_STATE} 2D vector of the required dimensions from
@@ -65,4 +86,10 @@ void showBoard(std::vector<std::vector<std::string>> board) {
     }
     std::cout << std::endl;
   }
+}
+
+/** Set the string at the coordinates on the board (by reference). */
+void setBoardIndexWithString(std::vector<std::vector<std::string>> &board, const Coordinate& coordinate, std::string string) {
+  int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
+  board[xCoordinate][coordinate.y] = std::move(string);
 }

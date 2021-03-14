@@ -12,6 +12,8 @@ public:
 
   void showBoard();
 
+  void updateBoard(const Coordinate& torpedoLocation, bool hitStatus);
+
 private:
 
   std::string HIT_STATE = "H";

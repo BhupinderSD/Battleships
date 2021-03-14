@@ -19,11 +19,14 @@ void playerVsComputer() {
   while (true) {
     std::cout << "Human Player." << std::endl;
     Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
-    computerPlayer.updateIfHit(humanTorpedoLocation);
+    bool humanHitStatus = computerPlayer.updateIfHit(humanTorpedoLocation);
+    humanPlayer.updateHitBoard(humanTorpedoLocation, humanHitStatus);
 
     std::cout << "Computer Player." << std::endl;
     Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
-    humanPlayer.updateIfHit(computerTorpedoLocation);
+    bool computerHitStatus = humanPlayer.updateIfHit(computerTorpedoLocation);
+    computerPlayer.updateHitBoard(computerTorpedoLocation, computerHitStatus);
+
     break; //TODO(Bhupinder): Keep looping till all boats for a player have been destroyed.
   }
 }
