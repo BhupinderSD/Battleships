@@ -195,10 +195,7 @@ bool GameBoard::updateIfHit(const Coordinate& maybeHitPosition) {
 }
 
 void GameBoard::setHitState(const Coordinate& hitPosition) {
-  int xCoordinate = ::getNumberFromAsciiLabel(hitPosition.x);
-  int yCoordinate = hitPosition.y;
-
-  gameBoard[xCoordinate][yCoordinate] = HIT_STATE; // Set the board position to the hit state.
+  ::setBoardIndexWithString(gameBoard, hitPosition, HIT_STATE); // Set the board position to the hit state.
 
   std::vector<std::string> boatNames = configSingleton.getBoatNames();
   for (auto &boatName : boatNames) { // Loop though every boat on the board till we find the one at this index.
@@ -264,7 +261,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
 
     std::string index = gameBoard[xCoordinate][yCoordinate];
     // Check if a boat already exists at this index.
-    if (index != "[]"){
+    if (index != EMPTY_STATE){
       if (printErrors) {
         std::cout << "A boat already exists at " << ::getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
       }
