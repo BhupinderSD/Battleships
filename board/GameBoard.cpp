@@ -190,6 +190,11 @@ bool GameBoard::updateIfHit(const Coordinate& maybeHitPosition) {
     return false;
   }
 
+  if (index == HIT_STATE){
+    std::cout << "Already hit!" << std::endl;
+    return false;
+  }
+
   setHitState(maybeHitPosition);
   return true;
 }
