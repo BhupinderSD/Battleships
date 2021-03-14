@@ -98,4 +98,10 @@ void printList(const std::string& title, const std::vector<std::string>& placedB
   }
 }
 
+/** Waits for the user to press enter after displaying the requested string. */
+void waitForUser(std::string request) {
+  std::cout << request;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+}
+
 #endif // BATTLESHIPS__HELPERFUNCTIONS_H_
