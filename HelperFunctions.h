@@ -10,14 +10,14 @@
 #ifndef BATTLESHIPS__HELPERFUNCTIONS_H_
 #define BATTLESHIPS__HELPERFUNCTIONS_H_
 
-/* Checks if a file with the specified filename exists. */
+/** Checks if a file with the specified filename exists. */
 bool fileExists(const std::string& filename) {
   struct stat buffer{};
   bool fileExists = stat(filename.c_str(), &buffer) == 0; //check if the file exists
   return fileExists;
 }
 
-/* Splits a string into a vector of strings, split by the specified delimiter. */
+/** Splits a string into a vector of strings, split by the specified delimiter. */
 std::vector<std::string> split(const std::string &s, char delimiter) {
   std::vector<std::string> strings;
   std::stringstream sstream(s);
@@ -28,7 +28,7 @@ std::vector<std::string> split(const std::string &s, char delimiter) {
   return strings;
 }
 
-/* Adds the same character to a string a specified number of times. */
+/** Adds the same character to a string a specified number of times. */
 std::string createStringOfChar(char character, int requiredLength) {
   std::string string = "";
 
@@ -39,7 +39,7 @@ std::string createStringOfChar(char character, int requiredLength) {
   return string;
 }
 
-/* Pads the string with spaces till the required length. */
+/** Pads the string with spaces till the required length. */
 std::string padString(std::string string, int requiredLength) {
   int length = string.length();
 
@@ -51,7 +51,7 @@ std::string padString(std::string string, int requiredLength) {
   return string;
 }
 
-/* Returns the user input after asking them the specified question. */
+/** Returns the user input after asking them the specified question. */
 std::string getLine(std::string request) {
   std::string string;
   std::cout << request << std::endl;
@@ -59,13 +59,13 @@ std::string getLine(std::string request) {
   return string;
 }
 
-/* Clears the cin stream state and cin buffer. */
+/** Clears the cin stream state and cin buffer. */
 void flushBuffer() {
   std::cin.clear(); // Resets the cin stream state so that future I/O operations work correctly.
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); // Clears the cin buffer including new lines or additional characters.
 }
 
-/* Get a number that is larger than or equal to startRange and smaller than or equal to endRange. */
+/** Get a number that is larger than or equal to startRange and smaller than or equal to endRange. */
 int getNumber(std::string request, int startRange, int endRange) {
   int number;
 
@@ -81,7 +81,7 @@ int getNumber(std::string request, int startRange, int endRange) {
   return number;
 }
 
-/* Print a list with the title and the strings in the vector. */
+/** Print a list with the title and the strings in the vector. */
 void printList(const std::string& title, const std::vector<std::string>& placedBoats) {
   if (!placedBoats.empty()) {
     std::cout << title << std::endl;

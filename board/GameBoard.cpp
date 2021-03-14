@@ -3,41 +3,14 @@
 //
 
 #include "GameBoard.h"
-#include <cmath>
-#include <utility>
 
 GameBoard::GameBoard() {
   initRandom();
-  gameBoard = createEmptyGameBoard(boardWidth, boardHeight);
+  gameBoard = ::createEmptyBoard();
 }
 
 void GameBoard::showBoard() {
-  int width = boardWidth;
-  int height = boardHeight;
-
-  // Calculate the max length of an index on the board, so that each index can
-  // be padded to the same length and the board can be evenly spaced.
-  int maxWidthLength = getAsciiLabel(width - 1).length();
-  int maxHeightLength = std::to_string(height).length();
-  int maxIndexLength = std::max(maxWidthLength, maxHeightLength) + PADDING;
-
-  // Start from -1 to account for the coordinate labels.
-  for (int y = -1; y < height; y++) {
-    for (int x = -1; x < width; x++) {
-      std::string indexString;
-      if (x == -1 && y == -1) { // Top left corner.
-        indexString = ""; // Show an empty index.
-      } else if (y == -1) { // Top row, for the coordinate labels.
-        indexString = getAsciiLabel(x); // Use letters to represent the columns.
-      } else if (x == -1) { // Left column, for the coordinate labels.
-        indexString = std::to_string(y+1); // Use numbers to represent rows.
-      } else { // Game board.
-        indexString = gameBoard[x][y]; // Show the current game board index.
-      }
-      std::cout << padString(indexString, maxIndexLength);
-    }
-    std::cout << std::endl;
-  }
+  ::showBoard(gameBoard);
 }
 
 void GameBoard::showPlacedAndUnplacedBoats() {
@@ -98,7 +71,7 @@ void GameBoard::autoPlaceUnplacedBoats() {
 
 Coordinate GameBoard::getRandomCoordinates() {
   Coordinate coordinate;
-  coordinate.x = getAsciiLabel(randomWidth(rng)); // Choose a random x coordinate.
+  coordinate.x = ::getAsciiLabel(randomWidth(rng)); // Choose a random x coordinate.
   coordinate.y = randomHeight(rng); // Choose a random y coordinate.
   return coordinate;
 }
@@ -139,7 +112,7 @@ void GameBoard::removeBoatFromBoardIfPlaced(const std::string &boatName) {
   std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second; // Coordinates that this boat occupies.
 
   for (const Coordinate& coordinate : boatCoordinates) {
-    setBoardIndexWithString(coordinate, EMPTY_STATE);
+    setBoardIndexWithString(coordinate, ::EMPTY_STATE);
   }
 }
 
@@ -203,7 +176,7 @@ bool GameBoard::maybePlaceBoat(const std::string &boatName, int boatLength,const
 
 void GameBoard::resetGameBoard() {
   std::cout << "Resetting game board...\n" << std::endl;
-  gameBoard = createEmptyGameBoard(boardWidth, boardHeight); // Reset the game board with an empty one.
+  gameBoard = ::createEmptyBoard(); // Reset the game board with an empty one.
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
@@ -212,7 +185,7 @@ bool GameBoard::isHit(const Coordinate& maybeHitPosition) {
   int yCoordinate = maybeHitPosition.y;
   std::string index = gameBoard[xCoordinate][yCoordinate];
 
-  if (index == EMPTY_STATE){
+  if (index == ::EMPTY_STATE){
     return false;
   }
 
@@ -248,21 +221,6 @@ void GameBoard::initRandom() {
   randomWidth = std::uniform_int_distribution<>(0, boardWidth - 1); // Used to generate a random int between 0 and the board width.
 }
 
-std::vector<std::vector<std::string>> GameBoard::createEmptyGameBoard(int boardWidth, int boardHeight) {
-  std::vector<std::vector<std::string>> gameBoard;
-
-  for (int x = 0; x < boardWidth; x++) {
-    std::vector<std::string> row; // Create a vector to represent this row.
-    row.reserve(boardHeight); // Pre-allocate the capacity used by the for loop.
-    for (int y = 0; y < boardHeight; y++) {
-      row.emplace_back(EMPTY_STATE); // Add an empty board state to this index.
-    }
-    gameBoard.push_back(row); // Add this row to the game board.
-  }
-
-  return gameBoard;
-}
-
 std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatStart &boatStart) {
   std::vector<Coordinate> boatPositions; // Stores every index that this boat occupies.
 
@@ -272,7 +230,7 @@ std::vector<Coordinate> GameBoard::getBoatPositions(int boatLength, const BoatSt
     for (int i = 0; i < boatLength; i++) {
       Coordinate coordinate;
       int number = getNumberFromAsciiLabel(boatStart.coordinate.x) + i;
-      coordinate.x = getAsciiLabel(number);
+      coordinate.x = ::getAsciiLabel(number);
       coordinate.y = boatStart.coordinate.y;
       boatPositions.push_back(coordinate); // Add the coordinates to the boat positions.
     }
@@ -298,7 +256,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
 
     if (!isValidCoordinate(coordinate)) {
       if (printErrors) {
-        std::cout << "Position " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
+        std::cout << "Position " << ::getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
       }
       return false;
     }
@@ -307,7 +265,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
     // Check if a boat already exists at this index.
     if (index != "[]"){
       if (printErrors) {
-        std::cout << "A boat already exists at " << getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
+        std::cout << "A boat already exists at " << ::getAsciiLabel(xCoordinate) << (yCoordinate + 1) << "." << std::endl;
       }
       return false;
     }
@@ -341,18 +299,6 @@ void GameBoard::placeBoatOnBoard(const std::string &boatName, const std::vector<
 void GameBoard::setBoardIndexWithString(const Coordinate& coordinate, std::string string) {
     int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
     gameBoard[xCoordinate][coordinate.y] = std::move(string);
-}
-
-std::string GameBoard::getAsciiLabel(int number) {
-  std::string string;
-
-  while (number >= 0) {
-    string = (char)('A' + number % 26 ) + string; // Get the right-most letter and place it in the string.
-    number = number / 26; // Right shift to get the next letter.
-    number--;
-  }
-
-  return string;
 }
 
 int GameBoard::getNumberFromAsciiLabel(const std::string& label) {

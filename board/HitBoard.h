@@ -10,6 +10,15 @@ class HitBoard {
 public:
   HitBoard(); // Constructor.
 
+  void showBoard();
+
+private:
+
+  std::string HIT_STATE = "H";
+  std::string MISS_STATE = "M";
+
+  std::vector<std::vector<std::string>> hitBoard; // Use a 2D vector to represent the hit board.
+
 };
 
 #endif // BATTLESHIPS_BOARD_HITBOARD_H_

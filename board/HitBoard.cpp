@@ -5,5 +5,9 @@
 #include "HitBoard.h"
 
 HitBoard::HitBoard() {
+  hitBoard = ::createEmptyBoard();
+}
 
+void HitBoard::showBoard() {
+  ::showBoard(hitBoard);
 }

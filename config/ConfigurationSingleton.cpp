@@ -3,7 +3,6 @@
 //
 
 #include "ConfigurationSingleton.h"
-#include <algorithm>
 
 ConfigurationSingleton &ConfigurationSingleton::getInstance() {
   static ConfigurationSingleton instance; // Instantiated on first use and guaranteed to be destroyed.
