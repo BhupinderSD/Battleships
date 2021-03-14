@@ -9,5 +9,6 @@ HitBoard::HitBoard() {
 }
 
 void HitBoard::showBoard() {
+  std::cout << "Hit board." << std::endl;
   ::showBoard(hitBoard);
 }

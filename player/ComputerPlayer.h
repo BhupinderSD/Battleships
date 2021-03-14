@@ -16,6 +16,7 @@ public:
 
 private:
   GameBoard gameBoard;
+  HitBoard hitBoard;
 
 };
 

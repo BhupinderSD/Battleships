@@ -10,6 +10,7 @@ GameBoard::GameBoard() {
 }
 
 void GameBoard::showBoard() {
+  std::cout << "Game board." << std::endl;
   ::showBoard(gameBoard);
 }
 

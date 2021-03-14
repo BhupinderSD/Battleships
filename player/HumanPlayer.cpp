@@ -27,6 +27,8 @@ void HumanPlayer::setBoatsOnBoard() {
 }
 
 Coordinate HumanPlayer::nextTurn() {
+  gameBoard.showBoard(); // Show the users current game board.
+  hitBoard.showBoard(); // Show the users current hit board.
   return gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
 }
 

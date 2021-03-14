@@ -10,6 +10,8 @@ ComputerPlayer::ComputerPlayer() {
 }
 
 Coordinate ComputerPlayer::nextTurn() {
+  gameBoard.showBoard(); // Show the current game board.
+  hitBoard.showBoard(); // Show the current hit board.
   Coordinate fireTorpedoLocation = gameBoard.getRandomCoordinates();
   std::cout << fireTorpedoLocation.x << std::to_string(fireTorpedoLocation.y) << std::endl;
   return fireTorpedoLocation;

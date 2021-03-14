@@ -7,10 +7,6 @@
 
 class HumanPlayer {
 
-  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
-
-  GameBoard gameBoard;
-
 public:
   HumanPlayer();
 
@@ -21,6 +17,11 @@ public:
   void updateIfHit(const Coordinate& torpedoLocation);
 
 private:
+  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
+
+  GameBoard gameBoard;
+  HitBoard hitBoard;
+
   void selectAndSetBoatsOnBoard();
 
 };
