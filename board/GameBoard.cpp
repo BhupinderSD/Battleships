@@ -138,7 +138,7 @@ Coordinate GameBoard::getCoordinates(const std::string &request) {
     // Split the x and y coordinates.
     for (char character : userCoordinates) {
       if (isalpha(character)) {
-        tempCoordinates.x += character;
+        tempCoordinates.x += toupper(character);
       } else if (isdigit(character)) {
         tempCoordinates.y = tempCoordinates.y * 10 + (character - '0');
       }
