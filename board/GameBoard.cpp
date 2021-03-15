@@ -320,7 +320,7 @@ bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
   int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
   int yCoordinate = coordinate.y;
 
-  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+  if (xCoordinate < 0 || xCoordinate > boardWidth || yCoordinate < 0 || yCoordinate > boardHeight) {
     return false;
   }
 
