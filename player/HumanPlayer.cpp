@@ -29,7 +29,9 @@ void HumanPlayer::setBoatsOnBoard() {
 Coordinate HumanPlayer::nextTurn() {
   gameBoard.showBoard(); // Show the users current game board.
   hitBoard.showBoard(); // Show the users current hit board.
-  return gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+  Coordinate coordinate = getFireLocation();
+
+  return coordinate;
 }
 
 HitStatus HumanPlayer::getHitStatus(const Coordinate &torpedoLocation) {
@@ -60,4 +62,19 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
     gameBoard.setBoatOnBoard(boatName, boatLength); // Place every boat on the board.
     gameBoard.showBoard();
   } while (gameBoard.hasUnplacedBoats());
+}
+
+Coordinate HumanPlayer::getFireLocation() {
+  Coordinate coordinate;
+  while (true) { // Keep asking the user for coordinates till we receive a valid/unused location.
+    coordinate = gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+
+    if (hitBoard.isValidLocation(coordinate)) {
+      break;
+    }
+
+    std::cout << "You have already fired at this location, please try again." << std::endl;
+  }
+
+  return coordinate;
 }

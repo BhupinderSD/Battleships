@@ -26,6 +26,8 @@ private:
 
   void selectAndSetBoatsOnBoard();
 
+  Coordinate getFireLocation();
+
 };
 
 #endif // BATTLESHIPS_PLAYER_HUMANPLAYER_H_

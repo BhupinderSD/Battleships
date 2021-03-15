@@ -20,6 +20,8 @@ private:
   GameBoard gameBoard;
   HitBoard hitBoard;
 
+  Coordinate getFireLocation();
+
 };
 
 #endif // BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_

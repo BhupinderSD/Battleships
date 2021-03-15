@@ -182,16 +182,9 @@ void GameBoard::resetGameBoard() {
 }
 
 HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
-  int xCoordinate = ::getNumberFromAsciiLabel(maybeHitPosition.x);
-  int yCoordinate = maybeHitPosition.y;
-  std::string index = gameBoard[xCoordinate][yCoordinate];
+  std::string index = ::getBoardIndex(gameBoard, maybeHitPosition);
 
   if (index == ::EMPTY_STATE){
-    return MISS;
-  }
-
-  if (index == HIT_STATE) { //TODO(Bhupinder): Move this validation to Player#nextTurn.
-    std::cout << "Already hit!" << std::endl;
     return MISS;
   }
 
@@ -265,7 +258,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
       return false;
     }
 
-    std::string index = gameBoard[xCoordinate][yCoordinate];
+    std::string index = ::getBoardIndex(gameBoard, coordinate);
     // Check if a boat already exists at this index.
     if (index != EMPTY_STATE){
       if (printErrors) {

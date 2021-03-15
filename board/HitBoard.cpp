@@ -33,3 +33,14 @@ void HitBoard::updateBoard(const Coordinate &torpedoLocation, HitStatus hitStatu
     break;
   }
 }
+
+/** Returns true if this position has not been fired at previously. */
+bool HitBoard::isValidLocation(const Coordinate &torpedoLocation) {
+  std::string index = ::getBoardIndex(hitBoard, torpedoLocation);
+
+  if (index == ::EMPTY_STATE) {
+    return true;
+  }
+
+  return false;
+}

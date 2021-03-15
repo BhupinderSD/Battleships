@@ -14,6 +14,8 @@ public:
 
   void updateBoard(const Coordinate& torpedoLocation, HitStatus hitStatus);
 
+  bool isValidLocation(const Coordinate& torpedoLocation);
+
 private:
 
   std::string HIT_STATE = "H";

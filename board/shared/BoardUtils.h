@@ -95,6 +95,14 @@ void showBoard(std::vector<std::vector<std::string>> board) {
   }
 }
 
+/** Returns the string stored at this coordinate. */
+std::string getBoardIndex(std::vector<std::vector<std::string>> board, const Coordinate& coordinate) {
+  int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
+  int yCoordinate = coordinate.y;
+
+  return board[xCoordinate][yCoordinate];
+}
+
 /** Set the string at the coordinates on the board (by reference). */
 void setBoardIndexWithString(std::vector<std::vector<std::string>> &board, const Coordinate& coordinate, std::string string) {
   int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
