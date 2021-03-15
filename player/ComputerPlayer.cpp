@@ -15,7 +15,7 @@ Coordinate ComputerPlayer::nextTurn() {
 
   Coordinate fireTorpedoLocation = getFireLocation();
 
-  std::cout << fireTorpedoLocation.x << std::to_string(fireTorpedoLocation.y) << std::endl;
+  std::cout << fireTorpedoLocation.x << std::to_string(fireTorpedoLocation.y + 1) << std::endl;
   return fireTorpedoLocation;
 }
 
