@@ -25,7 +25,7 @@ void HitBoard::updateBoard(const Coordinate &torpedoLocation, HitStatus hitStatu
     break;
   case WIN:
     std::cout << "You win!" << std::endl;
-    //TODO(Bhupinder): End the game at a win.
+    ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
     break;
   case MISS:
     std::cout << "Miss!" << std::endl;

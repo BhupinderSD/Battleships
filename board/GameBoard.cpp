@@ -181,6 +181,7 @@ void GameBoard::resetGameBoard() {
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
+/** Updates the board if hit and returns the type of hit. */
 HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
   std::string index = ::getBoardIndex(gameBoard, maybeHitPosition);
 
@@ -188,14 +189,34 @@ HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
     return MISS;
   }
 
-  setHitState(maybeHitPosition);
-  //TODO(Bhupinder): Check if a boat was sunk or if all boats are sunk.
-  return HIT;
+  std::string boatName = updateAndGetBoatHit(maybeHitPosition);
+  if (boatName.empty()) {
+    return MISS;
+  }
+
+  setHitStateOnBoard(maybeHitPosition); // Update the board since there was a hit.
+
+  if (shipSunk(boatName)) { // If the ship was sunk.
+    if (gameWon()) { // Check if this was the final ship to sink.
+      return WIN; // If all boats are destroyed, return a HitStatus#WIN.
+    }
+
+    return SUNK; // Return a HitStatus#SUNK.
+  }
+
+  return HIT; // Return a HitStatus#HIT, but the boat was not sunk.
 }
 
-void GameBoard::setHitState(const Coordinate& hitPosition) {
+/** Sets the hit state on the board and updates the boat locations. */
+void GameBoard::setHitStateOnBoard(const Coordinate& hitPosition) {
   ::setBoardIndexWithString(gameBoard, hitPosition, HIT_STATE); // Set the board position to the hit state.
+}
 
+/**
+ * Deletes the section of the boat hit from the boatLocations map.
+ * @returns the name of the boat hit, or else {@code ""}.
+ */
+std::string GameBoard::updateAndGetBoatHit(const Coordinate &hitPosition) {
   std::vector<std::string> boatNames = configSingleton.getBoatNames();
   for (auto &boatName : boatNames) { // Loop though every boat on the board till we find the one at this index.
     std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second;
@@ -204,10 +225,33 @@ void GameBoard::setHitState(const Coordinate& hitPosition) {
       if (coordinate.x == hitPosition.x && coordinate.y == hitPosition.y) { // If this position is the position that was hit.
         boatCoordinates.erase(boatCoordinates.begin() + i); // Remove this section of the boat.
         boatLocations.find(boatName)->second = boatCoordinates; // Update the boat locations.
-        return; // Since the boat locations have been updated, return to avoid unneeded loops.
+        // Since the boat locations have been updated, return to avoid unneeded loops.
+        return boatName; // Return the name of the boat.
       }
     }
   }
+
+  return ""; // Return an empty string
+}
+
+/** Checks if there are any surviving boats on the board and returns true if not. */
+bool GameBoard::gameWon() {
+  for (auto const& boats : boatLocations) { // Loop though every boat in the map.
+    if (!boats.second.empty()) { // Check if any boat still has sections remaining.
+      return false; // If a section to a boat was found, return false as the game is not over.
+    }
+  }
+
+  return true; // If all boats have no more locations, the game as been won.
+}
+
+bool GameBoard::shipSunk(const std::string& boatName) {
+  std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second;
+  if (boatCoordinates.empty()) {
+    return true;
+  }
+
+  return false;
 }
 
 void GameBoard::initRandom() {

@@ -77,7 +77,13 @@ private:
 
   bool maybePlaceBoat(const std::string &boatName, int boatLength,const BoatStart &boatPosition, bool printErrors);
 
-  void setHitState(const Coordinate& hitPosition);
+  void setHitStateOnBoard(const Coordinate& hitPosition);
+
+  std::string updateAndGetBoatHit(const Coordinate& hitPosition);
+
+  bool gameWon();
+
+  bool shipSunk(const std::string& boatName);
 };
 
 #endif // BATTLESHIPS_BOARD_GAMEBOARD_H_
