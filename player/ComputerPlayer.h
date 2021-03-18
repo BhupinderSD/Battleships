@@ -20,6 +20,8 @@ private:
   GameBoard gameBoard;
   HitBoard hitBoard;
 
+  void placeBoats();
+
   Coordinate getFireLocation();
 
 };

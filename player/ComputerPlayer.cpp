@@ -5,8 +5,7 @@
 #include "ComputerPlayer.h"
 
 ComputerPlayer::ComputerPlayer() {
-  gameBoard.autoPlaceUnplacedBoats();
-  gameBoard.showBoard();
+  placeBoats();
 }
 
 Coordinate ComputerPlayer::nextTurn() {
@@ -25,6 +24,31 @@ HitStatus ComputerPlayer::getHitStatus(const Coordinate& torpedoLocation) {
 
 void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   hitBoard.updateBoard(torpedoLocation, hitStatus);
+}
+
+void ComputerPlayer::placeBoats() {
+  gameBoard.autoPlaceUnplacedBoats(); // Try to place all boats.
+  gameBoard.showBoard();
+
+  while (gameBoard.hasUnplacedBoats()) { // If any boats couldn't be placed, ask the user how to proceed.
+    int option = getNumber("Unable to place all boats. Please choose an option:\n0. Try again\n1. Reset board and try again\n2. Continue ", 0, 2);
+
+    switch (option) {
+    case 0:
+      gameBoard.autoPlaceUnplacedBoats();
+      gameBoard.showBoard();
+      continue;
+    case 1:
+      gameBoard.resetGameBoard();
+      gameBoard.autoPlaceUnplacedBoats();
+      gameBoard.showBoard();
+      continue;
+    case 2:
+      break;
+    default:
+      std::cout << "Invalid input, please try again.";
+    }
+  }
 }
 
 Coordinate ComputerPlayer::getFireLocation() {
