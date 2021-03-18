@@ -69,6 +69,8 @@ private:
 
   bool isValidCoordinate(const Coordinate& coordinate) const;
 
+  bool isValidIndex(const Coordinate& coordinate) const;
+
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
   void removeBoatFromBoardIfPlaced(const std::string& boatName);

@@ -152,7 +152,7 @@ Coordinate GameBoard::getCoordinates(const std::string &request) {
     } else if (tempCoordinates.y == 0) {
       std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
     } else if (!isValidCoordinate(tempCoordinates)) {
-      std::cout << "Please enter valid coordinates within the bounds of the board.\n" << std::endl;
+      std::cout << tempCoordinates.x << tempCoordinates.y << "Please enter valid coordinates within the bounds of the board.\n" << std::endl;
     } else {
       tempCoordinates.y = tempCoordinates.y - 1; // Subtract 1 since the board index starts at 0.
       coordinate = tempCoordinates; // Set the temp coordinates as the coordinates to return.
@@ -295,7 +295,7 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
     int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
     int yCoordinate = coordinate.y;
 
-    if (!isValidCoordinate(coordinate)) {
+    if (!isValidIndex(coordinate)) {
       if (printErrors) {
         std::cout << "Position " << ::getAsciiLabel(xCoordinate) << (yCoordinate + 1) << " is outside of the board, the boat must be placed within the board." << std::endl;
       }
@@ -315,10 +315,25 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
   return true;
 }
 
-/** Check if this coordinate is outside of the board. */
+/** Check if this coordinate is outside of the board. Here, height starts from
+  * 1. */
 bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
   int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
   int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate > boardHeight) {
+    return false;
+  }
+
+  return true;
+}
+
+/** Check if this coordinate is outside of the board. Here, the height starts
+  * from 0. */
+bool GameBoard::isValidIndex(const Coordinate& coordinate) const {
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
+  int yCoordinate = coordinate.y;
+
   if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
     return false;
   }
