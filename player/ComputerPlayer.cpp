@@ -14,7 +14,6 @@ Coordinate ComputerPlayer::nextTurn() {
 
   Coordinate fireTorpedoLocation = getFireLocation();
 
-  std::cout << fireTorpedoLocation.x << std::to_string(fireTorpedoLocation.y + 1) << std::endl;
   return fireTorpedoLocation;
 }
 
@@ -52,15 +51,5 @@ void ComputerPlayer::placeBoats() {
 }
 
 Coordinate ComputerPlayer::getFireLocation() {
-  Coordinate fireTorpedoLocation;
-
-  while (true) { // Keep generating coordinates till we receive a valid/unused location.
-    fireTorpedoLocation = gameBoard.getRandomCoordinates();
-
-    if (hitBoard.isValidLocation(fireTorpedoLocation)) {
-      break;
-    }
-  }
-
-  return fireTorpedoLocation;
+ return ::getAutoFireLocation(gameBoard, hitBoard);
 }

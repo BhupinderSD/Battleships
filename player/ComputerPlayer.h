@@ -5,6 +5,8 @@
 #ifndef BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 #define BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 
+#include "shared/PlayerUtils.h"
+
 class ComputerPlayer {
 
 public:

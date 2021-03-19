@@ -29,9 +29,18 @@ void HumanPlayer::setBoatsOnBoard() {
 Coordinate HumanPlayer::nextTurn() {
   gameBoard.showBoard(); // Show the users current game board.
   hitBoard.showBoard(); // Show the users current hit board.
-  Coordinate coordinate = getFireLocation();
 
-  return coordinate;
+  while (true) {
+    int option = getNumber("How would you like to take your next turn:\n0. Auto fire\n1. Enter coordinates ", 0, 1);
+    switch (option) {
+    case 0:
+      return ::getAutoFireLocation(gameBoard, hitBoard);
+    case 1:
+      return getFireLocation();
+    default:
+      std::cout << "Invalid input, please try again.";
+    }
+  }
 }
 
 HitStatus HumanPlayer::getHitStatus(const Coordinate &torpedoLocation) {
