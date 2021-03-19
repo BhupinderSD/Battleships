@@ -207,6 +207,18 @@ HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
   return HIT; // Return a HitStatus#HIT, but the boat was not sunk.
 }
 
+/** Returns the number of boats on the board that are not sunk. */
+int GameBoard::getSurvivingBoatCount() {
+  int survivingBoatsCount = 0;
+  for (auto const& boats : boatLocations) { // Loop though every boat in the map.
+    if (!boats.second.empty()) { // Check if any boat still has sections remaining.
+      survivingBoatsCount++; // Increment the count
+    }
+  }
+
+  return survivingBoatsCount; // Return the count.
+}
+
 /** Sets the hit state on the board and updates the boat locations. */
 void GameBoard::setHitStateOnBoard(const Coordinate& hitPosition) {
   ::setBoardIndexWithString(gameBoard, hitPosition, HIT_STATE); // Set the board position to the hit state.

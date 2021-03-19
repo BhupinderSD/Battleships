@@ -43,6 +43,8 @@ public:
 
   HitStatus getHitStatus(const Coordinate& maybeHitPosition);
 
+  int getSurvivingBoatCount();
+
 private:
 
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();

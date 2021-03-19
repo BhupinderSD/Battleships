@@ -18,7 +18,7 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus);
 
-private:
+protected:
   GameBoard gameBoard;
   HitBoard hitBoard;
 

@@ -20,7 +20,7 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus);
 
-private:
+protected:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 
   GameBoard gameBoard;
