@@ -119,9 +119,52 @@ void playerVsComputerSalvo() {
   }
 }
 
+void playerVsPlayerSalvo() {
+  std::cout << "Human Player 1." << std::endl;
+  HumanPlayerSalvo humanPlayer1;
+  humanPlayer1.setBoatsOnBoard();
+
+  std::cout << "Human Player 2." << std::endl;
+  HumanPlayerSalvo humanPlayer2;
+  humanPlayer2.setBoatsOnBoard();
+
+  while (true) {
+    int human1Turns = humanPlayer1.getSurvivingBoatCount();
+    while (human1Turns > 0) {
+      human1Turns--;
+      std::cout << "Human Player 1." << std::endl;
+      Coordinate human1TorpedoLocation = humanPlayer1.nextTurn();
+      HitStatus human1HitStatus =
+          humanPlayer2.getHitStatus(human1TorpedoLocation);
+      humanPlayer1.updateHitBoard(human1TorpedoLocation, human1HitStatus);
+      if (human1HitStatus == WIN) {
+        ::waitForUser("Press enter to end the game.\n");
+        return;
+      }
+    }
+    ::waitForUser("Press enter to end your turn.\n");
+
+
+    int human2Turns = humanPlayer2.getSurvivingBoatCount();
+    while (human2Turns > 0) {
+      human2Turns--;
+      std::cout << "Human Player 2." << std::endl;
+      Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
+      HitStatus human2HitStatus =
+          humanPlayer1.getHitStatus(human2TorpedoLocation);
+      humanPlayer2.updateHitBoard(human2TorpedoLocation, human2HitStatus);
+      if (human2HitStatus == WIN) {
+        ::waitForUser("Press enter to end the game.\n");
+        return;
+      }
+    }
+    ::waitForUser("Press enter to end your turn.\n");
+  }
+}
+
 void showMenu() {
   while (true) { // Ask the user to enter a game mode until they choose to quit.
-    int option = getNumber("Please select a game mode: \n1. Player v Computer\n2. Player v Player\n3. Player v Computer (salvo)\n0. Quit", 0, 3);
+    int option = getNumber("Please select a game mode: \n1. Player v Computer\n2. Player v Player\n3. Player v Computer (salvo)\n4. Player v Player (salvo)\n0. Quit", 0, 4);
     switch(option) {
     case 1:
       playerVsComputer();
@@ -131,6 +174,9 @@ void showMenu() {
       continue;
     case 3:
       playerVsComputerSalvo();
+      continue;
+    case 4:
+      playerVsPlayerSalvo();
       continue;
     case 0:
       std::cout << "Thanks for playing!" << std::endl;
