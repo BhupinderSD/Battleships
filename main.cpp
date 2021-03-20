@@ -11,26 +11,28 @@
 #include "player/ComputerPlayer.cpp"
 #include "player/ComputerPlayerSalvo.cpp"
 
+/** Returns true if the player plays the next turn then wins. */
+bool playNextTurnThenWin(Player &player, Player &otherPlayer) {
+  Coordinate humanTorpedoLocation = player.nextTurn();
+  HitStatus humanHitStatus = otherPlayer.getHitStatus(humanTorpedoLocation);
+  player.updateHitBoard(humanTorpedoLocation, humanHitStatus);
+  if (humanHitStatus == WIN) {
+    ::waitForUser("Press enter to end the game.\n");
+    return true;
+  } else {
+    player.waitToEndTurn();
+    return false;
+  }
+}
+
 void playStandardGame(Player &player1, Player &player2) {
   while (true) {
-    Coordinate humanTorpedoLocation = player1.nextTurn();
-    HitStatus humanHitStatus = player2.getHitStatus(humanTorpedoLocation);
-    player1.updateHitBoard(humanTorpedoLocation, humanHitStatus);
-    if (humanHitStatus == WIN) {
-      ::waitForUser("Press enter to end the game.\n");
+    if (playNextTurnThenWin(player1, player2)) {
       break;
-    } else {
-      player1.waitToEndTurn();
     }
 
-    Coordinate computerTorpedoLocation = player2.nextTurn();
-    HitStatus computerHitStatus = player1.getHitStatus(computerTorpedoLocation);
-    player2.updateHitBoard(computerTorpedoLocation, computerHitStatus);
-    if (computerHitStatus == WIN) {
-      ::waitForUser("Press enter to end the game.\n");
+    if (playNextTurnThenWin(player2, player1)) {
       break;
-    } else {
-      player2.waitToEndTurn();
     }
   }
 }
