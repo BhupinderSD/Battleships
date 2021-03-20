@@ -5,63 +5,48 @@
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
 #include "board/HitBoard.cpp"
+#include "player/shared/Player.h"
 #include "player/HumanPlayer.cpp"
 #include "player/HumanPlayerSalvo.cpp"
 #include "player/ComputerPlayer.cpp"
 #include "player/ComputerPlayerSalvo.cpp"
 
-void playerVsComputer() {
-  HumanPlayer humanPlayer("Human Player");
-  ComputerPlayer computerPlayer("Computer Player");
-
+void playStandardGame(Player &player1, Player &player2) {
   while (true) {
-    Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
-    HitStatus humanHitStatus = computerPlayer.getHitStatus(humanTorpedoLocation);
-    humanPlayer.updateHitBoard(humanTorpedoLocation, humanHitStatus);
+    Coordinate humanTorpedoLocation = player1.nextTurn();
+    HitStatus humanHitStatus = player2.getHitStatus(humanTorpedoLocation);
+    player1.updateHitBoard(humanTorpedoLocation, humanHitStatus);
     if (humanHitStatus == WIN) {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      humanPlayer.waitToEndTurn();
+      player1.waitToEndTurn();
     }
 
-    Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
-    HitStatus computerHitStatus = humanPlayer.getHitStatus(computerTorpedoLocation);
-    computerPlayer.updateHitBoard(computerTorpedoLocation, computerHitStatus);
+    Coordinate computerTorpedoLocation = player2.nextTurn();
+    HitStatus computerHitStatus = player1.getHitStatus(computerTorpedoLocation);
+    player2.updateHitBoard(computerTorpedoLocation, computerHitStatus);
     if (computerHitStatus == WIN) {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      computerPlayer.waitToEndTurn();
+      player2.waitToEndTurn();
     }
   }
+}
+
+void playerVsComputer() {
+  HumanPlayer humanPlayer("Human Player");
+  ComputerPlayer computerPlayer("Computer Player");
+
+  playStandardGame(humanPlayer, computerPlayer);
 }
 
 void playerVsPlayer() {
   HumanPlayer humanPlayer1("Human Player 1");
   HumanPlayer humanPlayer2("Human Player 2");
 
-  while (true) {
-    Coordinate human1TorpedoLocation = humanPlayer1.nextTurn();
-    HitStatus human1HitStatus = humanPlayer2.getHitStatus(human1TorpedoLocation);
-    humanPlayer1.updateHitBoard(human1TorpedoLocation, human1HitStatus);
-    if (human1HitStatus == WIN) {
-      ::waitForUser("Press enter to end the game.\n");
-      break;
-    } else {
-      humanPlayer1.waitToEndTurn();
-    }
-
-    Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
-    HitStatus human2HitStatus = humanPlayer1.getHitStatus(human2TorpedoLocation);
-    humanPlayer2.updateHitBoard(human2TorpedoLocation, human2HitStatus);
-    if (human2HitStatus == WIN) {
-      ::waitForUser("Press enter to end the game.\n");
-      break;
-    } else {
-      humanPlayer2.waitToEndTurn();
-    }
-  }
+  playStandardGame(humanPlayer1, humanPlayer2);
 }
 
 void playerVsComputerSalvo() {

@@ -16,6 +16,8 @@ protected:
     this->playerName = playerName;
   };
 
+public:
+
   /** Returns the coordinates for the next turn from this player. */
   virtual Coordinate nextTurn() = 0;
 
