@@ -36,6 +36,9 @@ public:
   /** Displays a message informing the user to end the turn. */
   virtual void waitToEndTurn() = 0;
 
+  /** Plays the next turn and returns true if the player wins on this turn. */
+  bool playNextTurnThenWin(Player &otherPlayer);
+
 };
 
 #endif // BATTLESHIPS_PLAYER_SHARED_PLAYER_H_

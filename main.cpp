@@ -5,33 +5,19 @@
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
 #include "board/HitBoard.cpp"
-#include "player/shared/Player.h"
+#include "player/shared/Player.cpp"
 #include "player/HumanPlayer.cpp"
 #include "player/HumanPlayerSalvo.cpp"
 #include "player/ComputerPlayer.cpp"
 #include "player/ComputerPlayerSalvo.cpp"
 
-/** Returns true if the player plays the next turn then wins. */
-bool playNextTurnThenWin(Player &player, Player &otherPlayer) {
-  Coordinate humanTorpedoLocation = player.nextTurn();
-  HitStatus humanHitStatus = otherPlayer.getHitStatus(humanTorpedoLocation);
-  player.updateHitBoard(humanTorpedoLocation, humanHitStatus);
-  if (humanHitStatus == WIN) {
-    ::waitForUser("Press enter to end the game.\n");
-    return true;
-  } else {
-    player.waitToEndTurn();
-    return false;
-  }
-}
-
 void playStandardGame(Player &player1, Player &player2) {
   while (true) {
-    if (playNextTurnThenWin(player1, player2)) {
+    if (player1.playNextTurnThenWin(player2)) {
       break;
     }
 
-    if (playNextTurnThenWin(player2, player1)) {
+    if (player2.playNextTurnThenWin(player1)) {
       break;
     }
   }
