@@ -8,7 +8,13 @@
 /** An abstract Player class with methods that all subclasses must implement. */
 class Player {
 
-public:
+protected:
+
+  std::string playerName;
+
+  explicit Player(const std::string& playerName) {
+    this->playerName = playerName;
+  };
 
   /** Returns the coordinates for the next turn from this player. */
   virtual Coordinate nextTurn() = 0;

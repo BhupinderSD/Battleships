@@ -11,14 +11,10 @@
 #include "player/ComputerPlayerSalvo.cpp"
 
 void playerVsComputer() {
-  std::cout << "Human Player." << std::endl;
-  HumanPlayer humanPlayer;
-
-  std::cout << "Computer Player." << std::endl;
-  ComputerPlayer computerPlayer;
+  HumanPlayer humanPlayer("Human Player");
+  ComputerPlayer computerPlayer("Computer Player");
 
   while (true) {
-    std::cout << "Human Player." << std::endl;
     Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
     HitStatus humanHitStatus = computerPlayer.getHitStatus(humanTorpedoLocation);
     humanPlayer.updateHitBoard(humanTorpedoLocation, humanHitStatus);
@@ -29,7 +25,6 @@ void playerVsComputer() {
       ::waitForUser("Press enter to end your turn.\n");
     }
 
-    std::cout << "Computer Player." << std::endl;
     Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
     HitStatus computerHitStatus = humanPlayer.getHitStatus(computerTorpedoLocation);
     computerPlayer.updateHitBoard(computerTorpedoLocation, computerHitStatus);
@@ -43,14 +38,10 @@ void playerVsComputer() {
 }
 
 void playerVsPlayer() {
-  std::cout << "Human Player 1." << std::endl;
-  HumanPlayer humanPlayer1;
-
-  std::cout << "Human Player 2." << std::endl;
-  HumanPlayer humanPlayer2;
+  HumanPlayer humanPlayer1("Human Player 1");
+  HumanPlayer humanPlayer2("Human Player 2");
 
   while (true) {
-    std::cout << "Human Player 1." << std::endl;
     Coordinate human1TorpedoLocation = humanPlayer1.nextTurn();
     HitStatus human1HitStatus = humanPlayer2.getHitStatus(human1TorpedoLocation);
     humanPlayer1.updateHitBoard(human1TorpedoLocation, human1HitStatus);
@@ -61,7 +52,6 @@ void playerVsPlayer() {
       ::waitForUser("Press enter to end your turn.\n");
     }
 
-    std::cout << "Human Player 2." << std::endl;
     Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
     HitStatus human2HitStatus = humanPlayer1.getHitStatus(human2TorpedoLocation);
     humanPlayer2.updateHitBoard(human2TorpedoLocation, human2HitStatus);
@@ -75,17 +65,13 @@ void playerVsPlayer() {
 }
 
 void playerVsComputerSalvo() {
-  std::cout << "Human Player." << std::endl;
-  HumanPlayerSalvo humanPlayer;
-
-  std::cout << "Computer Player." << std::endl;
-  ComputerPlayerSalvo computerPlayer;
+  HumanPlayerSalvo humanPlayer("Human Player");
+  ComputerPlayerSalvo computerPlayer("Computer Player");
 
   while (true) {
     int humanTurns = humanPlayer.getSurvivingBoatCount();
     while (humanTurns > 0) {
       humanTurns--;
-      std::cout << "Human Player." << std::endl;
       Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
       HitStatus humanHitStatus =
           computerPlayer.getHitStatus(humanTorpedoLocation);
@@ -101,7 +87,6 @@ void playerVsComputerSalvo() {
     int computerTurns = computerPlayer.getSurvivingBoatCount();
     while (computerTurns > 0) {
       computerTurns--;
-      std::cout << "Computer Player." << std::endl;
       Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
       HitStatus computerHitStatus =
           humanPlayer.getHitStatus(computerTorpedoLocation);
@@ -116,17 +101,13 @@ void playerVsComputerSalvo() {
 }
 
 void playerVsPlayerSalvo() {
-  std::cout << "Human Player 1." << std::endl;
-  HumanPlayerSalvo humanPlayer1;
-
-  std::cout << "Human Player 2." << std::endl;
-  HumanPlayerSalvo humanPlayer2;
+  HumanPlayerSalvo humanPlayer1("Human Player 1");
+  HumanPlayerSalvo humanPlayer2("Human Player 2");
 
   while (true) {
     int human1Turns = humanPlayer1.getSurvivingBoatCount();
     while (human1Turns > 0) {
       human1Turns--;
-      std::cout << "Human Player 1." << std::endl;
       Coordinate human1TorpedoLocation = humanPlayer1.nextTurn();
       HitStatus human1HitStatus =
           humanPlayer2.getHitStatus(human1TorpedoLocation);
@@ -142,7 +123,6 @@ void playerVsPlayerSalvo() {
     int human2Turns = humanPlayer2.getSurvivingBoatCount();
     while (human2Turns > 0) {
       human2Turns--;
-      std::cout << "Human Player 2." << std::endl;
       Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
       HitStatus human2HitStatus =
           humanPlayer1.getHitStatus(human2TorpedoLocation);

@@ -4,11 +4,13 @@
 
 #include "ComputerPlayer.h"
 
-ComputerPlayer::ComputerPlayer() {
+ComputerPlayer::ComputerPlayer(const std::string &playerName): Player(playerName) {
   placeBoats();
 }
 
 Coordinate ComputerPlayer::nextTurn() {
+  std::cout << playerName <<  "." << std::endl;
+
   gameBoard.showBoard(); // Show the current game board.
   hitBoard.showBoard(); // Show the current hit board.
 

@@ -4,11 +4,13 @@
 
 #include "HumanPlayer.h"
 
-HumanPlayer::HumanPlayer() {
+HumanPlayer::HumanPlayer(const std::string &playerName): Player(playerName) {
   placeBoats();
 }
 
 Coordinate HumanPlayer::nextTurn() {
+  std::cout << playerName <<  "." << std::endl;
+
   gameBoard.showBoard(); // Show the users current game board.
   hitBoard.showBoard(); // Show the users current hit board.
 

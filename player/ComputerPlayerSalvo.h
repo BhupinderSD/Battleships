@@ -10,6 +10,8 @@
 class ComputerPlayerSalvo : public ComputerPlayer {
 
 public:
+  explicit ComputerPlayerSalvo(const std::string &playerName) : ComputerPlayer(playerName) {};
+
   int getSurvivingBoatCount();
 
 };

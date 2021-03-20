@@ -11,7 +11,7 @@
 class ComputerPlayer : public Player {
 
 public:
-  ComputerPlayer();
+  explicit ComputerPlayer(const std::string &playerName);
 
   Coordinate nextTurn() override;
 

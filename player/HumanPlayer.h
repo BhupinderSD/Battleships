@@ -11,7 +11,7 @@
 class HumanPlayer : public Player  {
 
 public:
-  HumanPlayer();
+  explicit HumanPlayer(const std::string &playerName);
 
   Coordinate nextTurn() override;
 

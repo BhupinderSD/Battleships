@@ -10,6 +10,8 @@
 class HumanPlayerSalvo : public HumanPlayer {
 
 public:
+  explicit HumanPlayerSalvo(const std::string &playerName) : HumanPlayer(playerName) {};
+
   int getSurvivingBoatCount();
 
 };
