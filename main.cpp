@@ -22,7 +22,7 @@ void playerVsComputer() {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      ::waitForUser("Press enter to end your turn.\n");
+      humanPlayer.waitToEndTurn();
     }
 
     Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
@@ -32,7 +32,7 @@ void playerVsComputer() {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      ::waitForUser("Press enter to end the computer's turn.\n");
+      computerPlayer.waitToEndTurn();
     }
   }
 }
@@ -49,7 +49,7 @@ void playerVsPlayer() {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      ::waitForUser("Press enter to end your turn.\n");
+      humanPlayer1.waitToEndTurn();
     }
 
     Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
@@ -59,7 +59,7 @@ void playerVsPlayer() {
       ::waitForUser("Press enter to end the game.\n");
       break;
     } else {
-      ::waitForUser("Press enter to end your turn.\n");
+      humanPlayer2.waitToEndTurn();
     }
   }
 }
@@ -81,8 +81,7 @@ void playerVsComputerSalvo() {
         return;
       }
     }
-    ::waitForUser("Press enter to end your turn.\n");
-
+    humanPlayer.waitToEndTurn();
 
     int computerTurns = computerPlayer.getSurvivingBoatCount();
     while (computerTurns > 0) {
@@ -96,7 +95,7 @@ void playerVsComputerSalvo() {
         return;
       }
     }
-    ::waitForUser("Press enter to end the computer's turn.\n");
+    computerPlayer.waitToEndTurn();
   }
 }
 
@@ -117,8 +116,7 @@ void playerVsPlayerSalvo() {
         return;
       }
     }
-    ::waitForUser("Press enter to end your turn.\n");
-
+    humanPlayer1.waitToEndTurn();
 
     int human2Turns = humanPlayer2.getSurvivingBoatCount();
     while (human2Turns > 0) {
@@ -132,7 +130,7 @@ void playerVsPlayerSalvo() {
         return;
       }
     }
-    ::waitForUser("Press enter to end your turn.\n");
+    humanPlayer2.waitToEndTurn();
   }
 }
 

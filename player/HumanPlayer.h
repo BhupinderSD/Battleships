@@ -7,6 +7,7 @@
 
 #include "shared/Player.h"
 #include "shared/PlayerUtils.h"
+#include "../HelperFunctions.h"
 
 class HumanPlayer : public Player  {
 
@@ -18,6 +19,8 @@ public:
   HitStatus getHitStatus(const Coordinate& torpedoLocation) override;
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
+
+  void waitToEndTurn() override;
 
 protected:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();

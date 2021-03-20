@@ -31,6 +31,9 @@ protected:
    */
   virtual void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) = 0;
 
+  /** Displays a message informing the user to end the turn. */
+  virtual void waitToEndTurn() = 0;
+
 };
 
 #endif // BATTLESHIPS_PLAYER_SHARED_PLAYER_H_
