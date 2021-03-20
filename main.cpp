@@ -13,7 +13,6 @@
 void playerVsComputer() {
   std::cout << "Human Player." << std::endl;
   HumanPlayer humanPlayer;
-  humanPlayer.setBoatsOnBoard();
 
   std::cout << "Computer Player." << std::endl;
   ComputerPlayer computerPlayer;
@@ -46,11 +45,9 @@ void playerVsComputer() {
 void playerVsPlayer() {
   std::cout << "Human Player 1." << std::endl;
   HumanPlayer humanPlayer1;
-  humanPlayer1.setBoatsOnBoard();
 
   std::cout << "Human Player 2." << std::endl;
   HumanPlayer humanPlayer2;
-  humanPlayer2.setBoatsOnBoard();
 
   while (true) {
     std::cout << "Human Player 1." << std::endl;
@@ -80,7 +77,6 @@ void playerVsPlayer() {
 void playerVsComputerSalvo() {
   std::cout << "Human Player." << std::endl;
   HumanPlayerSalvo humanPlayer;
-  humanPlayer.setBoatsOnBoard();
 
   std::cout << "Computer Player." << std::endl;
   ComputerPlayerSalvo computerPlayer;
@@ -122,11 +118,9 @@ void playerVsComputerSalvo() {
 void playerVsPlayerSalvo() {
   std::cout << "Human Player 1." << std::endl;
   HumanPlayerSalvo humanPlayer1;
-  humanPlayer1.setBoatsOnBoard();
 
   std::cout << "Human Player 2." << std::endl;
   HumanPlayerSalvo humanPlayer2;
-  humanPlayer2.setBoatsOnBoard();
 
   while (true) {
     int human1Turns = humanPlayer1.getSurvivingBoatCount();

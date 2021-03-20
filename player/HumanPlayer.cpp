@@ -4,26 +4,8 @@
 
 #include "HumanPlayer.h"
 
-HumanPlayer::HumanPlayer() {}
-
-void HumanPlayer::setBoatsOnBoard() {
-  while (true) {
-    selectAndSetBoatsOnBoard();
-
-    int option = getNumber("Are you happy with the boat placements? \n1. Yes\n2. Move a boat\n3. Reset the board", 1, 3);
-    switch (option) {
-    case 1:
-      return; // If the user is happy with the boat placements, continue with the game.
-    case 2:
-      continue; // Show the user the placed boats and let them move one boat each time.
-    case 3:
-      gameBoard.resetGameBoard(); // Reset the game board.
-      continue; // Continue with the loop and place all of the boats again.
-    default:
-      std::cout << "Invalid option, please try again." << std::endl;
-      continue;
-    }
-  }
+HumanPlayer::HumanPlayer() {
+  placeBoats();
 }
 
 Coordinate HumanPlayer::nextTurn() {
@@ -49,6 +31,26 @@ HitStatus HumanPlayer::getHitStatus(const Coordinate &torpedoLocation) {
 
 void HumanPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   hitBoard.updateBoard(torpedoLocation, hitStatus);
+}
+
+void HumanPlayer::placeBoats() {
+  while (true) {
+    selectAndSetBoatsOnBoard();
+
+    int option = getNumber("Are you happy with the boat placements? \n1. Yes\n2. Move a boat\n3. Reset the board", 1, 3);
+    switch (option) {
+    case 1:
+      return; // If the user is happy with the boat placements, continue with the game.
+    case 2:
+      continue; // Show the user the placed boats and let them move one boat each time.
+    case 3:
+      gameBoard.resetGameBoard(); // Reset the game board.
+      continue; // Continue with the loop and place all of the boats again.
+    default:
+      std::cout << "Invalid option, please try again." << std::endl;
+      continue;
+    }
+  }
 }
 
 void HumanPlayer::selectAndSetBoatsOnBoard() {

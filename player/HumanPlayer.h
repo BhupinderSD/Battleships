@@ -13,8 +13,6 @@ class HumanPlayer : public Player  {
 public:
   HumanPlayer();
 
-  void setBoatsOnBoard();
-
   Coordinate nextTurn() override;
 
   HitStatus getHitStatus(const Coordinate& torpedoLocation) override;
@@ -26,6 +24,8 @@ protected:
 
   GameBoard gameBoard;
   HitBoard hitBoard;
+
+  void placeBoats();
 
   void selectAndSetBoatsOnBoard();
 
