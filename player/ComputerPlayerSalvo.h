@@ -5,7 +5,10 @@
 #ifndef BATTLESHIPS_PLAYER_COMPUTERPLAYERSALVO_H_
 #define BATTLESHIPS_PLAYER_COMPUTERPLAYERSALVO_H_
 
+#include "ComputerPlayer.h"
+
 class ComputerPlayerSalvo : public ComputerPlayer {
+
 public:
   int getSurvivingBoatCount();
 

@@ -5,6 +5,8 @@
 #ifndef BATTLESHIPS_PLAYER_HUMANPLAYERSALVO_H_
 #define BATTLESHIPS_PLAYER_HUMANPLAYERSALVO_H_
 
+#include "HumanPlayer.h"
+
 class HumanPlayerSalvo : public HumanPlayer {
 
 public:

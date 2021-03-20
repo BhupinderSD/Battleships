@@ -5,18 +5,19 @@
 #ifndef BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 #define BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 
+#include "shared/Player.h"
 #include "shared/PlayerUtils.h"
 
-class ComputerPlayer {
+class ComputerPlayer : public Player {
 
 public:
   ComputerPlayer();
 
-  Coordinate nextTurn();
+  Coordinate nextTurn() override;
 
-  HitStatus getHitStatus(const Coordinate& torpedoLocation);
+  HitStatus getHitStatus(const Coordinate& torpedoLocation) override;
 
-  void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus);
+  void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
 
 protected:
   GameBoard gameBoard;
