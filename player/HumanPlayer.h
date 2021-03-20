@@ -25,9 +25,6 @@ public:
 protected:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 
-  GameBoard gameBoard;
-  HitBoard hitBoard;
-
   void placeBoats();
 
   void selectAndSetBoatsOnBoard();

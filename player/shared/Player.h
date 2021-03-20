@@ -12,6 +12,9 @@ protected:
 
   std::string playerName;
 
+  GameBoard gameBoard;
+  HitBoard hitBoard;
+
   explicit Player(const std::string& playerName) {
     this->playerName = playerName;
   };

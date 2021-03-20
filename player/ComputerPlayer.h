@@ -23,9 +23,6 @@ public:
   void waitToEndTurn() override;
 
 protected:
-  GameBoard gameBoard;
-  HitBoard hitBoard;
-
   void placeBoats();
 
   Coordinate getFireLocation();
