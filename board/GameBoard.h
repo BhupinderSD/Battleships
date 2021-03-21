@@ -9,6 +9,7 @@
 #include "../HelperFunctions.h"
 #include <random>
 #include <cmath>
+#include <utility>
 
 enum Orientation { // An enum to identify the different orientations of a boat.
   HORIZONTAL,
@@ -23,7 +24,7 @@ struct BoatStart { // A struct that stores the position and orientation for a bo
 class GameBoard {
 
 public:
-  GameBoard(); // Constructor.
+  GameBoard(std::string playerName); // Constructor.
 
   void showBoard();
 
@@ -50,6 +51,8 @@ private:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
   int boardWidth = configSingleton.getWidth();
   int boardHeight = configSingleton.getHeight();
+
+  std::string playerName;
 
   std::string HIT_STATE = "✸";
 

@@ -15,7 +15,7 @@ protected:
   GameBoard gameBoard;
   HitBoard hitBoard;
 
-  explicit Player(const std::string& playerName) {
+  explicit Player(const std::string& playerName) : hitBoard(playerName), gameBoard(playerName) {
     this->playerName = playerName;
   };
 

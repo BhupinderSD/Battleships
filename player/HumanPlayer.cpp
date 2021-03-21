@@ -15,10 +15,10 @@ Coordinate HumanPlayer::nextTurn() {
   hitBoard.showBoard(); // Show the users current hit board.
 
   while (true) {
-    int option = getNumber("How would you like to take your next turn:\n0. Auto fire\n1. Enter coordinates ", 0, 1);
+    int option = getNumber(playerName + " - How would you like to take your next turn:\n0. Auto fire\n1. Enter coordinates ", 0, 1);
     switch (option) {
     case 0:
-      return ::getAutoFireLocation(gameBoard, hitBoard);
+      return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
     case 1:
       return getFireLocation();
     default:
@@ -36,14 +36,14 @@ void HumanPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hi
 }
 
 void HumanPlayer::waitToEndTurn() {
-  ::waitForUser("Press enter to end the " + playerName + "'s turn.\n");
+  ::waitForUser(playerName + " - Press enter to end this turn.\n");
 }
 
 void HumanPlayer::placeBoats() {
   while (true) {
     selectAndSetBoatsOnBoard();
 
-    int option = getNumber("Are you happy with the boat placements? \n1. Yes\n2. Move a boat\n3. Reset the board", 1, 3);
+    int option = getNumber(playerName + " - Are you happy with the boat placements? \n1. Yes\n2. Move a boat\n3. Reset the board", 1, 3);
     switch (option) {
     case 1:
       return; // If the user is happy with the boat placements, continue with the game.
@@ -66,7 +66,7 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
   do { // Allow the user to replace a boat, even if all boats are placed.
     gameBoard.showPlacedAndUnplacedBoats();
 
-    int option = getNumber("Please enter the number of the boat to place: ", 0, boatNames.size());
+    int option = getNumber(playerName + " - Please enter the number of the boat to place: ", 0, boatNames.size());
     if (option == 0) { // Auto-place all remaining boats.
       gameBoard.autoPlaceUnplacedBoats();
       gameBoard.showBoard();
@@ -84,13 +84,13 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
 Coordinate HumanPlayer::getFireLocation() {
   Coordinate coordinate;
   while (true) { // Keep asking the user for coordinates till we receive a valid/unused location.
-    coordinate = gameBoard.getCoordinates("What coordinates do you want to fire a torpedo at?");
+    coordinate = gameBoard.getCoordinates(playerName + " - What coordinates do you want to fire a torpedo at?");
 
     if (hitBoard.isValidLocation(coordinate)) {
       break;
     }
 
-    std::cout << "You have already fired at this location, please try again." << std::endl;
+    std::cout << playerName << " - You have already fired at this location, please try again." << std::endl;
   }
 
   return coordinate;

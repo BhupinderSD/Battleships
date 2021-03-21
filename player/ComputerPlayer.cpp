@@ -28,7 +28,7 @@ void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus
 }
 
 void ComputerPlayer::waitToEndTurn() {
-  ::waitForUser("Press enter to end the " + playerName + "'s turn.\n");
+  ::waitForUser(playerName + " - Press enter to end this turn.\n");
 }
 
 void ComputerPlayer::placeBoats() {
@@ -54,8 +54,10 @@ void ComputerPlayer::placeBoats() {
       std::cout << "Invalid input, please try again.";
     }
   }
+
+  ::waitForUser(playerName + "'s boats have been set. Press enter to continue.\n");
 }
 
 Coordinate ComputerPlayer::getFireLocation() {
- return ::getAutoFireLocation(gameBoard, hitBoard);
+ return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
 }

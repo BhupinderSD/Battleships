@@ -4,13 +4,14 @@
 
 #include "GameBoard.h"
 
-GameBoard::GameBoard() {
+GameBoard::GameBoard(std::string playerName) {
+  this->playerName = std::move(playerName);
   initRandom();
   gameBoard = ::createEmptyBoard();
 }
 
 void GameBoard::showBoard() {
-  std::cout << "Game board." << std::endl;
+  std::cout << playerName << " - Game board." << std::endl;
   ::showBoard(gameBoard);
 }
 
@@ -32,8 +33,8 @@ void GameBoard::showPlacedAndUnplacedBoats() {
     unplacedBoats.push_back(std::to_string(0) + ". Auto-place unplaced boats."); // Inform the user that they can auto-place boats.
   }
 
-  printList("Placed boats:", placedBoats);
-  printList("Unplaced boats:", unplacedBoats);
+  printList(playerName + " - Placed boats:", placedBoats);
+  printList(playerName + " - Unplaced boats:", unplacedBoats);
 }
 
 void GameBoard::autoPlaceUnplacedBoats() {

@@ -5,10 +5,12 @@
 #ifndef BATTLESHIPS_BOARD_HITBOARD_H_
 #define BATTLESHIPS_BOARD_HITBOARD_H_
 
+#include <utility>
+
 class HitBoard {
 
 public:
-  HitBoard(); // Constructor.
+  HitBoard(std::string playerName); // Constructor.
 
   void showBoard();
 
@@ -17,6 +19,8 @@ public:
   bool isValidLocation(const Coordinate& torpedoLocation);
 
 private:
+
+  std::string playerName;
 
   std::string HIT_STATE = "H";
   std::string MISS_STATE = "M";

@@ -18,8 +18,8 @@ bool SalvoGame::playNextTurnThenWin(Player &player, Player &otherPlayer) {
       ::waitForUser("Press enter to end the game.\n");
       return true;
     }
+    player.waitToEndTurn();
   }
 
-  player.waitToEndTurn();
   return false;
 }

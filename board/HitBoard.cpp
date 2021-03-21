@@ -4,31 +4,32 @@
 
 #include "HitBoard.h"
 
-HitBoard::HitBoard() {
+HitBoard::HitBoard(std::string playerName) {
+  this->playerName = std::move(playerName);
   hitBoard = ::createEmptyBoard();
 }
 
 void HitBoard::showBoard() {
-  std::cout << "Hit board." << std::endl;
+  std::cout << playerName << " - Hit board." << std::endl;
   ::showBoard(hitBoard);
 }
 
 void HitBoard::updateBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   switch (hitStatus) {
   case HIT:
-    std::cout << "Hit!" << std::endl;
+    std::cout << playerName << " - Hit!" << std::endl;
     ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
     break;
   case SUNK:
-    std::cout << "Hit and sunk a ship!" << std::endl;
+    std::cout << playerName << " - Hit and sunk a ship!" << std::endl;
     ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
     break;
   case WIN:
-    std::cout << "You win!" << std::endl;
+    std::cout << playerName << " - You win!" << std::endl;
     ::setBoardIndexWithString(hitBoard, torpedoLocation, HIT_STATE);
     break;
   case MISS:
-    std::cout << "Miss!" << std::endl;
+    std::cout << playerName << " - Miss!" << std::endl;
     ::setBoardIndexWithString(hitBoard, torpedoLocation, MISS_STATE);
     break;
   }
