@@ -39,6 +39,9 @@ public:
   /** Displays a message informing the user to end the turn. */
   virtual void waitToEndTurn() = 0;
 
+  /** Returns the gameboard. */
+  GameBoard& getGameBoard() { return gameBoard; }
+
 };
 
 #endif // BATTLESHIPS_PLAYER_SHARED_PLAYER_H_

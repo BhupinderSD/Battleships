@@ -7,12 +7,12 @@
 #include "board/HitBoard.cpp"
 #include "player/shared/Player.h"
 #include "player/HumanPlayer.cpp"
-#include "player/HumanPlayerSalvo.cpp"
 #include "player/ComputerPlayer.cpp"
-#include "player/ComputerPlayerSalvo.cpp"
-#include "gamemode/StandardGame.cpp"
 #include "gamemode/shared/GameMode.h"
+#include "gamemode/StandardGame.cpp"
+#include "gamemode/SalvoGame.cpp"
 
+/** Plays the battleship game with a {@code gameMode} until a player wins. */
 void playGame(Player &player1, Player &player2, GameMode &gameMode) {
   while (true) {
     if (gameMode.playNextTurnThenWin(player1, player2)) {
@@ -25,7 +25,7 @@ void playGame(Player &player1, Player &player2, GameMode &gameMode) {
   }
 }
 
-void playerVsComputer() {
+void playerVsComputerStandard() {
   HumanPlayer humanPlayer("Human Player");
   ComputerPlayer computerPlayer("Computer Player");
   StandardGame standardGame;
@@ -33,7 +33,7 @@ void playerVsComputer() {
   playGame(humanPlayer, computerPlayer, standardGame);
 }
 
-void playerVsPlayer() {
+void playerVsPlayerStandard() {
   HumanPlayer humanPlayer1("Human Player 1");
   HumanPlayer humanPlayer2("Human Player 2");
   StandardGame standardGame;
@@ -42,73 +42,19 @@ void playerVsPlayer() {
 }
 
 void playerVsComputerSalvo() {
-  HumanPlayerSalvo humanPlayer("Human Player");
-  ComputerPlayerSalvo computerPlayer("Computer Player");
+  HumanPlayer humanPlayer("Human Player");
+  ComputerPlayer computerPlayer("Computer Player");
+  SalvoGame salvoGame;
 
-  while (true) {
-    int humanTurns = humanPlayer.getSurvivingBoatCount();
-    while (humanTurns > 0) {
-      humanTurns--;
-      Coordinate humanTorpedoLocation = humanPlayer.nextTurn();
-      HitStatus humanHitStatus =
-          computerPlayer.getHitStatus(humanTorpedoLocation);
-      humanPlayer.updateHitBoard(humanTorpedoLocation, humanHitStatus);
-      if (humanHitStatus == WIN) {
-        ::waitForUser("Press enter to end the game.\n");
-        return;
-      }
-    }
-    humanPlayer.waitToEndTurn();
-
-    int computerTurns = computerPlayer.getSurvivingBoatCount();
-    while (computerTurns > 0) {
-      computerTurns--;
-      Coordinate computerTorpedoLocation = computerPlayer.nextTurn();
-      HitStatus computerHitStatus =
-          humanPlayer.getHitStatus(computerTorpedoLocation);
-      computerPlayer.updateHitBoard(computerTorpedoLocation, computerHitStatus);
-      if (computerHitStatus == WIN) {
-        ::waitForUser("Press enter to end the game.\n");
-        return;
-      }
-    }
-    computerPlayer.waitToEndTurn();
-  }
+  playGame(humanPlayer, computerPlayer, salvoGame);
 }
 
 void playerVsPlayerSalvo() {
-  HumanPlayerSalvo humanPlayer1("Human Player 1");
-  HumanPlayerSalvo humanPlayer2("Human Player 2");
+  HumanPlayer humanPlayer1("Human Player 1");
+  HumanPlayer humanPlayer2("Human Player 2");
+  SalvoGame salvoGame;
 
-  while (true) {
-    int human1Turns = humanPlayer1.getSurvivingBoatCount();
-    while (human1Turns > 0) {
-      human1Turns--;
-      Coordinate human1TorpedoLocation = humanPlayer1.nextTurn();
-      HitStatus human1HitStatus =
-          humanPlayer2.getHitStatus(human1TorpedoLocation);
-      humanPlayer1.updateHitBoard(human1TorpedoLocation, human1HitStatus);
-      if (human1HitStatus == WIN) {
-        ::waitForUser("Press enter to end the game.\n");
-        return;
-      }
-    }
-    humanPlayer1.waitToEndTurn();
-
-    int human2Turns = humanPlayer2.getSurvivingBoatCount();
-    while (human2Turns > 0) {
-      human2Turns--;
-      Coordinate human2TorpedoLocation = humanPlayer2.nextTurn();
-      HitStatus human2HitStatus =
-          humanPlayer1.getHitStatus(human2TorpedoLocation);
-      humanPlayer2.updateHitBoard(human2TorpedoLocation, human2HitStatus);
-      if (human2HitStatus == WIN) {
-        ::waitForUser("Press enter to end the game.\n");
-        return;
-      }
-    }
-    humanPlayer2.waitToEndTurn();
-  }
+  playGame(humanPlayer1, humanPlayer2, salvoGame);
 }
 
 void showMenu() {
@@ -116,10 +62,10 @@ void showMenu() {
     int option = getNumber("Please select a game mode: \n1. Player v Computer\n2. Player v Player\n3. Player v Computer (salvo)\n4. Player v Player (salvo)\n0. Quit", 0, 4);
     switch(option) {
     case 1:
-      playerVsComputer();
+      playerVsComputerStandard();
       continue;
     case 2:
-      playerVsPlayer();
+      playerVsPlayerStandard();
       continue;
     case 3:
       playerVsComputerSalvo();
