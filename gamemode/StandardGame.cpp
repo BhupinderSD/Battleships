@@ -6,10 +6,10 @@
 
 /** Returns true if the player plays the next turn then wins. */
 bool StandardGame::playNextTurnThenWin(Player &player, Player &otherPlayer) {
-  Coordinate humanTorpedoLocation = player.nextTurn();
-  HitStatus humanHitStatus = otherPlayer.getHitStatus(humanTorpedoLocation);
-  player.updateHitBoard(humanTorpedoLocation, humanHitStatus);
-  if (humanHitStatus == WIN) {
+  Coordinate playerTorpedoLocation = player.nextTurn();
+  HitStatus playerHitStatus = otherPlayer.getHitStatus(playerTorpedoLocation);
+  player.updateHitBoard(playerTorpedoLocation, playerHitStatus);
+  if (playerHitStatus == WIN) {
     ::waitForUser("Press enter to end the game.\n");
     return true;
   } else {
