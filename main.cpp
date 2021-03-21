@@ -11,6 +11,7 @@
 #include "gamemode/shared/GameMode.h"
 #include "gamemode/StandardGame.cpp"
 #include "gamemode/SalvoGame.cpp"
+#include "gamemode/HiddenMines.cpp"
 
 /** Plays the battleship game with a {@code gameMode} until a player wins. */
 void playGame(Player &player1, Player &player2, GameMode &gameMode) {
@@ -57,9 +58,41 @@ void playerVsPlayerSalvo() {
   playGame(humanPlayer1, humanPlayer2, salvoGame);
 }
 
+void playerVsComputerHiddenMines() {
+  HumanPlayer humanPlayer("Human Player");
+  ComputerPlayer computerPlayer("Computer Player");
+  HiddenMines hiddenMines;
+
+  playGame(humanPlayer, computerPlayer, hiddenMines);
+}
+
+void playerVsPlayerHiddenMines() {
+  HumanPlayer humanPlayer1("Human Player 1");
+  HumanPlayer humanPlayer2("Human Player 2");
+  HiddenMines hiddenMines;
+
+  playGame(humanPlayer1, humanPlayer2, hiddenMines);
+}
+
+void ComputerVsComputerHiddenMines() {
+  ComputerPlayer computerPlayer1("Computer Player 1");
+  ComputerPlayer computerPlayer2("Computer Player 2");
+  HiddenMines hiddenMines;
+
+  playGame(computerPlayer1, computerPlayer2, hiddenMines);
+}
+
 void showMenu() {
   while (true) { // Ask the user to enter a game mode until they choose to quit.
-    int option = getNumber("Please select a game mode: \n1. Player v Computer\n2. Player v Player\n3. Player v Computer (salvo)\n4. Player v Player (salvo)\n0. Quit", 0, 4);
+    int option = getNumber("Please select a game mode: \n"
+                           "1. Player v Computer\n"
+                           "2. Player v Player\n"
+                           "3. Player v Computer (salvo)\n"
+                           "4. Player v Player (salvo)\n"
+                           "5. Player v Computer (hidden mines)\n"
+                           "6. Player v Player (hidden mines)\n"
+                           "7. Computer v Computer (hidden mines)\n"
+                           "0. Quit", 0, 7);
     switch(option) {
     case 1:
       playerVsComputerStandard();
@@ -72,6 +105,15 @@ void showMenu() {
       continue;
     case 4:
       playerVsPlayerSalvo();
+      continue;
+    case 5:
+      playerVsComputerHiddenMines();
+      continue;
+    case 6:
+      playerVsPlayerHiddenMines();
+      continue;
+    case 7:
+      ComputerVsComputerHiddenMines();
       continue;
     case 0:
       std::cout << "Thanks for playing!" << std::endl;
