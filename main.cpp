@@ -5,19 +5,21 @@
 #include "config/ConfigurationSingleton.cpp"
 #include "board/GameBoard.cpp"
 #include "board/HitBoard.cpp"
-#include "player/shared/Player.cpp"
+#include "player/shared/Player.h"
 #include "player/HumanPlayer.cpp"
 #include "player/HumanPlayerSalvo.cpp"
 #include "player/ComputerPlayer.cpp"
 #include "player/ComputerPlayerSalvo.cpp"
+#include "gamemode/StandardGame.cpp"
+#include "gamemode/shared/GameMode.h"
 
-void playStandardGame(Player &player1, Player &player2) {
+void playGame(Player &player1, Player &player2, GameMode &gameMode) {
   while (true) {
-    if (player1.playNextTurnThenWin(player2)) {
+    if (gameMode.playNextTurnThenWin(player1, player2)) {
       break;
     }
 
-    if (player2.playNextTurnThenWin(player1)) {
+    if (gameMode.playNextTurnThenWin(player2, player1)) {
       break;
     }
   }
@@ -26,15 +28,17 @@ void playStandardGame(Player &player1, Player &player2) {
 void playerVsComputer() {
   HumanPlayer humanPlayer("Human Player");
   ComputerPlayer computerPlayer("Computer Player");
+  StandardGame standardGame;
 
-  playStandardGame(humanPlayer, computerPlayer);
+  playGame(humanPlayer, computerPlayer, standardGame);
 }
 
 void playerVsPlayer() {
   HumanPlayer humanPlayer1("Human Player 1");
   HumanPlayer humanPlayer2("Human Player 2");
+  StandardGame standardGame;
 
-  playStandardGame(humanPlayer1, humanPlayer2);
+  playGame(humanPlayer1, humanPlayer2, standardGame);
 }
 
 void playerVsComputerSalvo() {
