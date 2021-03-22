@@ -63,6 +63,9 @@ void playerVsComputerHiddenMines() {
   ComputerPlayer computerPlayer("Computer Player");
   HiddenMines hiddenMines;
 
+  humanPlayer.getGameBoard().setHiddenMines();
+  computerPlayer.getGameBoard().setHiddenMines();
+
   playGame(humanPlayer, computerPlayer, hiddenMines);
 }
 
@@ -71,6 +74,9 @@ void playerVsPlayerHiddenMines() {
   HumanPlayer humanPlayer2("Human Player 2");
   HiddenMines hiddenMines;
 
+  humanPlayer1.getGameBoard().setHiddenMines();
+  humanPlayer2.getGameBoard().setHiddenMines();
+
   playGame(humanPlayer1, humanPlayer2, hiddenMines);
 }
 
@@ -78,6 +84,9 @@ void ComputerVsComputerHiddenMines() {
   ComputerPlayer computerPlayer1("Computer Player 1");
   ComputerPlayer computerPlayer2("Computer Player 2");
   HiddenMines hiddenMines;
+
+  computerPlayer1.getGameBoard().setHiddenMines();
+  computerPlayer2.getGameBoard().setHiddenMines();
 
   playGame(computerPlayer1, computerPlayer2, hiddenMines);
 }

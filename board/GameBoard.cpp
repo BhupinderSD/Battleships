@@ -182,6 +182,31 @@ void GameBoard::resetGameBoard() {
   boatLocations.clear(); // Delete all stored boat locations.
 }
 
+/** Sets 5 mines at random places on the board. */
+void GameBoard::setHiddenMines() {
+  int minesRemaining = 5;
+
+  while (minesRemaining > 0) {
+    Coordinate coordinate = getRandomCoordinates();
+
+    if (!isValidIndex(coordinate) || ::vectorContainsElement(mineLocations, coordinate)) {
+      continue; // Don't add a mine here if the coordinates are invalid or a mine is already here.
+    }
+
+    std::string mineString;
+    std::string boardIndex = ::getBoardIndex(gameBoard, coordinate);
+    if (boardIndex == ::EMPTY_STATE) { // Check if we need to append the mine to a boat initial.
+      mineString = MINE;
+    } else {
+      mineString = boardIndex + "/" + MINE; // Add the mine after the boat initial.
+    }
+
+    ::setBoardIndexWithString(gameBoard, coordinate, mineString); // Set the mine on the board.
+
+    minesRemaining--; // Decrease the counter since a mine has been placed.
+  }
+}
+
 /** Updates the board if hit and returns the type of hit. */
 HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
   std::string index = ::getBoardIndex(gameBoard, maybeHitPosition);

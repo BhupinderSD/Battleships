@@ -40,6 +40,8 @@ public:
 
   void resetGameBoard();
 
+  void setHiddenMines();
+
   Coordinate getCoordinates(const std::string& boatName);
 
   HitStatus getHitStatus(const Coordinate& maybeHitPosition);
@@ -55,8 +57,10 @@ private:
   std::string playerName;
 
   std::string HIT_STATE = "✸";
+  std::string MINE = "M";
 
   std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
+  std::vector<Coordinate> mineLocations; // Use vector to represent the locations of any mines set on the board.
 
   std::map<std::string, std::vector<Coordinate>> boatLocations;
 

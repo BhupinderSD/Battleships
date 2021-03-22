@@ -7,6 +7,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
+#include <algorithm>
 
 #ifndef BATTLESHIPS__HELPERFUNCTIONS_H_
 #define BATTLESHIPS__HELPERFUNCTIONS_H_
@@ -102,6 +103,15 @@ void printList(const std::string& title, const std::vector<std::string>& placedB
 void waitForUser(std::string request) {
   std::cout << request;
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+}
+
+/**
+ * Returns true if the {@code element} is found in the {@code vector}. Using
+ * generics so any object type will work.
+ */
+template <typename E> bool vectorContainsElement(const std::vector<E> vector, E element) {
+  bool found = std::find(vector.begin(), vector.end(), element) != vector.end();
+  return found;
 }
 
 #endif // BATTLESHIPS__HELPERFUNCTIONS_H_

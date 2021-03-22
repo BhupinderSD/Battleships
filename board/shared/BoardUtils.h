@@ -11,13 +11,19 @@ const int PADDING = 2; // Padding so each index can be bigger than the max index
 struct Coordinate { // A struct that stores the coordinates for a boat.
   std::string x;
   int y = 0;
+
+  // Allows us to check if coordinates are equal.
+  bool operator == (const Coordinate& coordinate) const {
+    return coordinate.x == this->x && coordinate.y == this->y;
+  }
 };
 
 enum HitStatus {
   HIT,
   SUNK,
   MISS,
-  WIN
+  WIN,
+  MINE
 };
 
 ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
