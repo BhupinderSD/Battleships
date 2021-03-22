@@ -5,6 +5,8 @@
 #include <utility>
 
 static const std::string EMPTY_STATE = "[]";
+static const std::string HIT_STATE = "✸";
+static const std::string MINE_STATE = "M";
 
 const int PADDING = 2; // Padding so each index can be bigger than the max index length.
 
@@ -113,4 +115,50 @@ std::string getBoardIndex(std::vector<std::vector<std::string>> board, const Coo
 void setBoardIndexWithString(std::vector<std::vector<std::string>> &board, const Coordinate& coordinate, std::string string) {
   int xCoordinate = getNumberFromAsciiLabel(coordinate.x); // Convert the Ascii coordinate to a column on the board.
   board[xCoordinate][coordinate.y] = std::move(string);
+}
+
+/**
+ * Check if this coordinate is outside of the board. Here, height starts from
+ * 1.
+ */
+bool isValidCoordinate(const Coordinate& coordinate) {
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
+  int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate > boardHeight) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Check if this coordinate is outside of the board. Here, the height starts
+ * from 0.
+ */
+bool isValidIndex(const Coordinate& coordinate) {
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
+  int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+    return false;
+  }
+
+  return true;
+}
+
+/** Sets the hit state for this and the immediately surrounding positions. */
+void setMineHit(std::vector<std::vector<std::string>> &board, const Coordinate &hitPosition, const std::string& string) {
+  int hitPositionXCoordinate = getNumberFromAsciiLabel(hitPosition.x);
+
+  for (int i = -1; i < 2; i++) { // Loop though the immediately surrounding indices.
+    for (int j = -1; j < 2; j++) {
+      Coordinate mineHitCoordinate;
+      mineHitCoordinate.x = ::getAsciiLabel(hitPositionXCoordinate + i);
+      mineHitCoordinate.y = hitPosition.y + j;
+      if (isValidIndex(mineHitCoordinate)) {
+        ::setBoardIndexWithString(board, mineHitCoordinate, string); // Set the board position to the hit state.
+      }
+    }
+  }
 }

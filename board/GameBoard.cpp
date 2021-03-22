@@ -152,7 +152,7 @@ Coordinate GameBoard::getCoordinates(const std::string &request) {
       std::cout << "Please enter a valid x coordinate (a letter).\n" << std::endl;
     } else if (tempCoordinates.y == 0) {
       std::cout << "Please enter a valid y coordinate (a number).\n" << std::endl;
-    } else if (!isValidCoordinate(tempCoordinates)) {
+    } else if (!::isValidCoordinate(tempCoordinates)) {
       std::cout << tempCoordinates.x << tempCoordinates.y << "Please enter valid coordinates within the bounds of the board.\n" << std::endl;
     } else {
       tempCoordinates.y = tempCoordinates.y - 1; // Subtract 1 since the board index starts at 0.
@@ -189,20 +189,20 @@ void GameBoard::setHiddenMines() {
   while (minesRemaining > 0) {
     Coordinate coordinate = getRandomCoordinates();
 
-    if (!isValidIndex(coordinate) || ::vectorContainsElement(mineLocations, coordinate)) {
+    if (!::isValidIndex(coordinate) || ::vectorContainsElement(mineLocations, coordinate)) {
       continue; // Don't add a mine here if the coordinates are invalid or a mine is already here.
     }
 
     std::string mineString;
     std::string boardIndex = ::getBoardIndex(gameBoard, coordinate);
     if (boardIndex == ::EMPTY_STATE) { // Check if we need to append the mine to a boat initial.
-      mineString = MINE;
+      mineString = ::MINE_STATE;
     } else {
-      mineString = boardIndex + "/" + MINE; // Add the mine after the boat initial.
+      mineString = boardIndex + "/" + ::MINE_STATE; // Add the mine after the boat initial.
     }
 
     ::setBoardIndexWithString(gameBoard, coordinate, mineString); // Set the mine on the board.
-
+    mineLocations.push_back(coordinate); // Add this mine coordinate to the vector.
     minesRemaining--; // Decrease the counter since a mine has been placed.
   }
 }
@@ -215,22 +215,34 @@ HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
     return MISS;
   }
 
-  std::string boatName = updateAndGetBoatHit(maybeHitPosition);
-  if (boatName.empty()) {
+  if (::vectorContainsElement(mineLocations, maybeHitPosition)) { // Check if a mine was hit.
+    setHitStateOnBoard(maybeHitPosition); // Update the board since a mine was hit.
+
+    if (gameWon()) { // Check if all the boats have sunk.
+      return WIN; // If all boats are destroyed, return a HitStatus#WIN.
+    }
+
+    return MINE;
+  }
+
+  std::vector<std::string> hitBoatNames = updateAndGetBoatHit(maybeHitPosition);
+  if (hitBoatNames.empty()) {
     return MISS;
   }
 
   setHitStateOnBoard(maybeHitPosition); // Update the board since there was a hit.
 
-  if (shipSunk(boatName)) { // If the ship was sunk.
-    if (gameWon()) { // Check if this was the final ship to sink.
-      return WIN; // If all boats are destroyed, return a HitStatus#WIN.
-    }
+  for (const std::string& hitBoat : hitBoatNames) { // Loop though every hit boat.
+    if (shipSunk(hitBoat)) { // If the ship was sunk.
+      if (gameWon()) { // Check if this was the final ship to sink.
+        return WIN; // If all boats are destroyed, return a HitStatus#WIN.
+      }
 
-    return SUNK; // Return a HitStatus#SUNK.
+      return SUNK; // Return a HitStatus#SUNK.
+    }
   }
 
-  return HIT; // Return a HitStatus#HIT, but the boat was not sunk.
+  return HIT; // Return a HitStatus#HIT, since a boat was hit but not sunk.
 }
 
 /** Returns the number of boats on the board that are not sunk. */
@@ -247,20 +259,61 @@ int GameBoard::getSurvivingBoatCount() {
 
 /** Sets the hit state on the board and updates the boat locations. */
 void GameBoard::setHitStateOnBoard(const Coordinate& hitPosition) {
-  ::setBoardIndexWithString(gameBoard, hitPosition, HIT_STATE); // Set the board position to the hit state.
+  if (::vectorContainsElement(mineLocations, hitPosition)) { // Check if a mine was hit.
+    ::setMineHit(gameBoard, hitPosition, ::HIT_STATE); // Sets this and surrounding positions as hit.
+  } else {
+    ::setBoardIndexWithString(gameBoard, hitPosition, ::HIT_STATE); // Set the board position to the hit state.
+  }
 }
 
 /**
  * Deletes the section of the boat hit from the boatLocations map.
- * @returns the name of the boat hit, or else {@code ""}.
+ *
+ * <p>If a mine was hit, this will delete sections of every boat hit.
+ *
+ * @returns the name of any boat hit, or else and empty string vector.
  */
-std::string GameBoard::updateAndGetBoatHit(const Coordinate &hitPosition) {
+std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPosition) {
+  std::vector<std::string> boatsHit;
+  if (!::vectorContainsElement(mineLocations, hitPosition)) { // Check if a mine was not hit.
+    std::string boatHit = getBoatAtCoordinate(hitPosition);
+    if (!boatHit.empty()) {
+      boatsHit.push_back(boatHit);
+    }
+    return boatsHit;
+  }
+
+  // Since a mine was hit, loop though the immediately surrounding indices.
+  for (int i = -1; i < 2; i++) {
+    for (int j = -1; j < 2; j++) {
+      int mineHitXCoordinate = getNumberFromAsciiLabel(hitPosition.x) + i;
+
+      Coordinate mineHitCoordinate;
+      mineHitCoordinate.x = ::getAsciiLabel(mineHitXCoordinate);
+      mineHitCoordinate.y = hitPosition.y + j;
+
+      if (::isValidIndex(mineHitCoordinate)) {
+        std::string boatHit = getBoatAtCoordinate(hitPosition);
+        if (!boatHit.empty()) { // If a boat was found at this coordinate.
+          boatsHit.push_back(boatHit); // Add the boat to the boatsHit vector.
+        }
+      }
+    }
+  }
+
+  return boatsHit;
+}
+
+/**
+ * @returns the name of the boat hit at this coordinate or else {@code ""}.
+ */
+std::string GameBoard::getBoatAtCoordinate(const Coordinate &coordinate) {
   std::vector<std::string> boatNames = configSingleton.getBoatNames();
   for (auto &boatName : boatNames) { // Loop though every boat on the board till we find the one at this index.
     std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second;
     for (int i = 0; i < boatCoordinates.size(); i++) { // Loop though every position taken by this boat.
-      Coordinate coordinate = boatCoordinates[i];
-      if (coordinate.x == hitPosition.x && coordinate.y == hitPosition.y) { // If this position is the position that was hit.
+      Coordinate boatCoordinate = boatCoordinates[i];
+      if (boatCoordinate.x == coordinate.x && boatCoordinate.y == coordinate.y) { // If this position is the position that was hit.
         boatCoordinates.erase(boatCoordinates.begin() + i); // Remove this section of the boat.
         boatLocations.find(boatName)->second = boatCoordinates; // Update the boat locations.
         // Since the boat locations have been updated, return to avoid unneeded loops.
@@ -348,32 +401,6 @@ bool GameBoard::isValidPosition(const std::vector<Coordinate> &boatPositions, bo
       }
       return false;
     }
-  }
-
-  return true;
-}
-
-/** Check if this coordinate is outside of the board. Here, height starts from
-  * 1. */
-bool GameBoard::isValidCoordinate(const Coordinate& coordinate) const {
-  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
-  int yCoordinate = coordinate.y;
-
-  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate > boardHeight) {
-    return false;
-  }
-
-  return true;
-}
-
-/** Check if this coordinate is outside of the board. Here, the height starts
-  * from 0. */
-bool GameBoard::isValidIndex(const Coordinate& coordinate) const {
-  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
-  int yCoordinate = coordinate.y;
-
-  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
-    return false;
   }
 
   return true;

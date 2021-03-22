@@ -6,5 +6,14 @@
 
 /** Returns true if the player plays the next turn then wins. */
 bool HiddenMines::playNextTurnThenWin(Player &player, Player &otherPlayer) {
-  return true; // TODO(Bhupinder): Implement this game mode.
+  Coordinate playerTorpedoLocation = player.nextTurn();
+  HitStatus playerHitStatus = otherPlayer.getHitStatus(playerTorpedoLocation);
+  player.updateHitBoard(playerTorpedoLocation, playerHitStatus);
+  if (playerHitStatus == WIN) {
+    ::waitForUser("Press enter to end the game.\n");
+    return true;
+  } else {
+    player.waitToEndTurn();
+    return false;
+  }
 }

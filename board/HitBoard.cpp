@@ -33,7 +33,9 @@ void HitBoard::updateBoard(const Coordinate &torpedoLocation, HitStatus hitStatu
     ::setBoardIndexWithString(hitBoard, torpedoLocation, MISS_STATE);
     break;
   case MINE:
-    break; //TODO(Bhupinder): Set this and surround indices as hit.
+    std::cout << playerName << " - Hit a mine!" << std::endl;
+    setMineHit(hitBoard, torpedoLocation, HIT_STATE);
+    break;
   }
 }
 

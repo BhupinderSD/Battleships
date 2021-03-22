@@ -56,9 +56,6 @@ private:
 
   std::string playerName;
 
-  std::string HIT_STATE = "✸";
-  std::string MINE = "M";
-
   std::vector<std::vector<std::string>> gameBoard; // Use a 2D vector to represent the game board.
   std::vector<Coordinate> mineLocations; // Use vector to represent the locations of any mines set on the board.
 
@@ -76,10 +73,6 @@ private:
 
   bool isValidPosition(const std::vector<Coordinate> &boatPositions, bool printErrors);
 
-  bool isValidCoordinate(const Coordinate& coordinate) const;
-
-  bool isValidIndex(const Coordinate& coordinate) const;
-
   void placeBoatOnBoard(const std::string& boatName, const std::vector<Coordinate>& boatPositions);
 
   void removeBoatFromBoardIfPlaced(const std::string& boatName);
@@ -90,7 +83,9 @@ private:
 
   void setHitStateOnBoard(const Coordinate& hitPosition);
 
-  std::string updateAndGetBoatHit(const Coordinate& hitPosition);
+  std::vector<std::string> updateAndGetBoatHit(const Coordinate& hitPosition);
+
+  std::string getBoatAtCoordinate(const Coordinate& coordinate);
 
   bool gameWon();
 
