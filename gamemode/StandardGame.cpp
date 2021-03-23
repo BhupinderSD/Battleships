@@ -10,7 +10,7 @@ bool StandardGame::playNextTurnThenWin(Player &player, Player &otherPlayer) {
   HitStatus playerHitStatus = otherPlayer.getHitStatus(playerTorpedoLocation);
   player.updateHitBoard(playerTorpedoLocation, playerHitStatus);
   if (playerHitStatus == WIN) {
-    ::waitForUser("Press enter to end the game.\n");
+    player.waitToEndGame();
     return true;
   } else {
     player.waitToEndTurn();

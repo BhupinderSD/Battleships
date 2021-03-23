@@ -38,6 +38,11 @@ public:
    */
   virtual void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) = 0;
 
+  /** Displays a message informing the user to end the game, since they have won. */
+  void waitToEndGame() {
+    ::waitForUser(playerName + " - Press enter to end the game.\n");
+  };
+
   /** Displays a message informing the user to end the turn. */
   void waitToEndTurn() {
     ::waitForUser(playerName + " - Press enter to end this turn.\n");
