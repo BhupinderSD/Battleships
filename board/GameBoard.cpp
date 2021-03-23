@@ -283,17 +283,18 @@ std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPos
     return boatsHit;
   }
 
+  int hitPositionXCoordinate = getNumberFromAsciiLabel(hitPosition.x);
+
   // Since a mine was hit, loop though the immediately surrounding indices.
   for (int i = -1; i < 2; i++) {
     for (int j = -1; j < 2; j++) {
-      int mineHitXCoordinate = getNumberFromAsciiLabel(hitPosition.x) + i;
 
       Coordinate mineHitCoordinate;
-      mineHitCoordinate.x = ::getAsciiLabel(mineHitXCoordinate);
+      mineHitCoordinate.x = ::getAsciiLabel(hitPositionXCoordinate + i);
       mineHitCoordinate.y = hitPosition.y + j;
 
       if (::isValidIndex(mineHitCoordinate)) {
-        std::string boatHit = getBoatAtCoordinate(hitPosition);
+        std::string boatHit = getBoatAtCoordinate(mineHitCoordinate);
         if (!boatHit.empty()) { // If a boat was found at this coordinate.
           boatsHit.push_back(boatHit); // Add the boat to the boatsHit vector.
         }
@@ -305,6 +306,8 @@ std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPos
 }
 
 /**
+ * Deletes the section of the boat hit from the boatLocations map.
+ *
  * @returns the name of the boat hit at this coordinate or else {@code ""}.
  */
 std::string GameBoard::getBoatAtCoordinate(const Coordinate &coordinate) {
