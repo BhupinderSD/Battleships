@@ -2,7 +2,6 @@
 // Created by Bhupinder Dhoofer on 02/03/2021.
 //
 
-#include <codecvt>
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
@@ -41,9 +40,9 @@ std::string createStringOfChar(char character, int requiredLength) {
   return string;
 }
 
-/** Returns the real length of a string, even if a char takes multiple bytes. */
+/** Returns the length of an ASCII string. */
 std::size_t getCharCount(const std::string& string){
-  return std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t >{}.from_bytes(string).size();
+  return string.length();
 }
 
 /** Pads the string with spaces till the required length. */

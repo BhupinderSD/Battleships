@@ -2,10 +2,11 @@
 // Created by Bhupinder Dhoofer on 14/03/2021.
 //
 
+#include <cmath>
 #include <utility>
 
 static const std::string EMPTY_STATE = "[]";
-static const std::string HIT_STATE = "✸";
+static const std::string HIT_STATE = "*";
 static const std::string MINE_STATE = "M";
 
 const int PADDING = 2; // Padding so each index can be bigger than the max index length.

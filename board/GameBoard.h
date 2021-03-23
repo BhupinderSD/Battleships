@@ -8,7 +8,6 @@
 #include "shared/BoardUtils.h"
 #include "../HelperFunctions.h"
 #include <random>
-#include <cmath>
 #include <utility>
 
 enum Orientation { // An enum to identify the different orientations of a boat.
