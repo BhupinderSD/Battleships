@@ -30,10 +30,6 @@ void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus
   }
 }
 
-void ComputerPlayer::waitToEndTurn() {
-  ::waitForUser(playerName + " - Press enter to end this turn.\n");
-}
-
 void ComputerPlayer::placeBoats() {
   gameBoard.autoPlaceUnplacedBoats(); // Try to place all boats.
   gameBoard.showBoard();

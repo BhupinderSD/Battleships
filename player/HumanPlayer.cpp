@@ -35,10 +35,6 @@ void HumanPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hi
   hitBoard.updateBoard(torpedoLocation, hitStatus);
 }
 
-void HumanPlayer::waitToEndTurn() {
-  ::waitForUser(playerName + " - Press enter to end this turn.\n");
-}
-
 void HumanPlayer::placeBoats() {
   while (true) {
     selectAndSetBoatsOnBoard();

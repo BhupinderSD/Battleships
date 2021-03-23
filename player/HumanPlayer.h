@@ -20,8 +20,6 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
 
-  void waitToEndTurn() override;
-
 protected:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 

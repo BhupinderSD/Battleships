@@ -5,6 +5,8 @@
 #ifndef BATTLESHIPS_PLAYER_SHARED_PLAYER_H_
 #define BATTLESHIPS_PLAYER_SHARED_PLAYER_H_
 
+#include "../../HelperFunctions.h"
+
 /** An abstract Player class with methods that all subclasses must implement. */
 class Player {
 
@@ -37,7 +39,9 @@ public:
   virtual void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) = 0;
 
   /** Displays a message informing the user to end the turn. */
-  virtual void waitToEndTurn() = 0;
+  void waitToEndTurn() {
+    ::waitForUser(playerName + " - Press enter to end this turn.\n");
+  };
 
   /** Returns the gameboard. */
   GameBoard& getGameBoard() { return gameBoard; }

@@ -21,8 +21,6 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
 
-  void waitToEndTurn() override;
-
 private:
   AdvancedTargeting advancedTargeting;
   bool askedAboutAdvancedTargeting = false;
