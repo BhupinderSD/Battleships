@@ -85,7 +85,7 @@ private:
 
   std::vector<std::string> updateAndGetBoatHit(const Coordinate& hitPosition);
 
-  std::string getBoatAtCoordinate(const Coordinate& coordinate);
+  std::string maybeRemoveBoatAtCoordinate(const Coordinate& coordinate);
 
   bool gameWon();
 

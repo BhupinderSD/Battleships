@@ -276,7 +276,7 @@ void GameBoard::setHitStateOnBoard(const Coordinate& hitPosition) {
 std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPosition) {
   std::vector<std::string> boatsHit;
   if (!::vectorContainsElement(mineLocations, hitPosition)) { // Check if a mine was not hit.
-    std::string boatHit = getBoatAtCoordinate(hitPosition);
+    std::string boatHit = maybeRemoveBoatAtCoordinate(hitPosition);
     if (!boatHit.empty()) {
       boatsHit.push_back(boatHit);
     }
@@ -294,7 +294,7 @@ std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPos
       mineHitCoordinate.y = hitPosition.y + j;
 
       if (::isValidIndex(mineHitCoordinate)) {
-        std::string boatHit = getBoatAtCoordinate(mineHitCoordinate);
+        std::string boatHit = maybeRemoveBoatAtCoordinate(mineHitCoordinate);
         if (!boatHit.empty()) { // If a boat was found at this coordinate.
           boatsHit.push_back(boatHit); // Add the boat to the boatsHit vector.
         }
@@ -310,7 +310,7 @@ std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPos
  *
  * @returns the name of the boat hit at this coordinate or else {@code ""}.
  */
-std::string GameBoard::getBoatAtCoordinate(const Coordinate &coordinate) {
+std::string GameBoard::maybeRemoveBoatAtCoordinate(const Coordinate &coordinate) {
   std::vector<std::string> boatNames = configSingleton.getBoatNames();
   for (auto &boatName : boatNames) { // Loop though every boat on the board till we find the one at this index.
     std::vector<Coordinate> boatCoordinates = boatLocations.find(boatName)->second;
