@@ -30,6 +30,9 @@ void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus
   }
 }
 
+/** The computer player never needs to quit the game. */
+bool ComputerPlayer::maybeQuitGame() { return false; }
+
 void ComputerPlayer::placeBoats() {
   gameBoard.autoPlaceUnplacedBoats(); // Try to place all boats.
   gameBoard.showBoard();

@@ -21,6 +21,8 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
 
+  bool maybeQuitGame() override;
+
 private:
   AdvancedTargeting advancedTargeting;
   bool askedAboutAdvancedTargeting = false;

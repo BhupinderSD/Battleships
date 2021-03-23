@@ -20,6 +20,8 @@ public:
 
   void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
 
+  bool maybeQuitGame() override;
+
 protected:
   ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
 
