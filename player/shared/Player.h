@@ -43,6 +43,21 @@ public:
     ::waitForUser(playerName + " - Press enter to end the game.\n");
   };
 
+  /** Asks the user if they want to quit the game. Returns true if the game should end. */
+  bool maybeQuitGame() {
+    while (true) {
+      int option = getNumber(playerName + " - Do you want to quit the game?\n1. Yes\n0. No ", 0, 1);
+      switch (option) {
+      case 0:
+        return false;
+      case 1:
+        return true;
+      default:
+        std::cout << "Invalid input, please try again.";
+      }
+    }
+  };
+
   /** Displays a message informing the user to end the turn. */
   void waitToEndTurn() {
     ::waitForUser(playerName + " - Press enter to end this turn.\n");

@@ -16,11 +16,11 @@
 /** Plays the battleship game with a {@code gameMode} until a player wins. */
 void playGame(Player &player1, Player &player2, GameMode &gameMode) {
   while (true) {
-    if (gameMode.playNextTurnThenWin(player1, player2)) {
+    if (gameMode.playNextTurnAndMaybeFinish(player1, player2)) {
       break;
     }
 
-    if (gameMode.playNextTurnThenWin(player2, player1)) {
+    if (gameMode.playNextTurnAndMaybeFinish(player2, player1)) {
       break;
     }
   }

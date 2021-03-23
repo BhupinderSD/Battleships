@@ -10,7 +10,7 @@
 class SalvoGame : public GameMode {
 
 private:
-  bool playNextTurnThenWin(Player &player, Player &otherPlayer) override;
+  bool playNextTurnAndMaybeFinish(Player &player, Player &otherPlayer) override;
 
 };
 

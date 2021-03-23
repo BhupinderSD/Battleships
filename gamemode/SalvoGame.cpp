@@ -4,8 +4,8 @@
 
 #include "SalvoGame.h"
 
-/** Returns true if the player plays the next turn then wins. */
-bool SalvoGame::playNextTurnThenWin(Player &player, Player &otherPlayer) {
+/** Returns true if the player plays the next turn then wins or quits. */
+bool SalvoGame::playNextTurnAndMaybeFinish(Player &player, Player &otherPlayer) {
   int playerTurns = player.getGameBoard().getSurvivingBoatCount();
 
   while (playerTurns > 0) {
@@ -17,8 +17,11 @@ bool SalvoGame::playNextTurnThenWin(Player &player, Player &otherPlayer) {
     if (playerHitStatus == WIN) {
       player.waitToEndGame();
       return true;
+    } else if (player.maybeQuitGame()) {
+      return true;
+    } else {
+      player.waitToEndTurn();
     }
-    player.waitToEndTurn();
   }
 
   return false;

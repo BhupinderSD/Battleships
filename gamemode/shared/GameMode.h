@@ -11,8 +11,8 @@
 class GameMode {
 
 public:
-  /** Returns true if the player plays the next turn then wins. */
-  virtual bool playNextTurnThenWin(Player &player, Player &otherPlayer) = 0;
+  /** Returns true if the player plays the next turn then wins or quits. */
+  virtual bool playNextTurnAndMaybeFinish(Player &player, Player &otherPlayer) = 0;
 
 };
 
