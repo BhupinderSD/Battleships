@@ -59,5 +59,29 @@ void ComputerPlayer::placeBoats() {
 }
 
 Coordinate ComputerPlayer::getFireLocation() {
- return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+  if (!askedAboutAdvancedTargeting) { // Only ask if we should use advanced targeting once.
+    useAdvancedTargeting = shouldUseAdvancedTargeting(); // Ask the user if this player should use advanced targeting.
+    askedAboutAdvancedTargeting = true;
+  }
+
+  if (useAdvancedTargeting) {
+//    return advancedTargeting.getFireLocation(); // TODO(Bhupinder): Implement advanced firing
+    return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+  } else {
+    return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+  }
+}
+
+bool ComputerPlayer::shouldUseAdvancedTargeting() {
+  while (true) {
+    int option = getNumber("Should " + playerName + " use advanced targeting:\n1. Yes\n0. No ", 0, 1);
+    switch (option) {
+    case 0:
+      return false;
+    case 1:
+      return true;
+    default:
+      std::cout << "Invalid input, please try again.";
+    }
+  }
 }

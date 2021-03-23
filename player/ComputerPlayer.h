@@ -5,6 +5,7 @@
 #ifndef BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 #define BATTLESHIPS_PLAYER_COMPUTERPLAYER_H_
 
+#include "shared/AdvancedTargeting.cpp"
 #include "shared/Player.h"
 #include "shared/PlayerUtils.h"
 #include "../HelperFunctions.h"
@@ -22,10 +23,16 @@ public:
 
   void waitToEndTurn() override;
 
-protected:
+private:
+  AdvancedTargeting advancedTargeting;
+  bool askedAboutAdvancedTargeting = false;
+  bool useAdvancedTargeting = false;
+
   void placeBoats();
 
   Coordinate getFireLocation();
+
+  bool shouldUseAdvancedTargeting();
 
 };
 
