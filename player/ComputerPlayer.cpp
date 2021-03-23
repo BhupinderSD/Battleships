@@ -25,6 +25,9 @@ HitStatus ComputerPlayer::getHitStatus(const Coordinate& torpedoLocation) {
 
 void ComputerPlayer::updateHitBoard(const Coordinate &torpedoLocation, HitStatus hitStatus) {
   hitBoard.updateBoard(torpedoLocation, hitStatus);
+  if (useAdvancedTargeting) {
+    advancedTargeting.saveHit(torpedoLocation, hitStatus);
+  }
 }
 
 void ComputerPlayer::waitToEndTurn() {
@@ -65,8 +68,7 @@ Coordinate ComputerPlayer::getFireLocation() {
   }
 
   if (useAdvancedTargeting) {
-//    return advancedTargeting.getFireLocation(); // TODO(Bhupinder): Implement advanced firing
-    return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+    return advancedTargeting.getFireLocation(gameBoard, hitBoard, playerName);
   } else {
     return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
   }

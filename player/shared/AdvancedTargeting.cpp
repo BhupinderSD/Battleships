@@ -4,10 +4,11 @@
 
 #include "AdvancedTargeting.h"
 
-Coordinate AdvancedTargeting::getFireLocation() {
-  Coordinate coordinate;
+void AdvancedTargeting::saveHit(const Coordinate &hitLocation, HitStatus hitStatus) {
+  fireLocations.insert(std::pair<Coordinate, HitStatus>(hitLocation, hitStatus));
+}
 
+Coordinate AdvancedTargeting::getFireLocation(GameBoard &gameBoard, HitBoard &hitBoard, std::string &playerName) {
   // TODO(Bhupinder): Implement advanced firing
-
-  return coordinate;
+  return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
 }

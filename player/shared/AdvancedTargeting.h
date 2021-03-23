@@ -8,7 +8,12 @@
 class AdvancedTargeting {
 
 public:
-  Coordinate getFireLocation();
+  Coordinate getFireLocation(GameBoard &gameBoard, HitBoard &hitBoard, std::string &playerName);
+
+  void saveHit(const Coordinate &hitLocation, HitStatus hitStatus);
+
+private:
+  std::map<Coordinate, HitStatus> fireLocations;
 
 };
 
