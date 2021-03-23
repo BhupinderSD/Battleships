@@ -83,7 +83,7 @@ private:
 
   void setHitStateOnBoard(const Coordinate& hitPosition);
 
-  std::vector<std::string> updateAndGetBoatHit(const Coordinate& hitPosition);
+  std::vector<std::string> updateAndGetBoatsHit(const Coordinate& hitPosition);
 
   std::string maybeRemoveBoatAtCoordinate(const Coordinate& coordinate);
 

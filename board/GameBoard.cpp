@@ -217,15 +217,16 @@ HitStatus GameBoard::getHitStatus(const Coordinate& maybeHitPosition) {
 
   if (::vectorContainsElement(mineLocations, maybeHitPosition)) { // Check if a mine was hit.
     setHitStateOnBoard(maybeHitPosition); // Update the board since a mine was hit.
+    updateAndGetBoatsHit(maybeHitPosition); // Update the boatLocations since a mine was hit.
 
-    if (gameWon()) { // Check if all the boats have sunk.
+    if (gameWon()) { // Check if all the boats have destroyed.
       return WIN; // If all boats are destroyed, return a HitStatus#WIN.
     }
 
     return MINE;
   }
 
-  std::vector<std::string> hitBoatNames = updateAndGetBoatHit(maybeHitPosition);
+  std::vector<std::string> hitBoatNames = updateAndGetBoatsHit(maybeHitPosition);
   if (hitBoatNames.empty()) {
     return MISS;
   }
@@ -273,7 +274,7 @@ void GameBoard::setHitStateOnBoard(const Coordinate& hitPosition) {
  *
  * @returns the name of any boat hit, or else and empty string vector.
  */
-std::vector<std::string> GameBoard::updateAndGetBoatHit(const Coordinate &hitPosition) {
+std::vector<std::string> GameBoard::updateAndGetBoatsHit(const Coordinate &hitPosition) {
   std::vector<std::string> boatsHit;
   if (!::vectorContainsElement(mineLocations, hitPosition)) { // Check if a mine was not hit.
     std::string boatHit = maybeRemoveBoatAtCoordinate(hitPosition);
