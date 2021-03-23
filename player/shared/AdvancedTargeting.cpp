@@ -51,7 +51,7 @@ void AdvancedTargeting::savePotentialLocations(const Coordinate &hitLocation) {
 
   for (const Coordinate& coordinate : potentialLocations) {
     if (::isValidIndex(coordinate)) {
-      locationsToSearch.push_back(hitLocation);
+      locationsToSearch.push_back(coordinate);
     }
   }
 }
