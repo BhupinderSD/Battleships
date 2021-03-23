@@ -58,13 +58,19 @@ void playerVsPlayerSalvo() {
   playGame(humanPlayer1, humanPlayer2, salvoGame);
 }
 
+/** Enables hidden mines for both plays and prints a message informing the user. */
+void setHiddenMines(Player &player1, Player &player2) {
+  player1.getGameBoard().setHiddenMines();
+  player2.getGameBoard().setHiddenMines();
+  std::cout << "Mines have been placed!\n" << std::endl;
+}
+
 void playerVsComputerHiddenMines() {
   HumanPlayer humanPlayer("Human Player");
   ComputerPlayer computerPlayer("Computer Player");
   HiddenMines hiddenMines;
 
-  humanPlayer.getGameBoard().setHiddenMines();
-  computerPlayer.getGameBoard().setHiddenMines();
+  setHiddenMines(humanPlayer, computerPlayer);
 
   playGame(humanPlayer, computerPlayer, hiddenMines);
 }
@@ -74,8 +80,7 @@ void playerVsPlayerHiddenMines() {
   HumanPlayer humanPlayer2("Human Player 2");
   HiddenMines hiddenMines;
 
-  humanPlayer1.getGameBoard().setHiddenMines();
-  humanPlayer2.getGameBoard().setHiddenMines();
+  setHiddenMines(humanPlayer1, humanPlayer2);
 
   playGame(humanPlayer1, humanPlayer2, hiddenMines);
 }
@@ -85,8 +90,7 @@ void ComputerVsComputerHiddenMines() {
   ComputerPlayer computerPlayer2("Computer Player 2");
   HiddenMines hiddenMines;
 
-  computerPlayer1.getGameBoard().setHiddenMines();
-  computerPlayer2.getGameBoard().setHiddenMines();
+  setHiddenMines(computerPlayer1, computerPlayer2);
 
   playGame(computerPlayer1, computerPlayer2, hiddenMines);
 }
