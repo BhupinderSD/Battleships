@@ -13,7 +13,9 @@ public:
   void saveHit(const Coordinate &hitLocation, HitStatus hitStatus);
 
 private:
-  std::map<Coordinate, HitStatus> fireLocations;
+  std::vector<Coordinate> locationsToSearch;
+
+  void saveSurroundingLocations(const Coordinate&hitLocation);
 
 };
 

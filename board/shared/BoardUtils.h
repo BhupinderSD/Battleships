@@ -19,9 +19,9 @@ struct Coordinate { // A struct that stores the coordinates for a boat.
     return coordinate.x == this->x && coordinate.y == this->y;
   }
 
-  // Allows us to check if a coordinate is less than another.
-  bool operator < (const Coordinate& coordinate) const {
-    return coordinate.x < this->x && coordinate.y < this->y;
+  // Allows us to check if a coordinates are not equal.
+  bool operator != (const Coordinate& coordinate) const {
+    return coordinate.x != this->x || coordinate.y != this->y;
   }
 };
 
