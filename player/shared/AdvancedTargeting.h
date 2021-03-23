@@ -15,7 +15,7 @@ public:
 private:
   std::vector<Coordinate> locationsToSearch;
 
-  void saveSurroundingLocations(const Coordinate&hitLocation);
+  void savePotentialLocations(const Coordinate &hitLocation);
 
 };
 

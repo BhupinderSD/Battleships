@@ -19,21 +19,30 @@ void AdvancedTargeting::saveHit(const Coordinate &hitLocation, HitStatus hitStat
   }
 
   if (hitStatus == HIT) { // Save the surrounding locations so we can start hunting for the rest of the boat.
-    saveSurroundingLocations(hitLocation);
+    savePotentialLocations(hitLocation);
   }
 }
 
-void AdvancedTargeting::saveSurroundingLocations(const Coordinate&hitLocation) {
-  int xCoordinate = getNumberFromAsciiLabel(hitLocation.x);
-  for (int i = -1; i < 2; i++) {
-    for (int j = -1; j < 2; j++) {
-      Coordinate coordinate;
-      coordinate.x = ::getAsciiLabel(xCoordinate + i);
-      coordinate.y = hitLocation.y + j;
+void AdvancedTargeting::savePotentialLocations(const Coordinate &hitLocation) {
+  int hitLocationXCoordinate = getNumberFromAsciiLabel(hitLocation.x);
 
-      if (::isValidIndex(coordinate) && coordinate != hitLocation) {
-        locationsToSearch.push_back(hitLocation);
-      }
+  Coordinate left;
+  left.x = ::getAsciiLabel(hitLocationXCoordinate - 1);
+  left.y = hitLocation.y;
+  Coordinate top;
+  top.x = ::getAsciiLabel(hitLocationXCoordinate);
+  top.y = hitLocation.y + 1;
+  Coordinate right;
+  right.x = ::getAsciiLabel(hitLocationXCoordinate + 1);
+  right.y = hitLocation.y;
+  Coordinate bottom;
+  bottom.x = ::getAsciiLabel(hitLocationXCoordinate);
+  bottom.y = hitLocation.y - 1;
+  Coordinate potentialLocations[] = {left, top, right, bottom};
+
+  for (const Coordinate& coordinate : potentialLocations) {
+    if (::isValidIndex(coordinate)) {
+      locationsToSearch.push_back(hitLocation);
     }
   }
 }
