@@ -101,7 +101,7 @@ void printList(const std::string& title, const std::vector<std::string>& placedB
 
 /** Waits for the user to press enter after displaying the requested string. */
 void waitForUser(std::string request) {
-  std::cout << request;
+  std::cout << request << std::flush;
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
 }
 
