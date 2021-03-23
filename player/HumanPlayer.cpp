@@ -76,8 +76,11 @@ void HumanPlayer::selectAndSetBoatsOnBoard() {
   do { // Allow the user to replace a boat, even if all boats are placed.
     gameBoard.showPlacedAndUnplacedBoats();
 
-    int option = getNumber(playerName + " - Please enter the number of the boat to place: ", 0, boatNames.size());
-    if (option == 0) { // Auto-place all remaining boats.
+    int option = getNumber(playerName + " - Please enter the number of the boat to place: ", -1, boatNames.size());
+    if (option == -1) { // Continue without placing all of the boats on the board.
+      gameBoard.showBoard();
+      break;
+    } else if (option == 0) { // Auto-place all remaining boats.
       gameBoard.autoPlaceUnplacedBoats();
       gameBoard.showBoard();
       continue;

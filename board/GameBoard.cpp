@@ -31,6 +31,7 @@ void GameBoard::showPlacedAndUnplacedBoats() {
 
   if (!unplacedBoats.empty()) {
     unplacedBoats.push_back(std::to_string(0) + ". Auto-place unplaced boats."); // Inform the user that they can auto-place boats.
+    unplacedBoats.push_back(std::to_string(-1) + ". Continue without placing all boats."); // Inform the user that they can continue without placing all boats.
   }
 
   printList(playerName + " - Placed boats:", placedBoats);
