@@ -4,13 +4,22 @@
 
 #include "AdvancedTargeting.h"
 
-// TODO(Bhupinder): Implement advanced firing
+/**
+ * Fires at random locations until a boat is hit. Once we have hit a boat and
+ * while it has not sunk, we traverse every valid surrounding coordinate till it
+ * has sunk.
+ */
 Coordinate AdvancedTargeting::getFireLocation(GameBoard &gameBoard, HitBoard &hitBoard, std::string &playerName) {
-  if (locationsToSearch.empty()) {
+  if (locationsToSearch.empty()) { // If we have no coordinates to search, fire at a random one.
     return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
   }
 
-  return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+  Coordinate coordinateToSearch = locationsToSearch[0]; // Get the next location to search in the vector.
+  locationsToSearch.erase(locationsToSearch.begin()); // Remove the location that we are about to search.
+
+  ::printFiringCoordinates(playerName, coordinateToSearch); // Prints the location this player is firing at.
+
+  return coordinateToSearch;
 }
 
 void AdvancedTargeting::saveHit(const Coordinate &hitLocation, HitStatus hitStatus) {

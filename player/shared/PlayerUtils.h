@@ -10,6 +10,12 @@ void printCoordinate(const Coordinate& coordinate) {
   std::cout << coordinate.x << std::to_string(coordinate.y + 1) << std::endl;
 }
 
+/** Prints out player's name and the coordinates being fired at. */
+void printFiringCoordinates(const std::string& playerName, const Coordinate& fireTorpedoLocation) {
+  std::cout << playerName + " - Firing at ";
+  ::printCoordinate(fireTorpedoLocation); // Print the auto fire coordinates.
+}
+
 /** Returns a random coordinate that hasn't been used on the hit board. */
 Coordinate getAutoFireLocation(GameBoard &gameBoard, HitBoard hitBoard, const std::string& playerName) {
   Coordinate fireTorpedoLocation;
@@ -22,8 +28,7 @@ Coordinate getAutoFireLocation(GameBoard &gameBoard, HitBoard hitBoard, const st
     }
   }
 
-  std::cout << playerName + " - Firing at ";
-  ::printCoordinate(fireTorpedoLocation); // Print the auto fire coordinates.
+  printFiringCoordinates(playerName, fireTorpedoLocation);
 
   return fireTorpedoLocation;
 }
