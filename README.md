@@ -716,7 +716,63 @@ Since I was following an iterative design process, I first created the human cla
   };
 
 ```
+### Implementation and effective use of ‘advanced’ programming principles
 
+I used various advanced programming techniques within my code to help create my solution. An example of this is by using object oriented design and programming. I also used a lot of defensive programming, accounting for all sorts of bugs, user inputs and edge cases. For example, I used the follow functions from a shared `BoardUtils` file
+
+```
+
+/**
+
+ * Check if this coordinate is outside of the board. Here, height starts from
+
+ * 1.
+
+ */
+
+bool isValidCoordinate(const Coordinate& coordinate) {
+
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
+
+  int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate > boardHeight) {
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+/**
+
+ * Check if this coordinate is outside of the board. Here, the height starts
+
+ * from 0.
+
+ */
+
+bool isValidIndex(const Coordinate& coordinate) {
+
+  int xCoordinate = ::getNumberFromAsciiLabel(coordinate.x);
+
+  int yCoordinate = coordinate.y;
+
+  if (xCoordinate < 0 || xCoordinate >= boardWidth || yCoordinate < 0 || yCoordinate >= boardHeight) {
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+```
+
+I also used suitable methods and field visibility so that data could not be accidentally changed or access where it shouldn’t be. This helps with readability as methods only do what they should. I used parameters where possible, and constants when I wasn’t editing them.
 
 ### Features showcase and embedded innovations
 
