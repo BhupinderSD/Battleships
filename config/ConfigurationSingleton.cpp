@@ -67,7 +67,7 @@ void ConfigurationSingleton::verifyConfigurationData(std::multimap<std::string, 
 }
 
 void ConfigurationSingleton::setConfigurationData(const std::multimap<std::string, std::string>& configMultiMap) {
-  for (auto &itr : configMultiMap) { // Iterate though every key and value in the MultiMap.
+  for (auto &itr : configMultiMap) { // Iterate through every key and value in the MultiMap.
     if (itr.first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
       setBoardDimensions(itr.second);
     } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.

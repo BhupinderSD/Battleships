@@ -13,7 +13,7 @@
 #include "gamemode/SalvoGame.cpp"
 #include "gamemode/HiddenMines.cpp"
 
-/** Plays the battleship game with a {@code gameMode} until a player wins. */
+/** Plays the battleship game with a {@code gameMode} until a player wins or quits. */
 void playGame(Player &player1, Player &player2, GameMode &gameMode) {
   while (true) {
     if (gameMode.playNextTurnAndMaybeFinish(player1, player2)) {
