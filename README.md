@@ -50,10 +50,7 @@ I will need to support two players, a human player and a computer player. In ord
 
 ### UML diagram
 
-
-
-
-
+[Uml diagram](battleships.png)
 
 
 ### Initial working plan
