@@ -1,4 +1,5 @@
 
+
 ## AP 2 - Battleships
 
 Repl link: https://replit.com/@BhupinderSD/Battleships
@@ -42,15 +43,20 @@ I will be implementing the following game modes:
 
 I will present this menu from main and I plan to keep it very simple so that it is easy to add more game modes and player combinations.
 
+The standard game mode is the same as a normal battleships game. Each player can take one shot at the other player's boat before ending their turn. In the salvo game mode, each player can shoot a torpedo for every ship they have remaining on their board on their turn. The hidden mines game mode adds 5 randomly dropped mines onto each player’s boards. When a mine is hit, it and the immediately surrounding valid coordinates are also hit. Apart from this, the gameplay is the same as the standard game mode.
+
 
 #### Players
 
 I will need to support two players, a human player and a computer player. In order to reuse code, and since both players will need to do the same things, I think that it will be best to use an abstract player class, which will be inherited by a human and computer class. This will let me reuse code since I can use the general players base class as a parameter to functions and methods and call the common virtual methods that both subclasses implement.
 
+The human player has the ability to place their boats manually, or to auto place them or a combination of both. When firing a torpedo, they can choose coordinate to fire at or choose to auto fire as well. The computer player always places and fires automatically. I will add an advanced targeting algorithm so the user can decide if the computer player should use the default or improved targeting method.
+
 
 ### UML diagram
 
 <img src="./battleships.png">
+
 
 ### Initial working plan
 
@@ -96,10 +102,7 @@ In order to help myself and other viewers of my code, I will try to make sure th
 I will be following the KISS principle and will keep the code as simple as possible. Using abstract classes should help with this. Meaningful variable and method names will also be really important. I will also try to make sure that commits only do one thing. This will make it easy to find when something was implemented and if there are any bugs, it can be easier to find out which commit may have caused it.
 
 
-### Development
-
-
-#### Phase 1 - Parsing the configuration
+### Phase 1 - Parsing the configuration
 
 The configuration file had to be in a specific format. The following are the default values.
 
@@ -135,7 +138,7 @@ std::vector<std::string> split(const std::string &s, char delimiter) {
 
   while(std::getline(sstream, string, delimiter)) {
 
-    strings.push\_back(string);
+    strings.push_back(string);
 
   }
 
@@ -155,11 +158,11 @@ void ConfigurationSingleton::setConfigurationData(const std::multimap<std::strin
 
   for (auto &itr : configMultiMap) { // Iterate through every key and value in the MultiMap.
 
-    if (itr.first == BOARD\_KEY) { // Check if the board dimensions have been set in the config file.
+    if (itr.first == BOARD_KEY) { // Check if the board dimensions have been set in the config file.
 
       setBoardDimensions(itr.second);
 
-    } else if (itr.first == BOAT\_KEY) { // Check if any boats have been set in the config file.
+    } else if (itr.first == BOAT_KEY) { // Check if any boats have been set in the config file.
 
       addToBoatsMap(itr.second);
 
@@ -172,16 +175,16 @@ void ConfigurationSingleton::setConfigurationData(const std::multimap<std::strin
 ```
 
 
-#### Phase 2 - Players
+### Phase 2 - Players
 
 Next, I created a HumanPlayer class. I created methods to ask the user for coordinates so that we can place boats (from the config singleton) on the board. For every boat to place, I ask for the orientation of the boat and then the starting coordinate for the boat. I also added validation and error handling for as many scenarios as I could think of.
 
 Then, I continued to add more functionality to this class as well as the game board class. I also added support for moving placed boats and resetting the board. I then added support for auto placements, which I could then use for the Computer Player.
 
 
-#### Phase 3 - Boards
+### Phase 3 - Boards
 
-I worked on this at the same time as Players, since I would need both for testing and development. I use the board dimensions from the configuration singleton to render the board. One of the bigger challenges was creating the x axis and also parsing it from the user entered coordinates.
+I worked on this at the same time as Players, since I would need both for testing and development. I use the board dimensions from the configuration singleton to render the board. One of the bigger challenges was creating the x axis and also parsing it from the user entered coordinates. I have explained this more in the reflections section below.
 
 ```
 
@@ -195,7 +198,7 @@ I worked on this at the same time as Players, since I would need both for testin
 
       } else if (isdigit(character)) {
 
-        tempCoordinates.y = tempCoordinates.y \* 10 + (character - '0');
+        tempCoordinates.y = tempCoordinates.y * 10 + (character - '0');
 
       }
 
@@ -203,7 +206,7 @@ I worked on this at the same time as Players, since I would need both for testin
 
 ```
 
-I use this algorithm to split a userCoordinates string into the x and y coordinates. I then check if the user entered the coordinates in the required notation and if they are missing any data, such as an x coordinate, y coordinates or if the provided coordinates are invalid. If the coordinates are valid, I exit a `while (true)` loop (so I can keep asking till I get valid coordinates) and return the coordinates.
+I use this algorithm to split a userCoordinates string into the x and y coordinates. This algorithm goes through every character in the user entered string and, if it is a number, addes it to the end of the current y coordinate (after multiplying the current y coordinate by 10 since it needs to be in the next positional value). If it is a letter, I make it upper case and and it to the end of the x coordinates. I then check if the user entered the coordinates in the required notation and if they are missing any data, such as an x coordinate, y coordinates or if the provided coordinates are invalid. If the coordinates are valid, I exit a `while (true)` loop (so I can keep asking till I get valid coordinates) and return the coordinates.
 
 ```
 
@@ -238,10 +241,458 @@ I use this algorithm to split a userCoordinates string into the x and y coordina
 ```
 
 
-### Bugs and testing
+### Phase 4 - Game modes
+
+During the development of the other epics, I implemented a standard game mode. Once the other epics were completed, I [extracted](https://github.com/BhupinderSD/Battleships/commit/92cbabcb154da235c8764ef31ff18a7236c8f573#diff-279f9cd7408d7bfb1d829678b72e3a03a16774f876bf898e5a69e5ddadd66589) the standard game mode into a new directory, using a base abstract class `GameMode` that is implemented by the different game modes. For a standard game mode, I ask the first player for their coordinates to fire at using `#nextTurn`. Then I pass this coordinate to the other player’s `#getHitStatus` which updates that player’s game mode if they were hit and returns the hit status type. Finally, I update the current player’s hit board with the hit status from the other player using `#updateHitBoard`. After this, I check if the hit status was a win, if so, `#playNextTurnAndMaybeFinish` will return `true`. Otherwise, I will ask the player (if they are a human) if they want to quit the game (to meet the AdaShip requirements), in which case I will return true as well. Otherwise, I will ask the user to press the enter key to end their turn, and since the game has not been won or quit, it will be the next player’s turn. This will repeat until a player has won or quit.
+
+```
+
+/** Plays the battleship game with a {@code gameMode} until a player wins or quits. */
+
+void playGame(Player &player1, Player &player2, GameMode &gameMode) {
+
+  while (true) {
+
+    if (gameMode.playNextTurnAndMaybeFinish(player1, player2)) {
+
+      break;
+
+    }
+
+    if (gameMode.playNextTurnAndMaybeFinish(player2, player1)) {
+
+      break;
+
+    }
+
+  }
+
+}
+
+```
+
+Since main is handling the menu, I thought that it should also handle running the loop until a game has been won or quit. As shown above, the code is very simple and this level of abstraction is very suitable for my purpose. It means that we can use the below code for a new game mode and player combination.
+
+```
+
+void playerVsComputerStandard() {
+
+  HumanPlayer humanPlayer("Human Player");
+
+  ComputerPlayer computerPlayer("Computer Player");
+
+  StandardGame standardGame;
+
+  playGame(humanPlayer, computerPlayer, standardGame);
+
+}
+
+```
+
+```
+
+void showMenu() {
+
+  while (true) { // Ask the user to enter a game mode until they choose to quit.
+
+    int option = getNumber("Please select a game mode: \n"
+
+                           "1. Player v Computer\n"
+
+                           "2. Player v Player\n"
+
+                           "3. Player v Computer (salvo)\n"
+
+                           "4. Player v Player (salvo)\n"
+
+                           "5. Player v Computer (hidden mines)\n"
+
+                           "6. Player v Player (hidden mines)\n"
+
+                           "7. Computer v Computer (hidden mines)\n"
+
+                           "0. Quit", 0, 7);
+
+    switch(option) {
+
+    case 1:
+
+      playerVsComputerStandard();
+
+      continue;
+
+    case 2:
+
+      playerVsPlayerStandard();
+
+      continue;
+
+    case 3:
+
+      playerVsComputerSalvo();
+
+      continue;
+
+    case 4:
+
+      playerVsPlayerSalvo();
+
+      continue;
+
+    case 5:
+
+      playerVsComputerHiddenMines();
+
+      continue;
+
+    case 6:
+
+      playerVsPlayerHiddenMines();
+
+      continue;
+
+    case 7:
+
+      ComputerVsComputerHiddenMines();
+
+      continue;
+
+    case 0:
+
+      std::cout << "Thanks for playing!" << std::endl;
+
+      return;
+
+    default:
+
+      std::cout << "Invalid option, please try again." << std::endl;
+
+      continue;
+
+    }
+
+  }
+
+}
+
+```
+
+The method in main to show the menu is also really simple. I use a `while (true)` loop to ask the user to select a valid game mode till they choose to quit. To add a new player or game mode option, I just inform the user about the number for that option, increase the range in `#getNumber` to support the new option and add the number to the `switch` statement to execute the relevant game play.
+
+This lets me easily add the other game modes, salvo and hidden mines. For salvo, I just ask the player for their next turn the same number of times as the number of their surviving ships.
+
+```
+
+/** Returns true if the player plays the next turn then wins or quits. */
+
+bool SalvoGame::playNextTurnAndMaybeFinish(Player &player, Player &otherPlayer) {
+
+  int playerTurns = player.getGameBoard().getSurvivingBoatCount();
+
+  while (playerTurns > 0) {
+
+    playerTurns--;
+
+    Coordinate playerTorpedoLocation = player.nextTurn();
+
+    HitStatus playerHitStatus =
+
+        otherPlayer.getHitStatus(playerTorpedoLocation);
+
+    player.updateHitBoard(playerTorpedoLocation, playerHitStatus);
+
+    if (playerHitStatus == WIN) {
+
+      player.waitToEndGame();
+
+      return true;
+
+    } else if (player.maybeQuitGame()) {
+
+      return true;
+
+    } else {
+
+      player.waitToEndTurn();
+
+    }
+
+  }
+
+  return false;
+
+}
+
+```
+
+For the hidden mines game mode, the game play and the turns are the same as the standard game mode. However, I need to add 5 hidden mines on the player’s game boards. I do this after the boats have been placed on the boards.
+
+```
+
+/** Enables hidden mines for both plays and prints a message informing the user. */
+
+void setHiddenMines(Player &player1, Player &player2) {
+
+  player1.getGameBoard().setHiddenMines();
+
+  player2.getGameBoard().setHiddenMines();
+
+  std::cout << "Mines have been placed!\n" << std::endl;
+
+}
+
+```
+
+I added support for this in `GameBoard`. While 5 mines have not been set, I am trying to add a mine at a random location that is valid and does not currently have a mine on it. If there is currently a boat where we want to place the mine, we can still place a mine down and we append `/M` to the boat initial to show the mine.
+
+```
+
+/** Sets 5 mines at random places on the board. */
+
+void GameBoard::setHiddenMines() {
+
+  int minesRemaining = 5;
+
+  while (minesRemaining > 0) {
+
+    Coordinate coordinate = getRandomCoordinates();
+
+    if (!::isValidIndex(coordinate) || ::vectorContainsElement(mineLocations, coordinate)) {
+
+      continue; // Don't add a mine here if the coordinates are invalid or a mine is already here.
+
+    }
+
+    std::string mineString;
+
+    std::string boardIndex = ::getBoardIndex(gameBoard, coordinate);
+
+    if (boardIndex == ::EMPTY_STATE) { // Check if we need to append the mine to a boat initial.
+
+      mineString = ::MINE_STATE;
+
+    } else {
+
+      mineString = boardIndex + "/" + ::MINE_STATE; // Add the mine after the boat initial.
+
+    }
 
 
-### Reflection
+<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>  GDC alert: Definition &darr;&darr; outside of definition list. Missing preceding term(s)? </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>> </span></p>
+
+
+    ::setBoardIndexWithString(gameBoard, coordinate, mineString); // Set the mine on the board.
+
+    mineLocations.push_back(coordinate); // Add this mine coordinate to the vector.
+
+    minesRemaining--; // Decrease the counter since a mine has been placed.
+
+  }
+
+}
+
+```
+
+
+### Ensuring quality through testing and resolving bugs
+
+During development and after any changes, big or small, I would run and play the game to ensure that I am meeting the user requirements and that the game is easy to understand and play. I created and added to a test plan that I would follow and keep in mind.
+
+
+<table>
+  <tr>
+   <td>Test 
+   </td>
+   <td>Test type 
+   </td>
+   <td>Test data 
+   </td>
+   <td>Expected result
+   </td>
+  </tr>
+  <tr>
+   <td>Can get coordinates from user
+   </td>
+   <td>Valid
+   </td>
+   <td>5C
+   </td>
+   <td>Fires at location
+   </td>
+  </tr>
+  <tr>
+   <td>Can get coordinates from user
+   </td>
+   <td>Invalid 
+   </td>
+   <td>7
+   </td>
+   <td>“Please enter a valid x coordinate (a letter).”
+   </td>
+  </tr>
+  <tr>
+   <td>Can get coordinates from user
+   </td>
+   <td>Valid, boundary
+   </td>
+   <td>A10
+   </td>
+   <td>Fires at location
+   </td>
+  </tr>
+  <tr>
+   <td>Can get coordinates from user
+   </td>
+   <td>Erroneous 
+   </td>
+   <td>“ ”
+   </td>
+   <td>“Please enter valid coordinates.”
+   </td>
+  </tr>
+  <tr>
+   <td>Can auto place boats
+   </td>
+   <td>Valid 
+   </td>
+   <td>Select auto place/use computer player
+   </td>
+   <td>No segmentation faults
+   </td>
+  </tr>
+  <tr>
+   <td>Can auto fire
+   </td>
+   <td>Valid 
+   </td>
+   <td>Select auto fire/use computer player
+   </td>
+   <td>No segmentation faults
+   </td>
+  </tr>
+  <tr>
+   <td>Hit mine at edge explodes surroundings 
+   </td>
+   <td>Valid, boundary
+   </td>
+   <td>Fire at a mine at the edge of the board
+   </td>
+   <td>No segmentation faults, location set as hit
+   </td>
+  </tr>
+  <tr>
+   <td>Salvo game mode works correctly
+   </td>
+   <td>Valid
+   </td>
+   <td>Enter fire coordinates
+   </td>
+   <td>Should ask to fire 5 times at the start 
+   </td>
+  </tr>
+  <tr>
+   <td>Can exit after a turn
+   </td>
+   <td>Valid 
+   </td>
+   <td>“1” on option 
+   </td>
+   <td>Returns to game menu
+   </td>
+  </tr>
+</table>
+
+
+There are a few bugs that I encountered around the board coordinate system. Namely, when the user enters a coordinate, “A” is the first index on the game board but I forgot to account for this when displaying the board. This was an easy [fix](https://github.com/BhupinderSD/Battleships/commit/138e6fa8009bf777dcaa4c277321a69e1b7da075) as I just had to subtract 1.
+
+I encountered another bug when I chose to use a unicode character “✸” as the hit state representation. This caused the padding for each cell on the board to be set incorrectly as the character was seen as string length 4, not 1. This was because std::string#length() returns the number of bytes rather than the number of characters. I [fixed](https://github.com/BhupinderSD/Battleships/commit/11077bee1a516c1d80bbecb0293e806eeb59ba4d) it by using `codecvt` to get the real length but I had to [revert](https://github.com/BhupinderSD/Battleships/commit/3dd600289e9aefe3990a43536aaa4b1fda1ab3cd) this change and device to use an ascii asterisk instead to add support for REPL, which didn’t support `codecvt`.
+
+
+### Reflection on key design challenges, innovations and solutions
+
+Fortunately, I spent a lot of time at the beginning of this project thinking about the plan and the technical solutions. The idea to use abstract classes is really useful as it helps me reduce code duplication as I can pass different instances (that implement the abstract class) into a common method (such as the ones shown in `main`). It also provides a layer of abstraction making it easier to read through code quickly. I also opted to use header files such as `HumanPlayer.h` which makes it really easy to see the members of a class without needing to look at all of the implementation code.
+
+```
+
+class HumanPlayer : public Player  {
+
+public:
+
+  explicit HumanPlayer(const std::string &playerName);
+
+  Coordinate nextTurn() override;
+
+  HitStatus getHitStatus(const Coordinate& torpedoLocation) override;
+
+  void updateHitBoard(const Coordinate& torpedoLocation, HitStatus hitStatus) override;
+
+  bool maybeQuitGame() override;
+
+protected:
+
+  ConfigurationSingleton& configSingleton = ConfigurationSingleton::getInstance();
+
+  void placeBoats();
+
+  void selectAndSetBoatsOnBoard();
+
+  Coordinate getFireLocation();
+
+};
+
+```
+
+One of the innovations that I am happy with is the functions for conversion between the x coordinate board index and its ASCII representation. These required a lot of algorithmic thinking and mathematical knowledge but after planning the algorithm and a small amount of trial and error, I was able to implement working conversion functions. I have added implementation comments explaining how they work for values within the range of an int.
+
+```
+
+/** Converts a number to its alphabetical equivalent. The number 1 returns "A". */
+
+std::string getAsciiLabel(int number) {
+
+  std::string string;
+
+  while (number >= 0) {
+
+    string = (char)('A' + number % 26 ) + string; // Get the right-most letter and place it in the string.
+
+    number = number / 26; // Right shift to get the next letter.
+
+    number--;
+
+  }
+
+  return string;
+
+}
+
+```
+
+```
+
+/** Converts a Ascii label from {@link #getAsciiLabel} to its respective number. */
+
+int getNumberFromAsciiLabel(const std::string& label) {
+
+  int number = 0;
+
+  for (int i = 0; i < label.size(); i++) {
+
+    char character = label[label.size() - i - 1]; // Start from the end.
+
+    character = std::toupper(character); // Ensure that the input is in upper case.
+
+    // Converts the character to 1-26 and multiplies it to its place value.
+
+    number += (character - 'A' + 1) * pow(26, i);
+
+  }
+
+  return number - 1;
+
+}
+
+```
 
 
 ## Evaluation
