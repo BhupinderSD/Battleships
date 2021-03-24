@@ -646,7 +646,76 @@ protected:
 ## Evaluation
 
 
-### Analysis
+
+### Analysis with embedded examples of key code refactoring, reuse and smells
+
+As I explained in the development section, one of my priorities was readability and the ability to reuse code. Using pure virtual methods and abstract classes let me pass different instances of the abstract class into common functions used in main. This provided a layer of abstract in main that makes it really easy to see what is happening, even to someone unfamiliar with the code base.
+
+```
+
+/** Plays the battleship game with a {@code gameMode} until a player wins or quits. */
+
+void playGame(Player &player1, Player &player2, GameMode &gameMode) {
+
+  while (true) {
+
+    if (gameMode.playNextTurnAndMaybeFinish(player1, player2)) {
+
+      break;
+
+    }
+
+    if (gameMode.playNextTurnAndMaybeFinish(player2, player1)) {
+
+      break;
+
+    }
+
+  }
+
+}
+
+```
+
+All of the game modes use the function above and it is called from a function such as the one below, which is called after a user has selected a choice from the game menu.
+
+```
+
+void playerVsComputerStandard() {
+
+  HumanPlayer humanPlayer("Human Player");
+
+  ComputerPlayer computerPlayer("Computer Player");
+
+  StandardGame standardGame;
+
+  playGame(humanPlayer, computerPlayer, standardGame);
+
+}
+
+```
+
+Since I was following an iterative design process, I first created the human class without creating a base player class. Once I knew the public methods that I would need and they had been implemented, I created a player class with the same API’s. This let me think about my code without being restricted to a certain way of programming and it would also let me make changes without needing to refactor my code, realise it is not suitable and then refactor again. I refactored my code to use a base player class in this [commit](https://github.com/BhupinderSD/Battleships/commit/980584a9a2b25e1a3a2f2fcb191b5f19ac8ce3bf#diff-c55054cdc541e1ce11e1299411f7f222443d4eeac44bdd9310263161c7d7d54f) and continued to add functionality after as well. Using what I learned about state machines, I also implemented generic player methods to print out the player name along with the state of the player. I implemented this in these commits ([1](https://github.com/BhupinderSD/Battleships/commit/ecc4dc586a8c97e8142166458cacec08c0a959b2#diff-c55054cdc541e1ce11e1299411f7f222443d4eeac44bdd9310263161c7d7d54f), [2](https://github.com/BhupinderSD/Battleships/commit/ede77fde72a101ac9997504ad1d772ab1a718baa#diff-c55054cdc541e1ce11e1299411f7f222443d4eeac44bdd9310263161c7d7d54f)).
+
+```
+
+  /** Displays a message informing the user to end the game, since they have won. */
+
+  void waitToEndGame() {
+
+  void ::waitForUser(playerName + " - Press enter to end the game.\n");
+
+  };
+
+  /** Displays a message informing the user to end the turn. */
+
+  void waitToEndTurn() {
+
+  void ::waitForUser(playerName + " - Press enter to end this turn.\n");
+
+  };
+
+```
 
 
 ### Features showcase and embedded innovations
