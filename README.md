@@ -704,7 +704,164 @@ int getNumberFromAsciiLabel(const std::string& label) {
 ### Features showcase and embedded innovations
 
 
+
 ### Improved targeting algorithm
+
+For the improved targeting algorithm, I first decided to view best practices and tactics for the normal battleships game. I found lots of resources online and decided to study them. A tactic that I felt would be extremely useful was
+
+> When you hit a new ship, you should immediately fire the adjacent shots to sink the ship.
+
+from https://www.ultraboardgames.com/battleship/tips.php.
+
+I then decided to research other algorithms used in computer game variants of battleship. I came across https://www.datagenetics.com/blog/december32011/ which was really insightful and also suggested the hunt randomly then target mode.
+
+After this research, I started the implementation. I decided that only the computer player should have access to the advanced targeting algorithm, and we ask the user if we should use it the first time the computer player has to make an automated move. This lets the opponent choose the level of difficulty.
+
+First, if no boats have been hit, fire randomly till we find a boat.
+
+```
+
+/**
+
+ * Fires at random locations until a boat is hit. Once we have hit a boat and
+
+ * while it has not sunk, we traverse every valid surrounding coordinate till it
+
+ * has sunk.
+
+ */
+
+Coordinate AdvancedTargeting::getFireLocation(GameBoard &gameBoard, HitBoard &hitBoard, std::string &playerName) {
+
+  if (locationsToSearch.empty()) { // If we have no coordinates to search, fire at a random one.
+
+    return ::getAutoFireLocation(gameBoard, hitBoard, playerName);
+
+  }
+
+  Coordinate coordinateToSearch = locationsToSearch[0]; // Get the next location to search in the vector.
+
+  locationsToSearch.erase(locationsToSearch.begin()); // Remove the location that we are about to search.
+
+
+<p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>  GDC alert: Definition &darr;&darr; outside of definition list. Missing preceding term(s)? </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>> </span></p>
+
+
+  ::printFiringCoordinates(playerName, coordinateToSearch); // Prints the location this player is firing at.
+
+  return coordinateToSearch;
+
+}
+
+```
+
+Once we find a boat, save the location if we hit it or clear all locations if we sunk it.
+
+```
+
+void AdvancedTargeting::saveHit(const Coordinate &hitLocation, HitStatus hitStatus) {
+
+  if (hitStatus == SUNK) { // Reset the current state since the boat we were looking for has sunk.
+
+    locationsToSearch.clear();
+
+  }
+
+  if (hitStatus == HIT) { // Save the surrounding locations so we can start hunting for the rest of the boat.
+
+    savePotentialLocations(hitLocation);
+
+  }
+
+}
+
+```
+
+If we hit it but did not sink the boat, save the surrounding locations to the coordinates that we need to search.
+
+```
+
+void AdvancedTargeting::savePotentialLocations(const Coordinate &hitLocation) {
+
+  int hitLocationXCoordinate = getNumberFromAsciiLabel(hitLocation.x);
+
+  Coordinate left;
+
+  left.x = ::getAsciiLabel(hitLocationXCoordinate - 1);
+
+  left.y = hitLocation.y;
+
+  Coordinate top;
+
+  top.x = ::getAsciiLabel(hitLocationXCoordinate);
+
+  top.y = hitLocation.y + 1;
+
+  Coordinate right;
+
+  right.x = ::getAsciiLabel(hitLocationXCoordinate + 1);
+
+  right.y = hitLocation.y;
+
+  Coordinate bottom;
+
+  bottom.x = ::getAsciiLabel(hitLocationXCoordinate);
+
+  bottom.y = hitLocation.y - 1;
+
+  Coordinate potentialLocations[] = {left, top, right, bottom};
+
+  for (const Coordinate& coordinate : potentialLocations) {
+
+    if (::isValidIndex(coordinate)) {
+
+      locationsToSearch.push_back(coordinate);
+
+    }
+
+  }
+
+}
+
+```
+
+I played the computer vs computer hidden mines game mode with the advanced targeting on for player 1 but off for player 2 and won 9 of the 10 games. I also inspected the coordinates being fired at and could verify that after it had hit a boat, it would look for the rest of the boat till it sunk.
 
 
 ### Reflective review
+
+If I continue to work on this project, I would like to separate some of the methods in `GameBoard` out into another class. Currently it handles a lot more than it needs to so I could extract some things into another class. For example, I could create a Random Number singleton with the following members along with the required getter methods.
+
+```
+
+  std::random_device rd;  // Used as the seed for the random number engine.
+
+  std::mt19937 rng; // Random number generator seeded with rd().
+
+  std::uniform_int_distribution<> randomBoolean; // Used to generate a random boolean.
+
+  std::uniform_int_distribution<> randomHeight; // Used to generate a random int between 0 and the board height.
+
+  std::uniform_int_distribution<> randomWidth; // Used to generate a random int between 0 and the board width.
+
+void initRandom() {
+
+  rng = std::mt19937(rd()); // Initialise the random number generator, seeded with rd().
+
+  randomBoolean = std::uniform_int_distribution<>(0, 1); // Used to generate a random boolean.
+
+  // Minus 1 since uniform_int_distribution is closed range (ranges are inclusive).
+
+  randomHeight = std::uniform_int_distribution<>(0, boardHeight - 1); // Used to generate a random int between 0 and the board height.
+
+  randomWidth = std::uniform_int_distribution<>(0, boardWidth - 1); // Used to generate a random int between 0 and the board width.
+
+}
+
+```
+
+I could also extract a coordinate helper class since coordinates are used across the project and a single source of truth could make it easier to add features or debug.
+
+I would also like to have written units tests. Due to the limited time I had for the project and limited experience with c++, I opted for frequent manual testing with a test plan. In the long run, unit tests (and even some integration tests) would be desired.
+
+Overall, I am really happy with the outcome of this project as I have learnt a lot about c++ development, along with a deeper understanding of object oriented design and programming. 
