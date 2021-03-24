@@ -642,6 +642,16 @@ protected:
 
 ```
 
+
+## Evaluation
+
+
+### Analysis
+
+
+### Features showcase and embedded innovations
+
+
 One of the innovations that I am happy with is the functions for conversion between the x coordinate board index and its ASCII representation. These required a lot of algorithmic thinking and mathematical knowledge but after planning the algorithm and a small amount of trial and error, I was able to implement working conversion functions. I have added implementation comments explaining how they work for values within the range of an int.
 
 ```
@@ -693,16 +703,6 @@ int getNumberFromAsciiLabel(const std::string& label) {
 }
 
 ```
-
-
-## Evaluation
-
-
-### Analysis
-
-
-### Features showcase and embedded innovations
-
 
 
 ### Improved targeting algorithm
